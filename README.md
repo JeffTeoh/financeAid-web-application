@@ -1,0 +1,2 @@
+# financeAid-web-application
+The web application is designed for the person who always spending without awareness of saving money. This web application is useful for tracking on money and budget flexibly as it is not only track on cash but also amount in bank account. It also allows users to add their daily expenses dynamically at anytime and anywhere. It can generate report of summary filtered by type of expenses and monthly expenses.
