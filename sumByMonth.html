@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" href="income.css">
-    <title>Income</title>
+    <link rel="stylesheet" href="sumByMonth.css">
+    <title>Summary By Month</title>
   </head>
   <body>
     <nav class="navbar navbar-dark bg-dark">
@@ -22,69 +22,65 @@
 
     <div class="container py-5">
         <div class="row">
-            <div class="col-md-6">
-                <div class="row py-3">
-                    <div class="col-md-6">
-                        Date
-                    </div>
-                </div>
-                <div class="row py-3">
-                    <div class="col-md-3">
-                        <div class="input-group date" data-provide="datepicker">
-                            <input type="text" class="form-control">
-                            <div class="input-group-addon">
-                                <span class="glyphicon glyphicon-th"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>                
-                <div class="row py-3">
-                    <div class="col-md-12">
-                        Account
-                    </div>
-                </div>
-                <div class="row py-3">
-                    <div class="col-md-12">
-                        <form action="/action_page.php">
-                            <select name="">
-                                <option value=""></option>
-                                <option value="bank">Bank</option>
-                                <option value="cash">Cash</option>
-                            </select>
-                        </form>
-                    </div>
-                </div>
-                <div class="row py-3">
-                    <div class="col-md-12">
-                        Amount
-                    </div>
-                </div>
-                <div class="row py-3">
-                    <div class="col-md-6">
-                        <input class="form-control" id="incomeAmount" placeholder="Amount">
-                    </div>
-                </div>
-                <div class="row py-3">
-                    <div class="col-md-6">
-                        <button type="button" class="btn btn-primary">Add</button>
-                    </div>
-                </div>
+            <div class="col-md-4 text-right">Month</div>
+            <div class="col-md-2">
+                <form action="/action_page.php">
+                    <select name="">
+                        <option value=""></option>
+                        <option value="jan">January</option>
+                        <option value="feb">February</option>
+                        <option value="mar">March</option>
+                        <option value="apr">April</option>
+                        <option value="may">May</option>
+                        <option value="jun">June</option>
+                        <option value="jul">July</option>
+                        <option value="aug">August</option>
+                        <option value="sept">September</option>
+                        <option value="oct">October</option>
+                        <option value="nov">November</option>
+                        <option value="dec">December</option>
+                    </select>
+                </form>
             </div>
             <div class="col-md-6">
-                <h5>List of income</h5>
+                <button type="button" class="btn btn-primary">Filter</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-12">
+                <h5>List of records</h5>
                 <ul class="list-group">
                     <li class="list-group-item">
                         <div class="container">
                             <div class="row">
+                                <div class="col-md-3">
+                                    01/03/2018
+                                </div>
+                                <div class="col-md-5">
+                                    Foods and Drinks
+                                </div>
+                                <div class="col-md-2"></div>
                                 <div class="col-md-2">
                                     RM800.00
                                 </div>
-                                <div class="col-md-6"></div>
-                                <div class="col-md-2">
-                                    <a href=""#>EDIT</a>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    02/03/2018
                                 </div>
+                                <div class="col-md-5">
+                                    Entertainment
+                                </div>
+                                <div class="col-md-2"></div>
                                 <div class="col-md-2">
-                                    <a href=""#>DELETE</a>
+                                    RM1000.00
                                 </div>
                             </div>
                         </div>
@@ -92,36 +88,37 @@
                     <li class="list-group-item">
                         <div class="container">
                             <div class="row">
-                                <div class="col-md-2">
-                                    RM100.000
+                                <div class="col-md-3">
+                                    03/03/2018
                                 </div>
-                                <div class="col-md-6"></div>
-                                <div class="col-md-2">
-                                    <a href=""#>EDIT</a>
+                                <div class="col-md-5">
+                                    Vehicle
                                 </div>
-                                <div class="col-md-2">
-                                    <a href=""#>DELETE</a>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="container">
-                            <div class="row">
+                                <div class="col-md-2"></div>
                                 <div class="col-md-2">
                                     RM300.00
-                                </div>
-                                <div class="col-md-6"></div>
-                                <div class="col-md-2">
-                                    <a href=""#>EDIT</a>
-                                </div>
-                                <div class="col-md-2">
-                                    <a href=""#>DELETE</a>
                                 </div>
                             </div>
                         </div>
                     </li>
                 </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-2 text-right">Total : RM</div>
+            <div class="col-md-2">
+                <form>
+                    <input class="form-control nopadding" id="totalAmountByMonth" value="2100.00" readonly>
+                </form>
+            </div>
+            <div class="col-md-2 text-right">Average : RM</div>
+            <div class="col-md-2">
+                <form>
+                    <input class="form-control nopadding" id="avgAmountByMonth" value="700.00" readonly>
+                </form>
             </div>
         </div>
     </div>
