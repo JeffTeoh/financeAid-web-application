@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" href="expense.css">
-    <title>Expense</title>
+    <link rel="stylesheet" href="transfer.css">
+    <title>Transfer</title>
   </head>
   <body>
     <nav class="navbar navbar-dark bg-dark">
@@ -40,7 +40,7 @@
                 </div>                
                 <div class="row py-3">
                     <div class="col-md-12">
-                        Category
+                        From
                     </div>
                 </div>
                 <div class="row py-3">
@@ -48,9 +48,24 @@
                         <form action="/action_page.php">
                             <select name="">
                                 <option value=""></option>
-                                <option value="foods">Foods and Drinks</option>
-                                <option value="vehicle">Vehicle</option>
-                                <option value="entertainment">Entertainment</option>                                
+                                <option value="bank">Bank</option>
+                                <option value="cash">Cash</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+                <div class="row py-3">
+                    <div class="col-md-12">
+                        To
+                    </div>
+                </div>
+                <div class="row py-3">
+                    <div class="col-md-12">
+                        <form action="/action_page.php">
+                            <select name="">
+                                <option value=""></option>
+                                <option value="bank">Bank</option>
+                                <option value="cash">Cash</option>
                             </select>
                         </form>
                     </div>
@@ -72,13 +87,13 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <h5>List of expenses</h5>
+                <h5>List of transfer</h5>
                 <ul class="list-group">
                     <li class="list-group-item">
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-3">
-                                    -RM800
+                                    RM800
                                 </div>
                                 <div class="col-md-5"></div>
                                 <div class="col-md-2">
@@ -94,7 +109,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-3">
-                                    -RM1000
+                                    RM1000
                                 </div>
                                 <div class="col-md-5"></div>
                                 <div class="col-md-2">
@@ -110,7 +125,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-md-3">
-                                    -RM300
+                                    RM300
                                 </div>
                                 <div class="col-md-5"></div>
                                 <div class="col-md-2">
