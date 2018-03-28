@@ -1,3 +1,51 @@
+@media (max-width:767px){
+    .card-item{
+        margin-top:5%;
+    }
+
+    .link{
+        margin:1%;
+    }
+    
+    .dropdown{
+        margin-bottom: 40%;
+    }
+}
+
+@media (max-width:1200px){
+    .menu-items a{
+        margin-top:1%;
+        margin-bottom:1%;
+    }
+
+    .menu-items button{
+        margin-top:1%;
+        margin-bottom:1%;
+    }
+}
+
 h1{
+    color:black;
+}
+
+p{
+    margin-bottom: 0;
+}
+
+.card-item a{
+    color:white;
+    text-decoration: none;
+}
+
+.card-item a:hover{
     color:red;
+}
+
+.menu-items{
+    margin-top:5%;
+    margin-bottom: 5%;
+}
+
+.dropdown-menu-wide{
+    width:100%;
 }

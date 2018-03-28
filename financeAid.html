@@ -12,12 +12,81 @@
     <title>Finance Aid</title>
   </head>
   <body>
-    <h1>Hello, world!</h1>
+    <h1 class="text-center py-4">Finance Aid</h1>
+
+    <div class="container py-md-2 pt-md-4">
+      <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-2 text-center">
+          <p style="font-size:2rem;">Balance: RM500.00</p>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-2 card-item d-flex align-items-center justify-content-center" align="center">
+          <a href="#" class="py-4 px-5 bg-primary">
+            <p>CASH</p>
+            <p>RM0.00</p>
+          </a>
+        </div>
+        <div class="col-md-1"></div>
+        <div class="col-md-2 card-item d-flex align-items-center justify-content-center" align="center">
+            <a href="#" class="py-4 px-5 bg-primary">
+              <p>BANK</p>
+              <p>RM0.00</p>
+            </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container menu-items">
+      <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-3 d-flex align-items-center justify-content-center link" align="center">
+          <a href="#">
+            <button class="btn btn-primary px-5 py-3 ">Income</button>
+          </a>
+        </div>
+        <div class="col-lg-2"></div>
+        <div class="col-lg-3 d-flex align-items-center justify-content-center link" align="center">
+            <a href="#">
+              <button class="btn btn-primary px-5 py-3 ">Expenses</button>
+            </a>
+        </div>
+        <div class="col-lg-2"></div>
+      </div>
+    </div>
+
+    <div class="container menu-items">
+        <div class="row">
+          <div class="col-lg-2"></div>
+          <div class="col-lg-3 d-flex align-items-center justify-content-center link" align="center">
+            <a href="#">
+              <button class="btn btn-primary px-5 py-3">Transfer</button>
+            </a>
+          </div>
+          <div class="col-lg-2"></div>
+          <div class="col-lg-3 col-sm-12">
+            <div class="dropdown d-flex align-items-center justify-content-center link" align="center">
+              <button class="btn btn-primary px-5 py-3 dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Summary
+              </button>
+              <div class="dropdown-menu dropdown-menu-wide" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">By Month</a>
+                <a class="dropdown-item" href="#">By Type</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2"></div>
+        </div>
+      </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+      $('.menu-items').find('a').css('width','100%');
+      $('.menu-items').find('button').css('width','100%');
+    </script>
   </body>
 </html>
