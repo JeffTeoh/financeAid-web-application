@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="income.css">
+    <title>Income</title>
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+        <a class="navbar-brand" href="financeAid.html">
+            <i class="fa fa-home"></i>
+            Main Menu
+        </a>
+    </nav>
+
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="row py-3">
+                    <div class="col-md-6">
+                        Date
+                    </div>
+                </div>
+                <div class="row py-3">
+                    <div class="col-md-3">
+                        <div class="input-group date" data-provide="datepicker">
+                            <input type="text" class="form-control">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+                <div class="row py-3">
+                    <div class="col-md-12">
+                        Account
+                    </div>
+                </div>
+                <div class="row py-3">
+                    <div class="col-md-12">
+                        <form action="/action_page.php">
+                            <select name="">
+                                <option value=""></option>
+                                <option value="foods">Foods and Drinks</option>
+                                <option value="vehicle">Vehicle</option>
+                                <option value="entertainment">Entertainment</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+                <div class="row py-3">
+                    <div class="col-md-12">
+                        Amount
+                    </div>
+                </div>
+                <div class="row py-3">
+                    <div class="col-md-6">
+                        <input class="form-control" id="incomeAmount" placeholder="Amount">
+                    </div>
+                </div>
+                <div class="row py-3">
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <h5>List of income</h5>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    RM800
+                                </div>
+                                <div class="col-md-6"></div>
+                                <div class="col-md-2">
+                                    EDIT
+                                </div>
+                                <div class="col-md-2">
+                                    DELETE
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    RM1000
+                                </div>
+                                <div class="col-md-6"></div>
+                                <div class="col-md-2">
+                                    EDIT
+                                </div>
+                                <div class="col-md-2">
+                                    DELETE
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-group-item">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    RM300
+                                </div>
+                                <div class="col-md-6"></div>
+                                <div class="col-md-2">
+                                    EDIT
+                                </div>
+                                <div class="col-md-2">
+                                    DELETE
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        $('.datepicker').datepicker();
+    </script>
+  </body>
+</html>
