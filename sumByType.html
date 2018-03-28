@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" href="sumByMonth.css">
-    <title>Summary By Month</title>
+    <link rel="stylesheet" href="sumByType.css">
+    <title>Summary By Type</title>
   </head>
   <body>
     <nav class="navbar navbar-dark bg-dark">
@@ -22,7 +22,18 @@
 
     <div class="container py-5">
         <div class="row">
-            <div class="col-md-4 text-right">Month</div>
+            <div class="col-md-2 text-right">Category</div>
+            <div class="col-md-2">
+                <form>
+                    <select name="">
+                        <option value=""></option>
+                        <option value="foods">Foods and Drinks</option>
+                        <option value="vehicle">Vehicle</option>
+                        <option value="entertainment">Entertainment</option>                                
+                    </select>
+                </form>
+            </div>
+            <div class="col-md-2 text-right">Month</div>
             <div class="col-md-2">
                 <form action="/action_page.php">
                     <select name="">
@@ -42,7 +53,8 @@
                     </select>
                 </form>
             </div>
-            <div class="col-md-6">
+            
+            <div class="col-md-4">
                 <button type="button" class="btn btn-primary">Filter</button>
             </div>
         </div>
@@ -60,11 +72,11 @@
                                     01/03/2018
                                 </div>
                                 <div class="col-md-5">
-                                    Foods and Drinks
+                                    Entertainment
                                 </div>
                                 <div class="col-md-2"></div>
                                 <div class="col-md-2">
-                                    RM800.00
+                                    RM200.00
                                 </div>
                             </div>
                         </div>
@@ -80,7 +92,7 @@
                                 </div>
                                 <div class="col-md-2"></div>
                                 <div class="col-md-2">
-                                    RM1000.00
+                                    RM100.00
                                 </div>
                             </div>
                         </div>
@@ -92,11 +104,11 @@
                                     03/03/2018
                                 </div>
                                 <div class="col-md-5">
-                                    Vehicle
+                                    Entertainment
                                 </div>
                                 <div class="col-md-2"></div>
                                 <div class="col-md-2">
-                                    RM300.00
+                                    RM200.00
                                 </div>
                             </div>
                         </div>
@@ -111,13 +123,13 @@
             <div class="col-md-2 text-right">Total : RM</div>
             <div class="col-md-2">
                 <form>
-                    <input class="form-control nopadding" id="totalAmountByMonth" value="" readonly>
+                    <input class="form-control nopadding" id="totalAmountByType" value="" readonly>
                 </form>
             </div>
             <div class="col-md-2 text-right">Average : RM</div>
             <div class="col-md-2">
                 <form>
-                    <input class="form-control nopadding" id="avgAmountByMonth" value="" readonly>
+                    <input class="form-control nopadding" id="avgAmountByType" value="" readonly>
                 </form>
             </div>
         </div>
