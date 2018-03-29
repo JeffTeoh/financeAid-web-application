@@ -14,6 +14,7 @@
   <body>
     <h1 class="text-center py-4">Finance Aid</h1>
 
+    <!-- Header that include balance and setting of starting amount for accounts -->
     <div class="container py-md-2 pt-md-4">
       <div class="row">
         <div class="col-md-2"></div>
@@ -22,14 +23,14 @@
         </div>
         <div class="col-md-2"></div>
         <div class="col-md-2 card-item d-flex align-items-center justify-content-center" align="center">
-          <a href="#" class="py-4 px-5 bg-primary">
+          <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#cashModal">
             <p>CASH</p>
             <p>RM0.00</p>
           </a>
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-2 card-item d-flex align-items-center justify-content-center" align="center">
-            <a href="#" class="py-4 px-5 bg-primary">
+            <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#bankModal">
               <p>BANK</p>
               <p>RM0.00</p>
             </a>
@@ -37,6 +38,49 @@
       </div>
     </div>
 
+    <!-- Modal for cash -->
+    <div class="modal fade" id="cashModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">CASH</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            CASH
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for bank -->
+    <div class="modal fade" id="bankModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">BANK</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            BANK
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Link to each features -->
     <div class="container menu-items">
       <div class="row">
         <div class="col-lg-2"></div>
