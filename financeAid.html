@@ -19,62 +19,83 @@
       <div class="row">
         <div class="col-md-2"></div>
         <div class="col-md-2 text-center">
-          <p style="font-size:2rem;">Balance: RM500.00</p>
+          <p style="font-size:2rem;">Balance:</p>
+          <p style="font-size:2rem;" id="balance"></p>
         </div>
         <div class="col-md-2"></div>
         <div class="col-md-2 card-item d-flex align-items-center justify-content-center" align="center">
           <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#cashModal">
             <p>CASH</p>
-            <p>RM0.00</p>
+            <p id="currentCashAmt">RM0.00</p>
           </a>
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-2 card-item d-flex align-items-center justify-content-center" align="center">
             <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#bankModal">
               <p>BANK</p>
-              <p>RM0.00</p>
+              <p id="currentBankAmt">RM0.00</p>
             </a>
         </div>
       </div>
     </div>
 
     <!-- Modal for cash -->
-    <div class="modal fade" id="cashModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div id="cashModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cashModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">CASH</h5>
+            <h5 class="modal-title" id="cashModalCenterTitle">Set starting amount of Cash</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            CASH
+            <form>
+              <div class="form-group">
+                <label for="startCash">RM</label>
+                <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash">
+              </div>
+            </form>
+            <!--div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">RM</span>
+              </div>
+              <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash">
+            </div-->
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save</button>
+            <button type="button" class="save btn btn-primary">Save</button>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Modal for bank -->
-    <div class="modal fade" id="bankModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div id="bankModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bankModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">BANK</h5>
+            <h5 class="modal-title" id="bankModalCenterTitle">Set starting amount of Bank</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            BANK
+            <form>
+              <div class="form-group">
+                <label for="startBank">RM</label>
+                <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank">
+              </div>
+            </form>
+            <!--div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">RM</span>
+              </div>
+              <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank">
+            </div-->
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save</button>
+            <button type="button" class="save btn btn-primary">Save</button>
           </div>
         </div>
       </div>
@@ -86,13 +107,13 @@
         <div class="col-lg-2"></div>
         <div class="col-lg-3 d-flex align-items-center justify-content-center link" align="center">
           <a href="income.html">
-            <button class="btn btn-primary px-5 py-3 ">Income</button>
+            <button class="btn btn-primary px-5 py-3">Income</button>
           </a>
         </div>
         <div class="col-lg-2"></div>
         <div class="col-lg-3 d-flex align-items-center justify-content-center link" align="center">
             <a href="expense.html">
-              <button class="btn btn-primary px-5 py-3 ">Expenses</button>
+              <button class="btn btn-primary px-5 py-3">Expenses</button>
             </a>
         </div>
         <div class="col-lg-2"></div>
@@ -128,7 +149,60 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
     <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyAR3t7qI2D5wRu4fO38FuPYbPegZwQd_yI",
+        authDomain: "finance-aid-b7793.firebaseapp.com",
+        databaseURL: "https://finance-aid-b7793.firebaseio.com",
+        projectId: "finance-aid-b7793",
+        storageBucket: "finance-aid-b7793.appspot.com",
+        messagingSenderId: "165519709635"
+      };
+      firebase.initializeApp(config);
+
+      //Set starting amount for accounts
+      $.fn.setStartAmt = function() {
+        var fields = this.find('[name]');
+        var result = {};
+        $.each(fields, function(i, el) {
+          result[el.name] = el.value;
+        });
+        return result;
+      }
+
+      //Write amount input by user to firebase database
+      var startAmount;
+      $('.save').on('click', function(e) {
+        e.preventDefault();
+        var updates = {};
+        startAmount = startAmount ? startAmount : firebase.database().ref().child('startingAmt').push().key;
+        updates[startAmount] = $('form').setStartAmt();
+        firebase.database().ref().child('startingAmt').update(updates);
+        console.log(updates);
+      });
+
+      //Read from database (consist logic problems, eg: if data existed in db, add only cash or bank starting amount will
+      //display NaN)
+      var balance = 0;
+      var amountRef = firebase.database().ref('startingAmt');
+      amountRef.on('value', function(snapshot){
+        snapshot.forEach(function(childSnapshot){
+          var childData = childSnapshot.val();
+          var dispStartCash = parseInt(childData.startCash);
+          var dispStartBank = parseInt(childData.startBank);
+          balance = dispStartCash + dispStartBank;
+          if (dispStartCash !== null && dispStartBank !== null) {
+            document.getElementById("balance").innerHTML = "RM" + balance;
+          }
+          //document.getElementById("balance").innerHTML = "RM" + balance;
+        });
+      });
+
+      //styling for button of main menu
       $('.menu-items').find('a').css('width','100%');
       $('.menu-items').find('button').css('width','100%');
     </script>

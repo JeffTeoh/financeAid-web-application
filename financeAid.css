@@ -37,10 +37,6 @@ p{
     text-decoration: none;
 }
 
-.card-item a:hover{
-    color:red;
-}
-
 .menu-items{
     margin-top:5%;
     margin-bottom: 5%;
@@ -48,4 +44,8 @@ p{
 
 .dropdown-menu-wide{
     width:100%;
+}
+
+.nopadding{
+    padding:0;
 }
