@@ -171,18 +171,20 @@
         $.each(fields, function(i, el) {
           result[el.name] = el.value;
         });
+        console.log(result);
         return result;
       }
 
       //Write amount input by user to firebase database
-      var startAmount;
+      var startAmountKey;
       $('.save').on('click', function(e) {
         e.preventDefault();
         var updates = {};
-        startAmount = startAmount ? startAmount : firebase.database().ref().child('startingAmt').push().key;
-        updates[startAmount] = $('form').setStartAmt();
-        firebase.database().ref().child('startingAmt').update(updates);
-        console.log(updates);
+        startAmountKey = startAmountKey ? startAmountKey : firebase.database().ref().child('startingAmt').push().key;
+        console.log(startAmountKey);
+        updates[startAmountKey] = $('form').setStartAmt();
+        firebase.database().ref().child('startingAmt').set(updates);
+        //console.log(updates);
       });
 
       //Read from database (consist logic problems, eg: if data existed in db, add only cash or bank starting amount will

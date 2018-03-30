@@ -19,26 +19,26 @@
             Main Menu
         </a>
     </nav>
-
+    
     <div class="container py-5">
         <div class="row">
             <div class="col-md-6">
-                <div class="row py-3">
+                <div class="row py-3">          <!--Date title-->
                     <div class="col-md-6">
                         Date
                     </div>
                 </div>
-                <div class="row py-3">
+                <div class="row py-3">          <!--Datepicker-->
                     <div class="col-md-3">
                         <input type="text" id="datepicker"></p>
                     </div>
                 </div>                
-                <div class="row py-3">
+                <div class="row py-3">          <!--Account title-->
                     <div class="col-md-12">
                         Account
                     </div>
                 </div>
-                <div class="row py-3">
+                <div class="row py-3">          <!--Account option-->
                     <div class="col-md-12">
                         <form>
                             <select name="" id="incomeAccount">
@@ -49,17 +49,17 @@
                         </form>
                     </div>
                 </div>
-                <div class="row py-3">
+                <div class="row py-3">          <!--Amount title-->
                     <div class="col-md-12">
                         Amount
                     </div>
                 </div>
-                <div class="row py-3">
+                <div class="row py-3">          <!--Amount input form-->
                     <div class="col-md-6">
                         <input class="form-control" id="incomeAmount" placeholder="Amount">
                     </div>
                 </div>
-                <div class="row py-3">
+                <div class="row py-3">          <!--Add button-->
                     <div class="col-md-6">
                         <button type="button" class="btn btn-primary">Add</button>
                     </div>
@@ -126,6 +126,50 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
+    <script>
+        //initiate datepicker
+        $(function() {
+            $("#datepicker").datepicker();
+        });
+
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAR3t7qI2D5wRu4fO38FuPYbPegZwQd_yI",
+            authDomain: "finance-aid-b7793.firebaseapp.com",
+            databaseURL: "https://finance-aid-b7793.firebaseio.com",
+            projectId: "finance-aid-b7793",
+            storageBucket: "finance-aid-b7793.appspot.com",
+            messagingSenderId: "165519709635"
+        };
+        firebase.initializeApp(config);
+
+
+        //return date from datepicker (problems: accept nullable value, amount accept any value[restrict to integer])
+        $('.btn').on('click', function(e) {
+            var incomeDateObj = $("#datepicker").datepicker("getDate");
+            /*return in MM-DD-YYYY*/
+            var incDate = $.datepicker.formatDate("mm-dd-yy", incomeDateObj);
+            var incAcc = document.getElementById("incomeAccount").value;
+            var incAmt = document.getElementById("incomeAmount").value;
+            
+            var incomeObj = {}; //(override on same object, never update)
+            var incomeObjKey = incomeObjKey ? incomeObjKey : firebase.database().ref().child('incomeObj').push().key;
+            //console.log(incomeObjKey);
+            //console.log(incomeObj);
+            incomeObj[incomeObjKey] = {incomeDate: incDate,incomeAccount: incAcc, incomeAmount: incAmt};            
+            firebase.database().ref().child('incomeObj').update(incomeObj);
+            
+            /*clear the input form after success alert*/
+            alert("Your income added successfully!");
+            document.getElementById("datepicker").value = '';
+            document.getElementById("incomeAccount").value = '';
+            document.getElementById("incomeAmount").value = '';
+        });
+    </script>
   </body>
 </html>
