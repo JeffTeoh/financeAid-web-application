@@ -137,7 +137,23 @@
             document.getElementById("transferAmount").value = '';
         });
 
-        
+        //output list of data
+        var transferRef = firebase.database().ref().child('transferObj');
+        var transferList = $('#transferList');
+        transferRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+                var transferObj = childSnapshot.val();
+                var trfDate = transferObj.transferDate;
+                var trfFrom = transferObj.transferFrom;
+                var trfTo = transferObj.transferTo;
+                var trfAmt = parseFloat(transferObj.transferAmount);
+                //console.log(trfDate);
+                //console.log(trfFrom);
+                //console.log(trfTo);
+                //console.log(trfAmt);
+                transferList.append('<li class="list-group-item">' + trfDate + " " + trfFrom + " " + trfTo + " " + trfAmt + '</li>');
+            }); 
+        });
     </script>
   </body>
 </html>
