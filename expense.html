@@ -68,7 +68,7 @@
             </div>
             <div class="col-md-6">
                 <h5>List of expenses</h5>
-                <ul class="list-group">
+                <ul class="list-group" id="expenseList">
                    
                 </ul>
             </div>
@@ -119,6 +119,22 @@
             document.getElementById("datepicker").value = '';
             document.getElementById("expenseCategory").value = '';
             document.getElementById("expenseAmount").value = '';
+        });
+
+        //output list of data
+        var expenseRef = firebase.database().ref().child('expenseObj');
+        var expenseList = $('#expenseList');
+        expenseRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+                var expenseObj = childSnapshot.val();
+                var expDate = expenseObj.expenseDate;
+                var expAcc = expenseObj.expenseCategory;
+                var expAmt = parseFloat(expenseObj.expenseAmount);
+                //console.log(expDate);
+                //console.log(expAcc);
+                //console.log(expAmt);
+                expenseList.append('<li class="list-group-item">' + expDate + " " + expAcc + " " + expAmt + '</li>');
+            }); 
         });
     </script>
   </body>
