@@ -67,54 +67,9 @@
             </div>
             <div class="col-md-6">
                 <h5>List of income</h5>
-                <ul class="list-group">
+                <ul class="list-group" id="incomeList">
                     <li class="list-group-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    RM800.00
-                                </div>
-                                <div class="col-md-6"></div>
-                                <div class="col-md-2">
-                                    <a href=""#>EDIT</a>
-                                </div>
-                                <div class="col-md-2">
-                                    <a href=""#>DELETE</a>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    RM100.000
-                                </div>
-                                <div class="col-md-6"></div>
-                                <div class="col-md-2">
-                                    <a href=""#>EDIT</a>
-                                </div>
-                                <div class="col-md-2">
-                                    <a href=""#>DELETE</a>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-2">
-                                    RM300.00
-                                </div>
-                                <div class="col-md-6"></div>
-                                <div class="col-md-2">
-                                    <a href=""#>EDIT</a>
-                                </div>
-                                <div class="col-md-2">
-                                    <a href=""#>DELETE</a>
-                                </div>
-                            </div>
-                        </div>
+                        Balance
                     </li>
                 </ul>
             </div>
@@ -170,6 +125,23 @@
             document.getElementById("incomeAccount").value = '';
             document.getElementById("incomeAmount").value = '';
         });
+
+        //output list of data
+        var incomeRef = firebase.database().ref().child('incomeObj');
+        var incomeList = $('#incomeList');
+        incomeRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+                var incomeObj = childSnapshot.val();
+                var incDate = incomeObj.incomeDate;
+                var incAcc = incomeObj.incomeAccount;
+                var incAmt = parseFloat(incomeObj.incomeAmount);
+                //console.log(incDate);
+                //console.log(incAcc);
+                //console.log(incAmt);
+                incomeList.append('<li class="list-group-item">' + incDate + " " + incAcc + " " + incAmt + '</li>');
+            }); 
+        });
+        
     </script>
   </body>
 </html>

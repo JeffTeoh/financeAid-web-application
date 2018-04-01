@@ -181,7 +181,7 @@
         e.preventDefault();
         var updates = {};
         startAmountKey = startAmountKey ? startAmountKey : firebase.database().ref().child('startingAmt').push().key;
-        console.log(startAmountKey);
+        //console.log(startAmountKey);
         updates[startAmountKey] = $('form').setStartAmt();
         firebase.database().ref().child('startingAmt').set(updates);
         //console.log(updates);
@@ -194,9 +194,11 @@
       amountRef.on('value', function(snapshot){
         snapshot.forEach(function(childSnapshot){
           var childData = childSnapshot.val();
-          var dispStartCash = parseInt(childData.startCash);
-          var dispStartBank = parseInt(childData.startBank);
+          var dispStartCash = parseFloat(childData.startCash);
+          var dispStartBank = parseFloat(childData.startBank);
           balance = dispStartCash + dispStartBank;
+          console.log(balance);
+          balance.toFixed(2).toString();
           if (dispStartCash !== null && dispStartBank !== null) {
             document.getElementById("balance").innerHTML = "RM" + balance;
           }
