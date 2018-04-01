@@ -30,7 +30,7 @@
                 </div>
                 <div class="row py-3">
                     <div class="col-md-3">
-                        <input type="text" class="datepicker"></p>
+                        <input type="text" class="datepicker" id="datepicker"></p>
                     </div>
                 </div>                
                 <div class="row py-3">
@@ -41,7 +41,7 @@
                 <div class="row py-3">
                     <div class="col-md-12">
                         <form>
-                            <select name="">
+                            <select name="" id="expenseCategory">
                                 <option value="">Choose an option:</option>
                                 <option value="foods">Foods and Drinks</option>
                                 <option value="vehicle">Vehicle</option>
@@ -69,54 +69,7 @@
             <div class="col-md-6">
                 <h5>List of expenses</h5>
                 <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    RM800.00
-                                </div>
-                                <div class="col-md-5"></div>
-                                <div class="col-md-2">
-                                    <a href=""#>EDIT</a>
-                                </div>
-                                <div class="col-md-2">
-                                    <a href=""#>DELETE</a>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    RM100.000
-                                </div>
-                                <div class="col-md-5"></div>
-                                <div class="col-md-2">
-                                    <a href=""#>EDIT</a>
-                                </div>
-                                <div class="col-md-2">
-                                    <a href=""#>DELETE</a>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    RM300.00
-                                </div>
-                                <div class="col-md-5"></div>
-                                <div class="col-md-2">
-                                    <a href=""#>EDIT</a>
-                                </div>
-                                <div class="col-md-2">
-                                    <a href=""#>DELETE</a>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                   
                 </ul>
             </div>
         </div>
@@ -146,6 +99,27 @@
             messagingSenderId: "165519709635"
         };
         firebase.initializeApp(config);
+
+        $('.btn').on('click', function(e) {
+            var expenseDateObj = $("#datepicker").datepicker("getDate");
+            /*return in MM-DD-YYYY*/
+            var expDate = $.datepicker.formatDate("mm-dd-yy", expenseDateObj);
+            var expCat = document.getElementById("expenseCategory").value;
+            var expAmt = document.getElementById("expenseAmount").value;
+            
+            var expenseObj = {}; //(override on same object, never update)
+            var expenseObjKey = expenseObjKey ? expenseObjKey : firebase.database().ref().child('expenseObj').push().key;
+            //console.log(expenseObjKey);
+            //console.log(expenseObj);
+            expenseObj[expenseObjKey] = {expenseDate: expDate,expenseCategory: expCat, expenseAmount: expAmt};            
+            firebase.database().ref().child('expenseObj').update(expenseObj);
+            
+            /*clear the input form after success alert*/
+            alert("Your expense added successfully!");
+            document.getElementById("datepicker").value = '';
+            document.getElementById("expenseCategory").value = '';
+            document.getElementById("expenseAmount").value = '';
+        });
     </script>
   </body>
 </html>
