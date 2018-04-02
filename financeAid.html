@@ -165,6 +165,9 @@
       };
       firebase.initializeApp(config);
 
+      //read only if input is number include number with decimal place
+      var reg = /[+-]?([0-9]*[.])?[0-9]+/;
+
       //Write amount input by user to firebase database      
       var startCashAmt = {};
       var startCashKey;
@@ -179,23 +182,37 @@
       //saving cash from input
       $('.saveCash').on('click', function(e) {
         e.preventDefault();
-        startCashKey = startCashKey ? startCashKey : firebase.database().ref().child('startCash').push().key;
-        startCashAmt.startCash = document.getElementById("cashStartAmt").value;
-        firebase.database().ref().child('startCash').set(startCashAmt);
-        currentCashAmt = {currentCash: startCashAmt.startCash};
-        currentCashKey = currentCashKey ? currentCashKey : firebase.database().ref().child('currentCashAmt').push().key;
-        firebase.database().ref().child('currentCashAmt').set(currentCashAmt);
+        var validCashAmt = document.getElementById("cashStartAmt").value;
+        if (reg.test(validCashAmt)){
+          startCashKey = startCashKey ? startCashKey : firebase.database().ref().child('startCash').push().key;
+          startCashAmt.startCash = document.getElementById("cashStartAmt").value;
+          firebase.database().ref().child('startCash').set(startCashAmt);
+          currentCashAmt = {currentCash: startCashAmt.startCash};
+          currentCashKey = currentCashKey ? currentCashKey : firebase.database().ref().child('currentCashAmt').push().key;
+          firebase.database().ref().child('currentCashAmt').set(currentCashAmt);
+          document.getElementById("cashStartAmt").value = '';
+        } else {
+          alert('Please fill up the correct starting amount');
+          document.getElementById("cashStartAmt").value = '';
+        }        
       });
 
       //saving bank from input
       $('.saveBank').on('click', function(e) {
         e.preventDefault();
-        startBankKey = startBankKey ? startBankKey : firebase.database().ref().child('startBank').push().key;
-        startBankAmt.startBank = document.getElementById("bankStartAmt").value;
-        firebase.database().ref().child('startBank').set(startBankAmt);
-        currentBankAmt = {currentBank: startBankAmt.startBank};
-        currentBankKey = currentBankKey ? currentBankKey : firebase.database().ref().child('currentBankAmt').push().key;
-        firebase.database().ref().child('currentBankAmt').set(currentBankAmt);
+        var validBankAmt = document.getElementById("bankStartAmt").value;
+        if (reg.test(validBankAmt)){
+          startBankKey = startBankKey ? startBankKey : firebase.database().ref().child('startBank').push().key;
+          startBankAmt.startBank = document.getElementById("bankStartAmt").value;
+          firebase.database().ref().child('startBank').set(startBankAmt);
+          currentBankAmt = {currentBank: startBankAmt.startBank};
+          currentBankKey = currentBankKey ? currentBankKey : firebase.database().ref().child('currentBankAmt').push().key;
+          firebase.database().ref().child('currentBankAmt').set(currentBankAmt);
+          document.getElementById("bankStartAmt").value = '';
+        } else {
+          alert('Please fill up the correct starting amount');
+          document.getElementById("bankStartAmt").value = '';
+        }        
       });
 
       //Read current cash from database
