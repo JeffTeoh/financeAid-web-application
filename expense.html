@@ -167,15 +167,28 @@
             document.getElementById("expenseAccount").value = '';
             document.getElementById("expenseCategory").value = '';
             document.getElementById("expenseAmount").value = '';
-            document.getElementById("expenseList li").remove();
+            $('#expenseList li').remove();
+            //output list of data
+            var expenseRef = firebase.database().ref().child('expenseObj');
+            var expenseObj;
+            expenseRef.on("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                    expenseObj = childSnapshot.val();
+                    var expDate = expenseObj.expenseDate;
+                    var expAcc = expenseObj.expenseAccount;
+                    var expCat = expenseObj.expenseCategory;
+                    var expAmt = parseFloat(expenseObj.expenseAmount);
+                    $('#expenseList').append('<li class="list-group-item">' + expDate + " " + expAcc + " " + expCat + " " + expAmt + '</li>');
+                }); 
+            });
         });
 
         //output list of data
         var expenseRef = firebase.database().ref().child('expenseObj');
-        var expenseList = $('#expenseList');
+        var expenseObj;
         expenseRef.on("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){
-                var expenseObj = childSnapshot.val();
+                expenseObj = childSnapshot.val();
                 var expDate = expenseObj.expenseDate;
                 var expAcc = expenseObj.expenseAccount;
                 var expCat = expenseObj.expenseCategory;
@@ -183,8 +196,7 @@
                 //console.log(expDate);
                 //console.log(expAcc);
                 //console.log(expAmt);
-                //change category display
-                expenseList.append('<li class="list-group-item">' + expDate + " " + expAcc + " " + expCat + " " + expAmt + '</li>');
+                $('#expenseList').append('<li class="list-group-item">' + expDate + " " + expAcc + " " + expCat + " " + expAmt + '</li>');
             }); 
         });
     </script>
