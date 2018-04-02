@@ -185,7 +185,7 @@
                     var expAcc = expenseObj.expenseAccount;
                     var expCat = expenseObj.expenseCategory;
                     var expAmt = parseFloat(expenseObj.expenseAmount).toFixed(2);
-                    $('#expenseList').append('<li class="list-group-item">' + expDate + " " + expAcc + " " + expCat + " " + expAmt + '</li>');
+                    $('#expenseList').append('<li class="list-group-item">' + expDate + " " + expAcc + " " + expCat + " " + expAmt.toFixed(2) + '</li>');
                 }); 
             });
         });
@@ -203,7 +203,7 @@
                 //console.log(expDate);
                 //console.log(expAcc);
                 //console.log(expAmt);
-                $('#expenseList').append('<li class="list-group-item">' + expDate + " " + expAcc + " " + expCat + " " + expAmt + '</li>');
+                $('#expenseList').append('<li class="list-group-item">' + expDate + " " + expAcc + " " + expCat + " " + expAmt.toFixed(2) + '</li>');
             }); 
         });
     </script>

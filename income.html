@@ -119,7 +119,7 @@
         //save records and update current amount for both accounts
         $('.btn').on('click', function(e) {
             var incomeDateObj = $("#datepicker").datepicker("getDate");
-            /*return in MM-DD-YYYY*/
+            //return in MM-DD-YYYY
             var incDate = $.datepicker.formatDate("mm-dd-yy", incomeDateObj);
             var incAcc = document.getElementById("incomeAccount").value;
             var incAmt = document.getElementById("incomeAmount").value;
@@ -151,7 +151,7 @@
                 firebase.database().ref().child('currentCashAmt').update(currentCashObj);
             }
             
-            /*clear the input form after success alert*/
+            //clear the input form after success alert
             alert("Your income added successfully!");
             document.getElementById("datepicker").value = '';
             document.getElementById("incomeAccount").value = '';
@@ -166,10 +166,10 @@
                     var incDate = incomeObj.incomeDate;
                     var incAcc = incomeObj.incomeAccount;
                     var incAmt = parseFloat(incomeObj.incomeAmount).toFixed(2);
-                    $('#incomeList').append('<li class="list-group-item">' + incDate + " " + incAcc + " " + incAmt + '</li>');
+                    $('#incomeList').append('<li class="list-group-item">' + incDate + " " + incAcc + " " + incAmt.toFixed(2) + '</li>');
                 }); 
             });
-        });
+        })
 
         //output list of data when loading the page and only appear if there are available data
         var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
@@ -183,7 +183,7 @@
                 console.log(incomeObj);
                 //console.log(incAcc);
                 //console.log(incAmt);
-                $('#incomeList').append('<li class="list-group-item">' + incDate + " " + incAcc + " " + incAmt + '</li>');
+                $('#incomeList').append('<li class="list-group-item">' + incDate + " " + incAcc + " " + incAmt.toFixed(2) + '</li>');
             }); 
         });
         

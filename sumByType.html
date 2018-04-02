@@ -143,7 +143,7 @@
                     if(expSelectedList[i].intMonth == selectedMonth && expSelectedList[i].expenseCategory == selectedCategory){
                         //console.log(expSelectedList[i].intMonth + " done");
                         //recordList.remove(); remove list to refresh during new selection
-                        $('#recordList').append('<li class="list-group-item">' + expDate + " " + expCat + " " + expAmt + '</li>');
+                        $('#recordList').append('<li class="list-group-item">' + expDate + " " + expCat + " " + expAmt.toFixed(2) + '</li>');
                         totalMonthAmt += expAmt;
                     }
                     document.getElementById("totalAmountByType").value = totalMonthAmt.toFixed(2);
