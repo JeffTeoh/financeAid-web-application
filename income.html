@@ -121,7 +121,6 @@
             //write records into list to firebase db
             var incomeObj = {}; //(if without var, override on same object, never update)
             var incomeObjKey = incomeObjKey ? incomeObjKey : firebase.database().ref().child('incomeObj').push().key;
-            //console.log(incomeObjKey);
             incomeObj[incomeObjKey] = {incomeDate: incDate,incomeAccount: incAcc, incomeAmount: incAmt};            
             firebase.database().ref().child('incomeObj').update(incomeObj);
             
