@@ -117,15 +117,21 @@
         firebase.initializeApp(config);
 
         //fetch current amount for both account
-        var currentAccountObj = {};
-        var currentAmtRef = firebase.database().ref('currentAmt');
-        currentAmtRef.on('value', function(snapshot){
+        var currentCashObj = {};
+        var currentCashAmtRef = firebase.database().ref('currentCashAmt');
+        currentCashAmtRef.on('value', function(snapshot){
             var childData = snapshot.val();
-            currentAccountObj.currentCash = parseFloat(childData.currentCash);
-            currentAccountObj.currentBank = parseFloat(childData.currentBank);
-        }); 
+            currentCashObj.currentCash = parseFloat(childData.currentCash);
+        });
+
+        var currentBankObj = {};
+        var currentBankAmtRef = firebase.database().ref('currentBankAmt');
+        currentBankAmtRef.on('value', function(snapshot){
+            var childData = snapshot.val();
+            currentBankObj.currentBank = parseFloat(childData.currentBank);
+        });
         
-        //problems: list need to reload after adding one item
+        //save records and update current amount for both accounts
         $('.btn').on('click', function(e) {
             var expenseDateObj = $("#datepicker").datepicker("getDate");
             /*return in MM-DD-YYYY*/
@@ -135,7 +141,7 @@
             var expAmt = document.getElementById("expenseAmount").value;
             
             //write records into list to firebase db
-            var expenseObj = {}; //(override on same object, never update)
+            var expenseObj = {};
             var expenseObjKey = expenseObjKey ? expenseObjKey : firebase.database().ref().child('expenseObj').push().key;
             expenseObj[expenseObjKey] = {expenseDate: expDate, expenseAccount: expAcc, expenseCategory: expCat, expenseAmount: expAmt};            
             firebase.database().ref().child('expenseObj').update(expenseObj);
@@ -143,22 +149,22 @@
             //calculate and update current amount based on expense
             var selectedAccount = document.getElementById('expenseAccount').value;
             if (selectedAccount == "Bank"){
-                var currentBankAmt = parseFloat(currentAccountObj.currentBank);
+                var currentBankAmt = parseFloat(currentBankObj.currentBank);
                 var currentexpenseAmt = parseFloat(expenseObj[expenseObjKey].expenseAmount);
                 currentBankAmt -= currentexpenseAmt;
                 
                 //upload the current amount to firebase db
-                currentAccountObj.currentBank = currentBankAmt;
-                firebase.database().ref().child('currentAmt').update(currentAccountObj);
+                currentBankObj.currentBank = currentBankAmt;
+                firebase.database().ref().child('currentBankAmt').update(currentBankObj);
             } else 
             if(selectedAccount == "Cash"){
-                var currentCashAmt = parseFloat(currentAccountObj.currentCash);
+                var currentCashAmt = parseFloat(currentCashObj.currentCash);
                 var currentexpenseAmt = parseFloat(expenseObj[expenseObjKey].expenseAmount);
                 currentCashAmt -= currentexpenseAmt;
                 
                 //upload the current amount to firebase db
-                currentAccountObj.currentCash = currentCashAmt;
-                firebase.database().ref().child('currentAmt').update(currentAccountObj);
+                currentCashObj.currentCash = currentCashAmt;
+                firebase.database().ref().child('currentCashAmt').update(currentCashObj);
             }
             
             /*clear the input form after success alert*/

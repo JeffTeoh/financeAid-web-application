@@ -102,15 +102,21 @@
         firebase.initializeApp(config);
 
         //fetch current amount for both account
-        var currentAccountObj = {};
-        var currentAmtRef = firebase.database().ref('currentAmt');
-        currentAmtRef.on('value', function(snapshot){
+        var currentCashObj = {};
+        var currentCashAmtRef = firebase.database().ref('currentCashAmt');
+        currentCashAmtRef.on('value', function(snapshot){
             var childData = snapshot.val();
-            currentAccountObj.currentCash = parseFloat(childData.currentCash);
-            currentAccountObj.currentBank = parseFloat(childData.currentBank);
-        });        
+            currentCashObj.currentCash = parseFloat(childData.currentCash);
+        });
 
-        //return date from datepicker (TODO: accept nullable value, amount accept any value[restrict to integer])
+        var currentBankObj = {};
+        var currentBankAmtRef = firebase.database().ref('currentBankAmt');
+        currentBankAmtRef.on('value', function(snapshot){
+            var childData = snapshot.val();
+            currentBankObj.currentBank = parseFloat(childData.currentBank);
+        });
+
+        //save records and update current amount for both accounts
         $('.btn').on('click', function(e) {
             var incomeDateObj = $("#datepicker").datepicker("getDate");
             /*return in MM-DD-YYYY*/
@@ -127,22 +133,22 @@
             //calculate and update current amount based on income
             var selectedAccount = document.getElementById('incomeAccount').value;
             if (selectedAccount == "Bank"){
-                var currentBankAmt = parseFloat(currentAccountObj.currentBank);
+                var currentBankAmt = parseFloat(currentBankObj.currentBank);
                 var currentIncomeAmt = parseFloat(incomeObj[incomeObjKey].incomeAmount);
                 currentBankAmt += currentIncomeAmt;
                 
                 //upload the current amount to firebase db
-                currentAccountObj.currentBank = currentBankAmt;
-                firebase.database().ref().child('currentAmt').update(currentAccountObj);
+                currentBankObj.currentBank = currentBankAmt;
+                firebase.database().ref().child('currentBankAmt').update(currentBankObj);
             } else 
             if(selectedAccount == "Cash"){
-                var currentCashAmt = parseFloat(currentAccountObj.currentCash);
+                var currentCashAmt = parseFloat(currentCashObj.currentCash);
                 var currentIncomeAmt = parseFloat(incomeObj[incomeObjKey].incomeAmount);
                 currentCashAmt += currentIncomeAmt;
                 
                 //upload the current amount to firebase db
-                currentAccountObj.currentCash = currentCashAmt;
-                firebase.database().ref().child('currentAmt').update(currentAccountObj);
+                currentCashObj.currentCash = currentCashAmt;
+                firebase.database().ref().child('currentCashAmt').update(currentCashObj);
             }
             
             /*clear the input form after success alert*/

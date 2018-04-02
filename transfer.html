@@ -112,15 +112,6 @@
         };
         firebase.initializeApp(config);
 
-        //fetch current amount for both account
-        var currentAccountObj = {};
-        var currentAmtRef = firebase.database().ref('currentAmt');
-        currentAmtRef.on('value', function(snapshot){
-            var childData = snapshot.val();
-            currentAccountObj.currentCash = parseFloat(childData.currentCash);
-            currentAccountObj.currentBank = parseFloat(childData.currentBank);
-        });
-
         //auto set transfer account when user selected
         var selectedAccount = $("#transferFrom option:selected");
         $('#transferFrom').change(function(){
@@ -135,7 +126,22 @@
             });
         });
 
-        //event happen when button clicked
+        //fetch current amount for both account
+        var currentCashObj = {};
+        var currentCashAmtRef = firebase.database().ref('currentCashAmt');
+        currentCashAmtRef.on('value', function(snapshot){
+            var childData = snapshot.val();
+            currentCashObj.currentCash = parseFloat(childData.currentCash);
+        });
+
+        var currentBankObj = {};
+        var currentBankAmtRef = firebase.database().ref('currentBankAmt');
+        currentBankAmtRef.on('value', function(snapshot){
+            var childData = snapshot.val();
+            currentBankObj.currentBank = parseFloat(childData.currentBank);
+        });
+
+        //save records and update current amount for both accounts
         $('.btn').on('click', function(e) {
             var transferDateObj = $("#datepicker").datepicker("getDate");
             /*return in MM-DD-YYYY*/
@@ -157,29 +163,32 @@
             var currentBankAmt;
             var currentCashAmt;
             if (selectedAccountFrom == "Bank"){
-                currentBankAmt = parseFloat(currentAccountObj.currentBank);
-                currentCashAmt = parseFloat(currentAccountObj.currentCash);
+                currentBankAmt = parseFloat(currentBankObj.currentBank);
+                currentCashAmt = parseFloat(currentCashObj.currentCash);
                 var currentTransferAmt = parseFloat(transferObj[transferObjKey].transferAmount);
                 currentBankAmt -= currentTransferAmt;
                 currentCashAmt += currentTransferAmt;
 
                 
                 //upload the current amount to firebase db
-                currentAccountObj.currentBank = currentBankAmt;
-                currentAccountObj.currentCash = currentCashAmt;
-                firebase.database().ref().child('currentAmt').update(currentAccountObj);
+                currentBankObj.currentBank = currentBankAmt;
+                currentCashObj.currentCash = currentCashAmt;
+                firebase.database().ref().child('currentBankAmt').update(currentBankObj);
+                firebase.database().ref().child('currentCashAmt').update(currentCashObj);
             } else 
             if(selectedAccountFrom == "Cash"){
-                currentBankAmt = parseFloat(currentAccountObj.currentBank);
-                currentCashAmt = parseFloat(currentAccountObj.currentCash);
-                currentTransferAmt = parseFloat(transferObj[transferObjKey].transferAmount);
+                currentBankAmt = parseFloat(currentBankObj.currentBank);
+                currentCashAmt = parseFloat(currentCashObj.currentCash);
+                var currentTransferAmt = parseFloat(transferObj[transferObjKey].transferAmount);
                 currentBankAmt += currentTransferAmt;
                 currentCashAmt -= currentTransferAmt;
+
                 
                 //upload the current amount to firebase db
-                currentAccountObj.currentBank = currentBankAmt;
-                currentAccountObj.currentCash = currentCashAmt;
-                firebase.database().ref().child('currentAmt').update(currentAccountObj);
+                currentBankObj.currentBank = currentBankAmt;
+                currentCashObj.currentCash = currentCashAmt;
+                firebase.database().ref().child('currentBankAmt').update(currentBankObj);
+                firebase.database().ref().child('currentCashAmt').update(currentCashObj);
             }
 
             /*clear the input form after success alert*/
