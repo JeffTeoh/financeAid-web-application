@@ -95,37 +95,49 @@
             messagingSenderId: "165519709635"
         };
         firebase.initializeApp(config);
+        
+        function daysInMonth (month, year) { // Use 1 for January, 2 for February, etc.
+            return new Date(year, month, 0).getDate();
+        }
+
+        //console.log(daysInMonth(2, 1999)); // February in a non-leap year.
+        //console.log(daysInMonth(2, 2000)); // February in a leap year.
 
         var selectedMonth;
         $('.btn').on('click', function(e) {
             selectedMonth = document.getElementById('monthPicker').value;
-            console.log(selectedMonth + " is chosen");
+            //console.log(selectedMonth + " is chosen");
             //output list of data
             var expenseRef = firebase.database().ref().child('expenseObj');
             var recordList = $('#recordList');
             var expSelectedList = [];
-            var expDateCompare;
-            var intDate;
+            var expMonth;
+            var intMonth;
             var i = 0;
             var totalMonthAmt = 0;
             var avgMonthAmt = 0;
+            var avgDays = 0;
+
             expenseRef.on("value", function(snapshot) {
                 snapshot.forEach(function(childSnapshot){
                     var expenseObj = childSnapshot.val();
                     var expDate = expenseObj.expenseDate;
                     var expCat = expenseObj.expenseCategory;
                     var expAmt = parseFloat(expenseObj.expenseAmount);
-                    expDateCompare = parseInt(expDate);
-                    expenseObj.intDate = expDateCompare;
+                    expMonth = parseInt(expDate);
+                    expenseObj.intMonth = expMonth;
                     expSelectedList.push(expenseObj);
-                    //console.log(expSelectedList[i].intDate);
-                    if(expSelectedList[i].intDate == selectedMonth){
-                        //console.log(expSelectedList[i].intDate + " done");
+                    //console.log(expSelectedList[i].intMonth);
+                    avgDays = daysInMonth(expSelectedList[i].intMonth, 2018); //fetch year from user input?
+                    console.log(avgDays);
+                    if(expSelectedList[i].intMonth == selectedMonth){
+                        //console.log(expSelectedList[i].intMonth + " done");
                         //recordList.remove(); remove list to refresh during new selection
                         recordList.append('<li class="list-group-item">' + expDate + " " + expCat + " " + expAmt + '</li>');
                         totalMonthAmt += expAmt;
-                        document.getElementById("totalAmountByMonth").value = totalMonthAmt;
                     }
+                    document.getElementById("totalAmountByMonth").value = totalMonthAmt;
+                    document.getElementById("avgAmountByMonth").value = (totalMonthAmt / avgDays).toFixed(2);
                     i += 1; 
                 }); 
             });
