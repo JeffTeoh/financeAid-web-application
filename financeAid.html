@@ -183,12 +183,12 @@
       $('.saveCash').on('click', function(e) {
         e.preventDefault();
         var validCashAmt = document.getElementById("cashStartAmt").value;
-        if (reg.test(validCashAmt)){
+        if (reg.test(validCashAmt) && validCashAmt != null){
           startCashKey = startCashKey ? startCashKey : firebase.database().ref().child('startCash').push().key;
           startCashAmt.startCash = document.getElementById("cashStartAmt").value;
           firebase.database().ref().child('startCash').set(startCashAmt);
           currentCashAmt = {currentCash: startCashAmt.startCash};
-          currentCashKey = currentCashKey ? currentCashKey : firebase.database().ref().child('currentCashAmt').push().key;
+          currefntCashKey = currentCashKey ? currentCashKey : firebase.database().ref().child('currentCashAmt').push().key;
           firebase.database().ref().child('currentCashAmt').set(currentCashAmt);
           document.getElementById("cashStartAmt").value = '';
         } else {
@@ -201,7 +201,7 @@
       $('.saveBank').on('click', function(e) {
         e.preventDefault();
         var validBankAmt = document.getElementById("bankStartAmt").value;
-        if (reg.test(validBankAmt)){
+        if (reg.test(validBankAmt) && validBankAmt != null){
           startBankKey = startBankKey ? startBankKey : firebase.database().ref().child('startBank').push().key;
           startBankAmt.startBank = document.getElementById("bankStartAmt").value;
           firebase.database().ref().child('startBank').set(startBankAmt);
