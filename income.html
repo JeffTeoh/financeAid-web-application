@@ -126,9 +126,8 @@
             var incDate = $.datepicker.formatDate("mm-dd-yy", incomeDateObj);
             var incAcc = document.getElementById("incomeAccount").value;
             var incAmt = document.getElementById("incomeAmount").value;
-
-            var validIncAmt = document.getElementById("incomeAmount").value;
-            if (reg.test(validIncAmt) && validIncAmt != null){
+            
+            if ((reg.test(validIncAmt) && validIncAmt != null), $("#datepicker").datepicker("getDate") != null){
                 //write records into list to firebase db
                 var incomeObj = {}; //(if without var, override on same object, never update)
                 var incomeObjKey = incomeObjKey ? incomeObjKey : firebase.database().ref().child('incomeObj').push().key;

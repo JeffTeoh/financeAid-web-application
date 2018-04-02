@@ -143,8 +143,7 @@
             var expCat = document.getElementById("expenseCategory").value;
             var expAmt = document.getElementById("expenseAmount").value;
             
-            var validExpAmt = document.getElementById("expenseAmount").value;
-            if (reg.test(validExpAmt) && validExpAmt != null){
+            if ((reg.test(validExpAmt) && validExpAmt != null), $("#datepicker").datepicker("getDate") != null){
                 //write records into list to firebase db
                 var expenseObj = {};
                 var expenseObjKey = expenseObjKey ? expenseObjKey : firebase.database().ref().child('expenseObj').push().key;
