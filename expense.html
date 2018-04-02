@@ -99,7 +99,8 @@
             messagingSenderId: "165519709635"
         };
         firebase.initializeApp(config);
-
+        
+        //problems: list need to reload after adding one item
         $('.btn').on('click', function(e) {
             var expenseDateObj = $("#datepicker").datepicker("getDate");
             /*return in MM-DD-YYYY*/
@@ -119,6 +120,7 @@
             document.getElementById("datepicker").value = '';
             document.getElementById("expenseCategory").value = '';
             document.getElementById("expenseAmount").value = '';
+            document.getElementById("expenseList").remove();
         });
 
         //output list of data
