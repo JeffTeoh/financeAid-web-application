@@ -43,8 +43,8 @@
                         <form>
                             <select name="" id="transferFrom">
                                 <option value="">Choose an option:</option>
-                                <option value="bank">Bank</option>
-                                <option value="cash">Cash</option>
+                                <option value="Bank">Bank</option>
+                                <option value="Cash">Cash</option>
                             </select>
                         </form>
                     </div>
@@ -57,10 +57,12 @@
                 <div class="row py-3">
                     <div class="col-md-12">
                         <form>
+                            <!--TODO: enforce transfer account when user select. eg: form disable and-->
+                            <!--only display value vice versa with transferFrom-->
                             <select name="" id="transferTo">
                                 <option value="">Choose an option:</option>
-                                <option value="bank">Bank</option>
-                                <option value="cash">Cash</option>
+                                <option value="Bank">Bank</option>
+                                <option value="Cash">Cash</option>
                             </select>
                         </form>
                     </div>
@@ -114,6 +116,15 @@
         };
         firebase.initializeApp(config);
 
+        //fetch current amount for both account
+        var currentAccountObj = {};
+        var currentAmtRef = firebase.database().ref('currentAmt');
+        currentAmtRef.on('value', function(snapshot){
+            var childData = snapshot.val();
+            currentAccountObj.currentCash = parseFloat(childData.currentCash);
+            currentAccountObj.currentBank = parseFloat(childData.currentBank);
+        });
+
         $('.btn').on('click', function(e) {
             var transferDateObj = $("#datepicker").datepicker("getDate");
             /*return in MM-DD-YYYY*/
@@ -122,6 +133,7 @@
             var trfTo = document.getElementById("transferTo").value;
             var trfAmt = document.getElementById("transferAmount").value;
             
+            //write records into list to firebase db
             var transferObj = {}; //(override on same object, never update)
             var transferObjKey = transferObjKey ? transferObjKey : firebase.database().ref().child('transferObj').push().key;
             //console.log(transferObjKey);
@@ -129,6 +141,36 @@
             transferObj[transferObjKey] = {transferDate: trfDate, transferFrom: trfFrom, transferTo: trfTo, transferAmount: trfAmt};
             firebase.database().ref().child('transferObj').update(transferObj);
             
+            //calculate and update current amount based on transfer
+            var selectedAccountFrom = trfFrom;
+            var currentBankAmt;
+            var currentCashAmt;
+            if (selectedAccountFrom == "Bank"){
+                currentBankAmt = parseFloat(currentAccountObj.currentBank);
+                currentCashAmt = parseFloat(currentAccountObj.currentCash);
+                var currentTransferAmt = parseFloat(transferObj[transferObjKey].transferAmount);
+                currentBankAmt -= currentTransferAmt;
+                currentCashAmt += currentTransferAmt;
+
+                
+                //upload the current amount to firebase db
+                currentAccountObj.currentBank = currentBankAmt;
+                currentAccountObj.currentCash = currentCashAmt;
+                firebase.database().ref().child('currentAmt').update(currentAccountObj);
+            } else 
+            if(selectedAccountFrom == "Cash"){
+                currentBankAmt = parseFloat(currentAccountObj.currentBank);
+                currentCashAmt = parseFloat(currentAccountObj.currentCash);
+                currentTransferAmt = parseFloat(transferObj[transferObjKey].transferAmount);
+                currentBankAmt += currentTransferAmt;
+                currentCashAmt -= currentTransferAmt;
+                
+                //upload the current amount to firebase db
+                currentAccountObj.currentBank = currentBankAmt;
+                currentAccountObj.currentCash = currentCashAmt;
+                firebase.database().ref().child('currentAmt').update(currentAccountObj);
+            }
+
             /*clear the input form after success alert*/
             alert("Your transfer added successfully!");
             document.getElementById("datepicker").value = '';
