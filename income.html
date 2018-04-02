@@ -68,9 +68,7 @@
             <div class="col-md-6">
                 <h5>List of income</h5>
                 <ul class="list-group" id="incomeList">
-                    <li class="list-group-item">
-                        Balance
-                    </li>
+                    
                 </ul>
             </div>
         </div>
@@ -103,8 +101,16 @@
         };
         firebase.initializeApp(config);
 
+        //fetch current amount for both account
+        var currentAccountObj = {};
+        var currentAmtRef = firebase.database().ref('currentAmt');
+        currentAmtRef.on('value', function(snapshot){
+            var childData = snapshot.val();
+            currentAccountObj.currentCash = parseFloat(childData.currentCash);
+            currentAccountObj.currentBank = parseFloat(childData.currentBank);
+        });        
 
-        //return date from datepicker (problems: accept nullable value, amount accept any value[restrict to integer])
+        //return date from datepicker (TODO: accept nullable value, amount accept any value[restrict to integer])
         $('.btn').on('click', function(e) {
             var incomeDateObj = $("#datepicker").datepicker("getDate");
             /*return in MM-DD-YYYY*/
@@ -112,12 +118,33 @@
             var incAcc = document.getElementById("incomeAccount").value;
             var incAmt = document.getElementById("incomeAmount").value;
             
-            var incomeObj = {}; //(override on same object, never update)
+            //write records into list to firebase db
+            var incomeObj = {}; //(if without var, override on same object, never update)
             var incomeObjKey = incomeObjKey ? incomeObjKey : firebase.database().ref().child('incomeObj').push().key;
             //console.log(incomeObjKey);
-            //console.log(incomeObj);
             incomeObj[incomeObjKey] = {incomeDate: incDate,incomeAccount: incAcc, incomeAmount: incAmt};            
             firebase.database().ref().child('incomeObj').update(incomeObj);
+            
+            //calculate and update current amount based on income
+            var selectedAccount = document.getElementById('incomeAccount').value;
+            if (selectedAccount == "Bank"){
+                var currentBankAmt = parseFloat(currentAccountObj.currentBank);
+                var currentIncomeAmt = parseFloat(incomeObj[incomeObjKey].incomeAmount);
+                currentBankAmt += currentIncomeAmt;
+                
+                //upload the current amount to firebase db
+                currentAccountObj.currentBank = currentBankAmt;
+                firebase.database().ref().child('currentAmt').update(currentAccountObj);
+            } else 
+            if(selectedAccount == "Cash"){
+                var currentCashAmt = parseFloat(currentAccountObj.currentCash);
+                var currentIncomeAmt = parseFloat(incomeObj[incomeObjKey].incomeAmount);
+                currentCashAmt += currentIncomeAmt;
+                
+                //upload the current amount to firebase db
+                currentAccountObj.currentCash = currentCashAmt;
+                firebase.database().ref().child('currentAmt').update(currentAccountObj);
+            }
             
             /*clear the input form after success alert*/
             alert("Your income added successfully!");
@@ -126,7 +153,7 @@
             document.getElementById("incomeAmount").value = '';
         });
 
-        //output list of data
+        //output list of data           [TODO: cannot refresh list, new child append into current list]
         var incomeRef = firebase.database().ref().child('incomeObj');
         var incomeList = $('#incomeList');
         incomeRef.on("value", function(snapshot) {

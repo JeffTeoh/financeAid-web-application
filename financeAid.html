@@ -26,14 +26,14 @@
         <div class="col-md-2 card-item d-flex align-items-center justify-content-center" align="center">
           <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#cashModal">
             <p>CASH</p>
-            <p id="currentCashAmt">RM0.00</p>
+            <p id="currentCashAmt"></p>
           </a>
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-2 card-item d-flex align-items-center justify-content-center" align="center">
             <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#bankModal">
               <p>BANK</p>
-              <p id="currentBankAmt">RM0.00</p>
+              <p id="currentBankAmt"></p>
             </a>
         </div>
       </div>
@@ -175,36 +175,51 @@
         return result;
       }
 
-      //Write amount input by user to firebase database
-      var startAmountKey;
+      //Write amount input by user to firebase database      
+      var startAmtKey;
+      var currentAmtKey;
+      var startAmt = {};
+      var currentCashAmt;
+      var currentBankAmt;
+      var currentAmt = {};
+      //var startAmountKey;
       $('.save').on('click', function(e) {
         e.preventDefault();
-        var updates = {};
-        startAmountKey = startAmountKey ? startAmountKey : firebase.database().ref().child('startingAmt').push().key;
-        //console.log(startAmountKey);
-        updates[startAmountKey] = $('form').setStartAmt();
-        firebase.database().ref().child('startingAmt').set(updates);
-        //console.log(updates);
+        //var updates = {};
+        //startAmountKey = startAmountKey ? startAmountKey : firebase.database().ref().child('startingAmt').push().key;
+        //updates[startAmountKey] = $('form').setStartAmt();
+        startAmtKey = startAmtKey ? startAmtKey : firebase.database().ref().child('startAmt').push().key;
+        startAmt.startCash = document.getElementById("cashStartAmt").value;
+        startAmt.startBank = document.getElementById("bankStartAmt").value;
+        firebase.database().ref().child('startAmt').set(startAmt);
+        currentCashAmt = startAmt.startCash;
+        currentBankAmt = startAmt.startBank;
+        currentAmt = {currentCash: startAmt.startCash, currentBank: startAmt.startBank};
+        currentAmtKey = currentAmtKey ? currentAmtKey : firebase.database().ref().child('currentAmt').push().key;
+        firebase.database().ref().child('currentAmt').set(currentAmt);
       });
 
-      //Read from database (consist logic problems, eg: if data existed in db, add only cash or bank starting amount will
+      //Read from database (TODO: consist logic problems, eg: if data existed in db, add only cash or bank starting amount will
       //display NaN)
       var balance = 0;
-      var amountRef = firebase.database().ref('startingAmt');
+      var amountRef = firebase.database().ref('currentAmt');
+      var dispStartCash;
+      var dispStartBank;
       amountRef.on('value', function(snapshot){
-        snapshot.forEach(function(childSnapshot){
-          var childData = childSnapshot.val();
-          var dispStartCash = parseFloat(childData.startCash);
-          var dispStartBank = parseFloat(childData.startBank);
+          var childData = snapshot.val();
+          dispStartCash = parseFloat(childData.startCash);
+          dispStartBank = parseFloat(childData.startBank);
           balance = dispStartCash + dispStartBank;
-          console.log(balance);
-          balance.toFixed(2).toString();
+          //balance.toFixed(2).toString();
           if (dispStartCash !== null && dispStartBank !== null) {
             document.getElementById("balance").innerHTML = "RM" + balance;
           }
           //document.getElementById("balance").innerHTML = "RM" + balance;
-        });
       });
+      //console.log(dispStartBank);
+      
+      //document.getElementById("currentCashAmt").value = "0.00";
+      //document.getElementById("currentBankAmt").value = dispStartBank;
 
       //styling for button of main menu
       $('.menu-items').find('a').css('width','100%');
