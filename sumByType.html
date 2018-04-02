@@ -8,7 +8,6 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="financeAid.css">
     <title>Summary By Type</title>
   </head>
@@ -25,7 +24,7 @@
             <div class="col-md-2 text-right">Category</div>
             <div class="col-md-2">
                 <form>
-                    <select name="">
+                    <select name="" id="catPicker">
                         <option value="">Choose an option:</option>
                         <option value="foods">Foods and Drinks</option>
                         <option value="vehicle">Vehicle</option>
@@ -36,20 +35,20 @@
             <div class="col-md-2 text-right">Month</div>
             <div class="col-md-2">
                 <form>
-                    <select name="">
+                    <select name="" id="monthPicker">
                         <option value="">Choose an option:</option>
-                        <option value="jan">January</option>
-                        <option value="feb">February</option>
-                        <option value="mar">March</option>
-                        <option value="apr">April</option>
-                        <option value="may">May</option>
-                        <option value="jun">June</option>
-                        <option value="jul">July</option>
-                        <option value="aug">August</option>
-                        <option value="sept">September</option>
-                        <option value="oct">October</option>
-                        <option value="nov">November</option>
-                        <option value="dec">December</option>
+                        <option value="1">January</option>
+                        <option value="2">February</option>
+                        <option value="3">March</option>
+                        <option value="4">April</option>
+                        <option value="5">May</option>
+                        <option value="6">June</option>
+                        <option value="7">July</option>
+                        <option value="8">August</option>
+                        <option value="9">September</option>
+                        <option value="10">October</option>
+                        <option value="11">November</option>
+                        <option value="12">December</option>
                     </select>
                 </form>
             </div>
@@ -64,55 +63,8 @@
         <div class="row">
             <div class="col-md-12">
                 <h5>List of records</h5>
-                <ul class="list-group">
-                    <li class="list-group-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    01/03/2018
-                                </div>
-                                <div class="col-md-5">
-                                    Entertainment
-                                </div>
-                                <div class="col-md-2"></div>
-                                <div class="col-md-2">
-                                    RM200.00
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    02/03/2018
-                                </div>
-                                <div class="col-md-5">
-                                    Entertainment
-                                </div>
-                                <div class="col-md-2"></div>
-                                <div class="col-md-2">
-                                    RM100.00
-                                </div>
-                            </div>
-                        </div>
-                    </li>
-                    <li class="list-group-item">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    03/03/2018
-                                </div>
-                                <div class="col-md-5">
-                                    Entertainment
-                                </div>
-                                <div class="col-md-2"></div>
-                                <div class="col-md-2">
-                                    RM200.00
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                <ul class="list-group" id="recordList">
+                    
                 </ul>
             </div>
         </div>
@@ -140,9 +92,66 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
     <script>
-        $('.datepicker').datepicker();
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyAR3t7qI2D5wRu4fO38FuPYbPegZwQd_yI",
+            authDomain: "finance-aid-b7793.firebaseapp.com",
+            databaseURL: "https://finance-aid-b7793.firebaseio.com",
+            projectId: "finance-aid-b7793",
+            storageBucket: "finance-aid-b7793.appspot.com",
+            messagingSenderId: "165519709635"
+        };
+        firebase.initializeApp(config);
+        
+        function daysInMonth (month, year) { // Use 1 for January, 2 for February, etc.
+            return new Date(year, month, 0).getDate();
+        }
+
+        var selectedMonth;
+        var selectedCategory;
+        $('.btn').on('click', function(e) {
+            selectedMonth = document.getElementById('monthPicker').value;
+            selectedCategory = document.getElementById('catPicker').value;
+            console.log(selectedCategory + " " + selectedMonth + " is chosen");
+            //output list of data
+            var expenseRef = firebase.database().ref().child('expenseObj');
+            var recordList = $('#recordList');
+            var expSelectedList = [];
+            var expMonth;
+            var intMonth;
+            var i = 0;
+            var totalMonthAmt = 0;
+            var avgMonthAmt = 0;
+            var avgDays = 0;
+
+            expenseRef.on("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                    var expenseObj = childSnapshot.val();
+                    var expDate = expenseObj.expenseDate;
+                    var expCat = expenseObj.expenseCategory;
+                    var expAmt = parseFloat(expenseObj.expenseAmount);
+                    expMonth = parseInt(expDate);
+                    expenseObj.intMonth = expMonth;
+                    expSelectedList.push(expenseObj);
+                    //console.log(expSelectedList[i].intMonth);
+                    avgDays = daysInMonth(expSelectedList[i].intMonth, 2018); //fetch year from user input?
+                    console.log(avgDays);
+                    if(expSelectedList[i].intMonth == selectedMonth && expSelectedList[i].expenseCategory == selectedCategory){
+                        //console.log(expSelectedList[i].intMonth + " done");
+                        //recordList.remove(); remove list to refresh during new selection
+                        recordList.append('<li class="list-group-item">' + expDate + " " + expCat + " " + expAmt + '</li>');
+                        totalMonthAmt += expAmt;
+                    }
+                    document.getElementById("totalAmountByType").value = totalMonthAmt;
+                    document.getElementById("avgAmountByType").value = (totalMonthAmt / avgDays).toFixed(2);
+                    i += 1; 
+                }); 
+            });
+        });
     </script>
   </body>
 </html>
