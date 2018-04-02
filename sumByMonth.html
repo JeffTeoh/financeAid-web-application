@@ -108,7 +108,7 @@
             selectedMonth = document.getElementById('monthPicker').value;
             //console.log(selectedMonth + " is chosen");
             //output list of data
-            var expenseRef = firebase.database().ref().child('expenseObj');
+            var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
             var expSelectedList = [];
             var expMonth;
             var intMonth;

@@ -180,7 +180,7 @@
             $('#transferList li').remove();
 
             //output list of data
-            var transferRef = firebase.database().ref().child('transferObj');
+            var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
             var transferObj;
             transferRef.on("value", function(snapshot) {
                 snapshot.forEach(function(childSnapshot){
@@ -195,7 +195,7 @@
         });
 
         //output list of data when loading the page and only appear if there are available data
-        var transferRef = firebase.database().ref().child('transferObj');
+        var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
         var transferObj;
         transferRef.on("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){

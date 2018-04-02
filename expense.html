@@ -170,7 +170,7 @@
             $('#expenseList li').remove();
             
             //output list of data
-            var expenseRef = firebase.database().ref().child('expenseObj');
+            var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
             var expenseObj;
             expenseRef.on("value", function(snapshot) {
                 snapshot.forEach(function(childSnapshot){
@@ -185,7 +185,7 @@
         });
 
         //output list of data when loading the page and only appear if there are available data
-        var expenseRef = firebase.database().ref().child('expenseObj');
+        var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
         var expenseObj;
         expenseRef.on("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){

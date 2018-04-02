@@ -153,7 +153,7 @@
             $('#incomeList li').remove();
             
             //output list of data
-            var incomeRef = firebase.database().ref().child('incomeObj');
+            var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
             incomeRef.on("value", function(snapshot) {
                 snapshot.forEach(function(childSnapshot){
                     var incomeObj = childSnapshot.val();
@@ -166,7 +166,7 @@
         });
 
         //output list of data when loading the page and only appear if there are available data
-        var incomeRef = firebase.database().ref().child('incomeObj');
+        var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
         var incomeObj;
         incomeRef.on("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){

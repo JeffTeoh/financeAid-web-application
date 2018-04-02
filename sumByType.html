@@ -118,7 +118,7 @@
             selectedCategory = document.getElementById('catPicker').value;
             console.log(selectedCategory + " " + selectedMonth + " is chosen");
             //output list of data
-            var expenseRef = firebase.database().ref().child('expenseObj');
+            var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
             var expSelectedList = [];
             var expMonth;
             var intMonth;
