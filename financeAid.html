@@ -20,7 +20,14 @@
         <div class="col-md-2"></div>
         <div class="col-md-2 text-center">
           <p style="font-size:2rem;">Balance:</p>
-          <p style="font-size:2rem;" id="balance"></p>
+          <form>
+            <label for="dispCurrentCash">Cash</label>
+            <input class="form-control" id="dispCurrentCash" readonly>
+          </form>
+          <form>
+            <label for="dispCurrentBank">Bank</label>
+            <input class="form-control" id="dispCurrentBank" readonly>
+          </form>
         </div>
         <div class="col-md-2"></div>
         <div class="col-md-2 card-item d-flex align-items-center justify-content-center" align="center">
@@ -201,25 +208,21 @@
 
       //Read from database (TODO: consist logic problems, eg: if data existed in db, add only cash or bank starting amount will
       //display NaN)
-      var balance = 0;
       var amountRef = firebase.database().ref('currentAmt');
-      var dispStartCash;
-      var dispStartBank;
+      var dispCurrentCash;
+      var dispCurrentBank;
       amountRef.on('value', function(snapshot){
           var childData = snapshot.val();
-          dispStartCash = parseFloat(childData.startCash);
-          dispStartBank = parseFloat(childData.startBank);
-          balance = dispStartCash + dispStartBank;
-          //balance.toFixed(2).toString();
-          if (dispStartCash !== null && dispStartBank !== null) {
-            document.getElementById("balance").innerHTML = "RM" + balance;
-          }
-          //document.getElementById("balance").innerHTML = "RM" + balance;
+          dispCurrentCash = parseFloat(childData.currentCash).toFixed(2);
+          dispCurrentBank = parseFloat(childData.currentBank).toFixed(2);
+          
+          //console.log( dispCurrentBank + " " + dispCurrentCash);
+          document.getElementById("dispCurrentCash").value = dispCurrentCash;
+          document.getElementById("dispCurrentBank").value = dispCurrentBank;
       });
-      //console.log(dispStartBank);
       
       //document.getElementById("currentCashAmt").value = "0.00";
-      //document.getElementById("currentBankAmt").value = dispStartBank;
+      //document.getElementById("currentBankAmt").value = dispCurrentBank;
 
       //styling for button of main menu
       $('.menu-items').find('a').css('width','100%');
