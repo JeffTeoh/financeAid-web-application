@@ -109,7 +109,6 @@
             //console.log(selectedMonth + " is chosen");
             //output list of data
             var expenseRef = firebase.database().ref().child('expenseObj');
-            var recordList = $('#recordList');
             var expSelectedList = [];
             var expMonth;
             var intMonth;
@@ -117,7 +116,8 @@
             var totalMonthAmt = 0;
             var avgMonthAmt = 0;
             var avgDays = 0;
-
+            
+            $('#recordList li').remove();
             expenseRef.on("value", function(snapshot) {
                 snapshot.forEach(function(childSnapshot){
                     var expenseObj = childSnapshot.val();
@@ -129,14 +129,13 @@
                     expSelectedList.push(expenseObj);
                     //console.log(expSelectedList[i].intMonth);
                     avgDays = daysInMonth(expSelectedList[i].intMonth, 2018); //fetch year from user input?
-                    console.log(avgDays);
                     if(expSelectedList[i].intMonth == selectedMonth){
                         //console.log(expSelectedList[i].intMonth + " done");
                         //recordList.remove(); remove list to refresh during new selection
-                        recordList.append('<li class="list-group-item">' + expDate + " " + expCat + " " + expAmt + '</li>');
+                        $('#recordList').append('<li class="list-group-item">' + expDate + " " + expCat + " " + expAmt + '</li>');
                         totalMonthAmt += expAmt;
                     }
-                    document.getElementById("totalAmountByMonth").value = totalMonthAmt;
+                    document.getElementById("totalAmountByMonth").value = totalMonthAmt.toFixed(2);
                     document.getElementById("avgAmountByMonth").value = (totalMonthAmt / avgDays).toFixed(2);
                     i += 1; 
                 }); 
