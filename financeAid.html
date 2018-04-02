@@ -22,11 +22,11 @@
           <p style="font-size:2rem;">Balance:</p>
           <form>
             <label for="dispCurrentCash">Cash</label>
-            <input class="form-control" id="dispCurrentCash" readonly>
+            <input class="form-control" id="dispCurrentCash" value="RM0.00" readonly>
           </form>
           <form>
             <label for="dispCurrentBank">Bank</label>
-            <input class="form-control" id="dispCurrentBank" readonly>
+            <input class="form-control" id="dispCurrentBank" value="RM0.00" readonly>
           </form>
         </div>
         <div class="col-md-2"></div>
@@ -71,7 +71,7 @@
             </div-->
           </div>
           <div class="modal-footer">
-            <button type="button" class="save btn btn-primary" data-dismiss="modal">Save</button>
+            <button type="button" class="saveCash btn btn-primary" data-dismiss="modal">Save</button>
           </div>
         </div>
       </div>
@@ -94,15 +94,9 @@
                 <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank">
               </div>
             </form>
-            <!--div class="input-group mb-3">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">RM</span>
-              </div>
-              <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank">
-            </div-->
           </div>
           <div class="modal-footer">
-            <button type="button" class="save btn btn-primary" data-dismiss="modal">Save</button>
+            <button type="button" class="saveBank btn btn-primary" data-dismiss="modal">Save</button>
           </div>
         </div>
       </div>
@@ -171,58 +165,58 @@
       };
       firebase.initializeApp(config);
 
-      //Set starting amount for accounts
-      $.fn.setStartAmt = function() {
-        var fields = this.find('[name]');
-        var result = {};
-        $.each(fields, function(i, el) {
-          result[el.name] = el.value;
-        });
-        console.log(result);
-        return result;
-      }
-
       //Write amount input by user to firebase database      
-      var startAmtKey;
-      var currentAmtKey;
-      var startAmt = {};
-      var currentCashAmt;
-      var currentBankAmt;
-      var currentAmt = {};
-      //var startAmountKey;
-      $('.save').on('click', function(e) {
+      var startCashAmt = {};
+      var startCashKey;
+      var currentCashAmt = {};
+      var currentCashKey;
+
+      var startBankAmt = {};
+      var startBankKey;
+      var currentBankAmt = {};
+      var currentBankKey;
+
+      //saving cash from input
+      $('.saveCash').on('click', function(e) {
         e.preventDefault();
-        //var updates = {};
-        //startAmountKey = startAmountKey ? startAmountKey : firebase.database().ref().child('startingAmt').push().key;
-        //updates[startAmountKey] = $('form').setStartAmt();
-        startAmtKey = startAmtKey ? startAmtKey : firebase.database().ref().child('startAmt').push().key;
-        startAmt.startCash = document.getElementById("cashStartAmt").value;
-        startAmt.startBank = document.getElementById("bankStartAmt").value;
-        firebase.database().ref().child('startAmt').set(startAmt);
-        currentCashAmt = startAmt.startCash;
-        currentBankAmt = startAmt.startBank;
-        currentAmt = {currentCash: startAmt.startCash, currentBank: startAmt.startBank};
-        currentAmtKey = currentAmtKey ? currentAmtKey : firebase.database().ref().child('currentAmt').push().key;
-        firebase.database().ref().child('currentAmt').set(currentAmt);
+        startCashKey = startCashKey ? startCashKey : firebase.database().ref().child('startCash').push().key;
+        startCashAmt.startCash = document.getElementById("cashStartAmt").value;
+        firebase.database().ref().child('startCash').set(startCashAmt);
+        currentCashAmt = {currentCash: startCashAmt.startCash};
+        currentCashKey = currentCashKey ? currentCashKey : firebase.database().ref().child('currentCashAmt').push().key;
+        firebase.database().ref().child('currentCashAmt').set(currentCashAmt);
       });
 
-      //Read from database (TODO: consist logic problems, eg: if data existed in db, add only cash or bank starting amount will
-      //display NaN)
-      var amountRef = firebase.database().ref('currentAmt');
+      //saving bank from input
+      $('.saveBank').on('click', function(e) {
+        e.preventDefault();
+        startBankKey = startBankKey ? startBankKey : firebase.database().ref().child('startBank').push().key;
+        startBankAmt.startBank = document.getElementById("bankStartAmt").value;
+        firebase.database().ref().child('startBank').set(startBankAmt);
+        currentBankAmt = {currentBank: startBankAmt.startBank};
+        currentBankKey = currentBankKey ? currentBankKey : firebase.database().ref().child('currentBankAmt').push().key;
+        firebase.database().ref().child('currentBankAmt').set(currentBankAmt);
+      });
+
+      //Read current cash from database
+      var amountCashRef = firebase.database().ref('currentCashAmt');
       var dispCurrentCash;
-      var dispCurrentBank;
-      amountRef.on('value', function(snapshot){
+      amountCashRef.on('value', function(snapshot){
           var childData = snapshot.val();
           dispCurrentCash = parseFloat(childData.currentCash).toFixed(2);
+          
+          document.getElementById("dispCurrentCash").value = "RM" + dispCurrentCash;
+      });
+
+      //Read current bank from database
+      var amountBankRef = firebase.database().ref('currentBankAmt');
+      var dispCurrentBank;
+      amountBankRef.on('value', function(snapshot){
+          var childData = snapshot.val();
           dispCurrentBank = parseFloat(childData.currentBank).toFixed(2);
           
-          //console.log( dispCurrentBank + " " + dispCurrentCash);
-          document.getElementById("dispCurrentCash").value = dispCurrentCash;
-          document.getElementById("dispCurrentBank").value = dispCurrentBank;
+          document.getElementById("dispCurrentBank").value = "RM" + dispCurrentBank;
       });
-      
-      //document.getElementById("currentCashAmt").value = "0.00";
-      //document.getElementById("currentBankAmt").value = dispCurrentBank;
 
       //styling for button of main menu
       $('.menu-items').find('a').css('width','100%');
