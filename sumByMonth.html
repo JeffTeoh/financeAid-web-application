@@ -107,24 +107,28 @@
             var expDateCompare;
             var intDate;
             var i = 0;
+            var totalMonthAmt = 0;
+            var avgMonthAmt = 0;
             expenseRef.on("value", function(snapshot) {
                 snapshot.forEach(function(childSnapshot){
                     var expenseObj = childSnapshot.val();
                     var expDate = expenseObj.expenseDate;
-                    var expAcc = expenseObj.expenseCategory;
+                    var expCat = expenseObj.expenseCategory;
                     var expAmt = parseFloat(expenseObj.expenseAmount);
                     expDateCompare = parseInt(expDate);
                     expenseObj.intDate = expDateCompare;
                     expSelectedList.push(expenseObj);
-                    console.log(expSelectedList[i].intDate);
+                    //console.log(expSelectedList[i].intDate);
                     if(expSelectedList[i].intDate == selectedMonth){
                         //console.log(expSelectedList[i].intDate + " done");
                         //recordList.remove(); remove list to refresh during new selection
-                        recordList.append('<li class="list-group-item">' + expSelectedList[i].expenseDate + " " + expSelectedList[i].expenseCategory + " " + expSelectedList[i].expenseAmount + '</li>');
+                        recordList.append('<li class="list-group-item">' + expDate + " " + expCat + " " + expAmt + '</li>');
+                        totalMonthAmt += expAmt;
+                        document.getElementById("totalAmountByMonth").value = totalMonthAmt;
                     }
                     i += 1; 
                 }); 
-            });            
+            });
         });
 
         
