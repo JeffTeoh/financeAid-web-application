@@ -168,6 +168,7 @@
             document.getElementById("expenseCategory").value = '';
             document.getElementById("expenseAmount").value = '';
             $('#expenseList li').remove();
+            
             //output list of data
             var expenseRef = firebase.database().ref().child('expenseObj');
             var expenseObj;
@@ -177,13 +178,13 @@
                     var expDate = expenseObj.expenseDate;
                     var expAcc = expenseObj.expenseAccount;
                     var expCat = expenseObj.expenseCategory;
-                    var expAmt = parseFloat(expenseObj.expenseAmount);
+                    var expAmt = parseFloat(expenseObj.expenseAmount).toFixed(2);
                     $('#expenseList').append('<li class="list-group-item">' + expDate + " " + expAcc + " " + expCat + " " + expAmt + '</li>');
                 }); 
             });
         });
 
-        //output list of data
+        //output list of data when loading the page and only appear if there are available data
         var expenseRef = firebase.database().ref().child('expenseObj');
         var expenseObj;
         expenseRef.on("value", function(snapshot) {

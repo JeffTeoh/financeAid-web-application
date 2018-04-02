@@ -177,14 +177,29 @@
             document.getElementById("transferFrom").value = '';
             document.getElementById("transferTo").value = '';
             document.getElementById("transferAmount").value = '';
+            $('#transferList li').remove();
+
+            //output list of data
+            var transferRef = firebase.database().ref().child('transferObj');
+            var transferObj;
+            transferRef.on("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                    transferObj = childSnapshot.val();
+                    var trfDate = transferObj.transferDate;
+                    var trfFrom = transferObj.transferFrom;
+                    var trfTo = transferObj.transferTo;
+                    var trfAmt = parseFloat(transferObj.transferAmount).toFixed(2);
+                    $('#transferList').append('<li class="list-group-item">' + trfDate + " " + trfFrom + " " + trfTo + " " + trfAmt + '</li>');
+                }); 
+            });
         });
 
-        //output list of data
+        //output list of data when loading the page and only appear if there are available data
         var transferRef = firebase.database().ref().child('transferObj');
-        var transferList = $('#transferList');
+        var transferObj;
         transferRef.on("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){
-                var transferObj = childSnapshot.val();
+                transferObj = childSnapshot.val();
                 var trfDate = transferObj.transferDate;
                 var trfFrom = transferObj.transferFrom;
                 var trfTo = transferObj.transferTo;
@@ -193,7 +208,7 @@
                 //console.log(trfFrom);
                 //console.log(trfTo);
                 //console.log(trfAmt);
-                transferList.append('<li class="list-group-item">' + trfDate + " " + trfFrom + " " + trfTo + " " + trfAmt + '</li>');
+                $('#transferList').append('<li class="list-group-item">' + trfDate + " " + trfFrom + " " + trfTo + " " + trfAmt + '</li>');
             }); 
         });
     </script>

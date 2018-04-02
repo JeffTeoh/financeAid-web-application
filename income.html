@@ -151,6 +151,7 @@
             document.getElementById("incomeAccount").value = '';
             document.getElementById("incomeAmount").value = '';
             $('#incomeList li').remove();
+            
             //output list of data
             var incomeRef = firebase.database().ref().child('incomeObj');
             incomeRef.on("value", function(snapshot) {
@@ -158,13 +159,13 @@
                     var incomeObj = childSnapshot.val();
                     var incDate = incomeObj.incomeDate;
                     var incAcc = incomeObj.incomeAccount;
-                    var incAmt = parseFloat(incomeObj.incomeAmount);
+                    var incAmt = parseFloat(incomeObj.incomeAmount).toFixed(2);
                     $('#incomeList').append('<li class="list-group-item">' + incDate + " " + incAcc + " " + incAmt + '</li>');
                 }); 
             });
         });
 
-        //output list of data
+        //output list of data when loading the page and only appear if there are available data
         var incomeRef = firebase.database().ref().child('incomeObj');
         var incomeObj;
         incomeRef.on("value", function(snapshot) {
