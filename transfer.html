@@ -42,7 +42,7 @@
                     <div class="col-md-12">
                         <form>
                             <select name="" id="transferFrom">
-                                <option value="">Choose an option:</option>
+                                <option value="" selected="selected">Choose an option:</option>
                                 <option value="Bank">Bank</option>
                                 <option value="Cash">Cash</option>
                             </select>
@@ -55,15 +55,11 @@
                     </div>
                 </div>
                 <div class="row py-3">
-                    <div class="col-md-12">
+                    <div class="col-md-4">
                         <form>
                             <!--TODO: enforce transfer account when user select. eg: form disable and-->
                             <!--only display value vice versa with transferFrom-->
-                            <select name="" id="transferTo">
-                                <option value="">Choose an option:</option>
-                                <option value="Bank">Bank</option>
-                                <option value="Cash">Cash</option>
-                            </select>
+                            <input class="form-control" id="transferTo" readonly>
                         </form>
                     </div>
                 </div>
@@ -125,6 +121,21 @@
             currentAccountObj.currentBank = parseFloat(childData.currentBank);
         });
 
+        //auto set transfer account when user selected
+        var selectedAccount = $("#transferFrom option:selected");
+        $('#transferFrom').change(function(){
+            selectedAccount.each(function() {
+                if (document.getElementById("transferFrom").value == "Bank"){
+                    document.getElementById("transferTo").value = "Cash";
+                } else if (document.getElementById("transferFrom").value == "Cash"){
+                    document.getElementById("transferTo").value = "Bank";
+                } else {
+                    document.getElementById("transferTo").value = "";
+                }
+            });
+        });
+
+        //event happen when button clicked
         $('.btn').on('click', function(e) {
             var transferDateObj = $("#datepicker").datepicker("getDate");
             /*return in MM-DD-YYYY*/
