@@ -150,21 +150,33 @@
             document.getElementById("datepicker").value = '';
             document.getElementById("incomeAccount").value = '';
             document.getElementById("incomeAmount").value = '';
+            $('#incomeList li').remove();
+            //output list of data
+            var incomeRef = firebase.database().ref().child('incomeObj');
+            incomeRef.on("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                    var incomeObj = childSnapshot.val();
+                    var incDate = incomeObj.incomeDate;
+                    var incAcc = incomeObj.incomeAccount;
+                    var incAmt = parseFloat(incomeObj.incomeAmount);
+                    $('#incomeList').append('<li class="list-group-item">' + incDate + " " + incAcc + " " + incAmt + '</li>');
+                }); 
+            });
         });
 
-        //output list of data           [TODO: cannot refresh list, new child append into current list]
+        //output list of data
         var incomeRef = firebase.database().ref().child('incomeObj');
-        var incomeList = $('#incomeList');
+        var incomeObj;
         incomeRef.on("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){
-                var incomeObj = childSnapshot.val();
+                incomeObj = childSnapshot.val();
                 var incDate = incomeObj.incomeDate;
                 var incAcc = incomeObj.incomeAccount;
                 var incAmt = parseFloat(incomeObj.incomeAmount);
-                //console.log(incDate);
+                console.log(incomeObj);
                 //console.log(incAcc);
                 //console.log(incAmt);
-                incomeList.append('<li class="list-group-item">' + incDate + " " + incAcc + " " + incAmt + '</li>');
+                $('#incomeList').append('<li class="list-group-item">' + incDate + " " + incAcc + " " + incAmt + '</li>');
             }); 
         });
         
