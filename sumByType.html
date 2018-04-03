@@ -147,7 +147,8 @@
                         expenseObj.intMonth = expMonth;
                         expSelectedList.push(expenseObj);
                         //console.log(expSelectedList[i].intMonth);
-                        avgDays = daysInMonth(expSelectedList[i].intMonth, 2018); //fetch year from user input?
+                        avgDays = new Date().getDate();
+                        //avgDays = daysInMonth(expSelectedList[i].intMonth, 2018); //fetch year from user input?
                         console.log(avgDays);
                         if(expSelectedList[i].intMonth == selectedMonth && expSelectedList[i].expenseCategory == selectedCategory){
                             //console.log(expSelectedList[i].intMonth + " done");
