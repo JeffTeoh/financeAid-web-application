@@ -162,60 +162,103 @@
                     //console.log(transferObjKey);
                     //console.log(transferObj);
                     transferObj[transferObjKey] = {transferDate: trfDate, transferFrom: trfFrom, transferTo: trfTo, transferAmount: trfAmt};
-                    firebase.database().ref().child('transferObj').update(transferObj);
+                    //firebase.database().ref().child('transferObj').update(transferObj);
                     
                     //calculate and update current amount based on transfer
                     var selectedAccountFrom = trfFrom;
+                    var currentTransferAmt = parseFloat(transferObj[transferObjKey].transferAmount);
                     var currentBankAmt;
                     var currentCashAmt;
                     if (selectedAccountFrom == "Bank"){
                         currentBankAmt = parseFloat(currentBankObj.currentBank);
                         currentCashAmt = parseFloat(currentCashObj.currentCash);
-                        var currentTransferAmt = parseFloat(transferObj[transferObjKey].transferAmount);
-                        currentBankAmt -= currentTransferAmt;
-                        currentCashAmt += currentTransferAmt;
+                        var validTrfDiff = currentBankAmt - currentTransferAmt;
+                        
+                        if (validTrfDiff < 0) {
+                            alert("Your Bank account does not have sufficient money");
+                            document.getElementById("datepicker").value = '';
+                            document.getElementById("transferFrom").value = '';
+                            document.getElementById("transferTo").value = '';
+                            document.getElementById("transferAmount").value = '';
+                        } else {
+                            firebase.database().ref().child('transferObj').update(transferObj);
+                            currentBankAmt -= currentTransferAmt;
+                            currentCashAmt += currentTransferAmt;
 
-                        //upload the current amount to firebase db
-                        currentBankObj.currentBank = currentBankAmt;
-                        currentCashObj.currentCash = currentCashAmt;
-                        firebase.database().ref().child('currentBankAmt').update(currentBankObj);
-                        firebase.database().ref().child('currentCashAmt').update(currentCashObj);
+                            //upload the current amount to firebase db
+                            currentBankObj.currentBank = currentBankAmt;
+                            currentCashObj.currentCash = currentCashAmt;
+                            firebase.database().ref().child('currentBankAmt').update(currentBankObj);
+                            firebase.database().ref().child('currentCashAmt').update(currentCashObj);
+
+                            //clear the input form after success alert
+                            alert("Your transfer added successfully!");
+                            document.getElementById("datepicker").value = '';
+                            document.getElementById("transferFrom").value = '';
+                            document.getElementById("transferTo").value = '';
+                            document.getElementById("transferAmount").value = '';
+                            $('#transferList li').remove();
+
+                            //output list of data
+                            var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+                            var transferObj;
+                            transferRef.on("value", function(snapshot) {
+                                snapshot.forEach(function(childSnapshot){
+                                    transferObj = childSnapshot.val();
+                                    var trfDate = transferObj.transferDate;
+                                    var trfFrom = transferObj.transferFrom;
+                                    var trfTo = transferObj.transferTo;
+                                    var trfAmt = parseFloat(transferObj.transferAmount).toFixed(2);
+                                    $('#transferList').append('<li class="list-group-item">' + trfDate + " from " + trfFrom + " To " + trfTo + " " + trfAmt + '</li>');
+                                }); 
+                            });
+                        }                        
                     } else 
                     if(selectedAccountFrom == "Cash"){
                         currentBankAmt = parseFloat(currentBankObj.currentBank);
                         currentCashAmt = parseFloat(currentCashObj.currentCash);
-                        var currentTransferAmt = parseFloat(transferObj[transferObjKey].transferAmount);
-                        currentBankAmt += currentTransferAmt;
-                        currentCashAmt -= currentTransferAmt;
-            
-                        //upload the current amount to firebase db
-                        currentBankObj.currentBank = currentBankAmt;
-                        currentCashObj.currentCash = currentCashAmt;
-                        firebase.database().ref().child('currentBankAmt').update(currentBankObj);
-                        firebase.database().ref().child('currentCashAmt').update(currentCashObj);
+                        var validTrfDiff = currentCashAmt - currentTransferAmt;
+                        
+                        if (validTrfDiff < 0) {
+                            alert("Your Cash account does not have sufficient money");
+                            document.getElementById("datepicker").value = '';
+                            document.getElementById("transferFrom").value = '';
+                            document.getElementById("transferTo").value = '';
+                            document.getElementById("transferAmount").value = '';
+                        } else {
+                            firebase.database().ref().child('transferObj').update(transferObj);
+                            currentBankAmt += currentTransferAmt;
+                            currentCashAmt -= currentTransferAmt;
+
+                            //upload the current amount to firebase db
+                            currentBankObj.currentBank = currentBankAmt;
+                            currentCashObj.currentCash = currentCashAmt;
+                            firebase.database().ref().child('currentBankAmt').update(currentBankObj);
+                            firebase.database().ref().child('currentCashAmt').update(currentCashObj);
+
+                            //clear the input form after success alert
+                            alert("Your transfer added successfully!");
+                            document.getElementById("datepicker").value = '';
+                            document.getElementById("transferFrom").value = '';
+                            document.getElementById("transferTo").value = '';
+                            document.getElementById("transferAmount").value = '';
+                            $('#transferList li').remove();
+
+                            //output list of data
+                            var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+                            var transferObj;
+                            transferRef.on("value", function(snapshot) {
+                                snapshot.forEach(function(childSnapshot){
+                                    transferObj = childSnapshot.val();
+                                    var trfDate = transferObj.transferDate;
+                                    var trfFrom = transferObj.transferFrom;
+                                    var trfTo = transferObj.transferTo;
+                                    var trfAmt = parseFloat(transferObj.transferAmount).toFixed(2);
+                                    $('#transferList').append('<li class="list-group-item">' + trfDate + " from " + trfFrom + " To " + trfTo + " " + trfAmt + '</li>');
+                                }); 
+                            });
+                        }
                     }
-
-                    //clear the input form after success alert
-                    alert("Your transfer added successfully!");
-                    document.getElementById("datepicker").value = '';
-                    document.getElementById("transferFrom").value = '';
-                    document.getElementById("transferTo").value = '';
-                    document.getElementById("transferAmount").value = '';
-                    $('#transferList li').remove();
-
-                    //output list of data
-                    var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
-                    var transferObj;
-                    transferRef.on("value", function(snapshot) {
-                        snapshot.forEach(function(childSnapshot){
-                            transferObj = childSnapshot.val();
-                            var trfDate = transferObj.transferDate;
-                            var trfFrom = transferObj.transferFrom;
-                            var trfTo = transferObj.transferTo;
-                            var trfAmt = parseFloat(transferObj.transferAmount).toFixed(2);
-                            $('#transferList').append('<li class="list-group-item">' + trfDate + " " + trfFrom + " " + trfTo + " " + trfAmt + '</li>');
-                        }); 
-                    });
                 } else {
                     alert("Please check either date or account had been selected");
                     document.getElementById("datepicker").value = '';
@@ -246,7 +289,7 @@
                 //console.log(trfFrom);
                 //console.log(trfTo);
                 //console.log(trfAmt);
-                $('#transferList').append('<li class="list-group-item">' + trfDate + " " + trfFrom + " " + trfTo + " " + trfAmt.toFixed(2) + '</li>');
+                $('#transferList').append('<li class="list-group-item">' + trfDate + " from " + trfFrom + " to " + trfTo + " " + trfAmt.toFixed(2) + '</li>');
             }); 
         });
     </script>
