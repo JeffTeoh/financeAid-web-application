@@ -16,7 +16,7 @@
     <div class="d-flex">
       <nav class="sidebar bg-dark">
         <ul class="list-unstyled">
-          <li><a class="navbar-brand text-center" href="#">Finance Aid</a></li>
+          <li><a class="navbar-brand text-center" href="financeAid.html">Finance Aid</a></li>
           <li>
             <a href="income.html">
               <div class="container">
@@ -61,7 +61,7 @@
           </li>
           <hr style="background-color: white;">
           <li>
-            <a href="settings.html">
+            <a href="#">
               <div class="container">
                 <div class="row">
                   <div class="col-lg-2">
@@ -76,27 +76,27 @@
           </li>
         </ul>
       </nav>
+
+      <!--content of page-->
       <div class="content p-4">
           <a class="sidebar-toggle text-light mr-3"><i class="fa fa-bars" style="color:blue;"></i></a>
           <!-- Header that include balance and setting of starting amount for accounts -->
           <div class="container py-md-2 pt-md-4">
             <div class="row">
               <div class="col-md-2"></div>
-              <div class="col-md-2 text-center">
-                <p style="font-size:2rem;">Balance:</p>
+              <div class="col-md-4 card-item d-flex align-items-center justify-content-center" align="center">
+                <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#cashModal">
+                  <p>CASH</p>
+                  <p id="currentCashAmt"></p>
+                </a>
               </div>
-              <div class="col-md-4 text-center">
-                <form>
-                  <label for="dispCurrentCash">Cash</label>
-                  <input class="form-control" id="dispCurrentCash" value="RM0.00" readonly>
-                </form>
+              <div class="col-md-1"></div>
+              <div class="col-md-4 card-item d-flex align-items-center justify-content-center" align="center">
+                  <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#bankModal">
+                    <p>BANK</p>
+                    <p id="currentBankAmt"></p>
+                  </a>
               </div>
-              <div class="col-md-4 text-center">
-                <form>
-                  <label for="dispCurrentBank">Bank</label>
-                  <input class="form-control" id="dispCurrentBank" value="RM0.00" readonly>
-                </form>
-              </div>  
             </div>
           </div>
       
@@ -117,6 +117,12 @@
                       <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash" maxlength="10">
                     </div>
                   </form>
+                  <!--div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="basic-addon1">RM</span>
+                    </div>
+                    <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash">
+                  </div-->
                 </div>
                 <div class="modal-footer">
                   <button type="button" class="saveCash btn btn-primary" data-dismiss="modal">Save</button>
@@ -149,26 +155,6 @@
               </div>
             </div>
           </div>
-      
-          <!-- Link to each features -->
-               
-          <div class="container menu-items">
-              <div class="row">
-                <div class="col-lg-2"></div>
-                <div class="col-lg-3 col-sm-12">
-                  <div class="dropdown d-flex align-items-center justify-content-center link" align="center">
-                    <button class="btn btn-primary px-5 py-3 dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Summary
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-wide" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="sumByMonth.html">By Month</a>
-                      <a class="dropdown-item" href="sumByType.html">By Type</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-2"></div>
-              </div>
-            </div>
       </div>
     </div>
 

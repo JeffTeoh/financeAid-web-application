@@ -7,72 +7,133 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="financeAid.css">
     <title>Income</title>
   </head>
   <body>
-    <nav class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand" href="financeAid.html">
-            <i class="fa fa-home"></i>
-            Main Menu
-        </a>
-    </nav>
-    
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="row py-3">          <!--Date title-->
-                    <div class="col-md-6">
-                        Date
+    <div class="d-flex">
+        <nav class="sidebar bg-dark">
+            <ul class="list-unstyled">
+                <li><a class="navbar-brand text-center" href="financeAid.html">Finance Aid</a></li>
+                <li>
+                    <a href="#">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <i class="fa fa-plus"></i>
+                                </div>
+                                <div class="col-lg-10">
+                                    Income
+                                </div>
+                            </div>
+                        </div>              
+                    </a>
+                </li>
+                <li>
+                    <a href="expense.html">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <i class="fa fa-minus"></i>
+                                </div>
+                                <div class="col-lg-10">
+                                    Expense
+                                </div>
+                            </div>
+                        </div>               
+                    </a>
+                </li>
+                <li>
+                    <a href="transfer.html">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <i class="fa fa-exchange-alt"></i>
+                                </div>
+                                <div class="col-lg-10">
+                                    Transfer
+                                </div>
+                            </div>
+                        </div>               
+                    </a>
+                </li>
+                <hr style="background-color: white;">
+                <li>
+                    <a href="settings.html">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <i class="fa fa-cog"></i>
+                                </div>
+                                <div class="col-lg-10">
+                                    Settings
+                                </div>
+                            </div>
+                        </div>               
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <div class="content p-4">
+            <div class="container py-5">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="row py-3">          <!--Date title-->
+                                <div class="col-md-6">
+                                    Date
+                                </div>
+                            </div>
+                            <div class="row py-3">          <!--Datepicker-->
+                                <div class="col-md-3">
+                                    <input type="text" id="datepicker"></p>
+                                </div>
+                            </div>                
+                            <div class="row py-3">          <!--Account title-->
+                                <div class="col-md-12">
+                                    Account
+                                </div>
+                            </div>
+                            <div class="row py-3">          <!--Account option-->
+                                <div class="col-md-12">
+                                    <form>
+                                        <select name="" id="incomeAccount">
+                                            <option value="">Choose an option:</option>
+                                            <option value="Bank">Bank</option>
+                                            <option value="Cash">Cash</option>
+                                        </select>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row py-3">          <!--Amount title-->
+                                <div class="col-md-12">
+                                    Amount
+                                </div>
+                            </div>
+                            <div class="row py-3">          <!--Amount input form-->
+                                <div class="col-md-6">
+                                    <input class="form-control" id="incomeAmount" placeholder="Amount" maxlength="10">
+                                </div>
+                            </div>
+                            <div class="row py-3">          <!--Add button-->
+                                <div class="col-md-6">
+                                    <button type="button" class="btn btn-primary">Add</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>List of income</h5>
+                            <ul class="list-group" id="incomeList">
+                                
+                            </ul>
+                        </div>
                     </div>
                 </div>
-                <div class="row py-3">          <!--Datepicker-->
-                    <div class="col-md-3">
-                        <input type="text" id="datepicker"></p>
-                    </div>
-                </div>                
-                <div class="row py-3">          <!--Account title-->
-                    <div class="col-md-12">
-                        Account
-                    </div>
-                </div>
-                <div class="row py-3">          <!--Account option-->
-                    <div class="col-md-12">
-                        <form>
-                            <select name="" id="incomeAccount">
-                                <option value="">Choose an option:</option>
-                                <option value="Bank">Bank</option>
-                                <option value="Cash">Cash</option>
-                            </select>
-                        </form>
-                    </div>
-                </div>
-                <div class="row py-3">          <!--Amount title-->
-                    <div class="col-md-12">
-                        Amount
-                    </div>
-                </div>
-                <div class="row py-3">          <!--Amount input form-->
-                    <div class="col-md-6">
-                        <input class="form-control" id="incomeAmount" placeholder="Amount" maxlength="10">
-                    </div>
-                </div>
-                <div class="row py-3">          <!--Add button-->
-                    <div class="col-md-6">
-                        <button type="button" class="btn btn-primary">Add</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h5>List of income</h5>
-                <ul class="list-group" id="incomeList">
-                    
-                </ul>
-            </div>
         </div>
     </div>
+    
+    
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
