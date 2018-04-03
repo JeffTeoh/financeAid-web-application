@@ -107,39 +107,47 @@
         $('.btn').on('click', function(e) {
             selectedMonth = document.getElementById('monthPicker').value;
             //console.log(selectedMonth + " is chosen");
-            //output list of data
-            var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
-            var expSelectedList = [];
-            var expMonth;
-            var intMonth;
-            var i = 0;
-            var totalMonthAmt = 0;
-            var avgMonthAmt = 0;
-            var avgDays = 0;
-            
-            $('#recordList li').remove();
-            expenseRef.on("value", function(snapshot) {
-                snapshot.forEach(function(childSnapshot){
-                    var expenseObj = childSnapshot.val();
-                    var expDate = expenseObj.expenseDate;
-                    var expCat = expenseObj.expenseCategory;
-                    var expAmt = parseFloat(expenseObj.expenseAmount);
-                    expMonth = parseInt(expDate);
-                    expenseObj.intMonth = expMonth;
-                    expSelectedList.push(expenseObj);
-                    //console.log(expSelectedList[i].intMonth);
-                    avgDays = daysInMonth(expSelectedList[i].intMonth, 2018); //fetch year from user input?
-                    if(expSelectedList[i].intMonth == selectedMonth){
-                        //console.log(expSelectedList[i].intMonth + " done");
-                        //recordList.remove(); remove list to refresh during new selection
-                        $('#recordList').append('<li class="list-group-item">' + expDate + " " + expCat + " " + expAmt.toFixed(2) + '</li>');
-                        totalMonthAmt += expAmt;
-                    }
-                    document.getElementById("totalAmountByMonth").value = totalMonthAmt.toFixed(2);
-                    document.getElementById("avgAmountByMonth").value = (totalMonthAmt / avgDays).toFixed(2);
-                    i += 1; 
-                }); 
-            });
+            if(selectedMonth == ""){
+                alert("Please select month for display expenses");
+                $('#recordList li').remove();
+                document.getElementById('monthPicker').value = "";
+                document.getElementById("totalAmountByMonth").value = "";
+                document.getElementById("avgAmountByMonth").value = "";
+            } else {
+                //output list of data
+                var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+                var expSelectedList = [];
+                var expMonth;
+                var intMonth;
+                var i = 0;
+                var totalMonthAmt = 0;
+                var avgMonthAmt = 0;
+                var avgDays = 0;
+                
+                $('#recordList li').remove();
+                expenseRef.on("value", function(snapshot) {
+                    snapshot.forEach(function(childSnapshot){
+                        var expenseObj = childSnapshot.val();
+                        var expDate = expenseObj.expenseDate;
+                        var expCat = expenseObj.expenseCategory;
+                        var expAmt = parseFloat(expenseObj.expenseAmount);
+                        expMonth = parseInt(expDate);
+                        expenseObj.intMonth = expMonth;
+                        expSelectedList.push(expenseObj);
+                        //console.log(expSelectedList[i].intMonth);
+                        avgDays = daysInMonth(expSelectedList[i].intMonth, 2018); //fetch year from user input?
+                        if(expSelectedList[i].intMonth == selectedMonth){
+                            //console.log(expSelectedList[i].intMonth + " done");
+                            //recordList.remove(); remove list to refresh during new selection
+                            $('#recordList').append('<li class="list-group-item">' + expDate + " " + expCat + " " + expAmt.toFixed(2) + '</li>');
+                            totalMonthAmt += expAmt;
+                        }
+                        document.getElementById("totalAmountByMonth").value = totalMonthAmt.toFixed(2);
+                        document.getElementById("avgAmountByMonth").value = (totalMonthAmt / avgDays).toFixed(2);
+                        i += 1; 
+                    }); 
+                });
+            }            
         });
 
         

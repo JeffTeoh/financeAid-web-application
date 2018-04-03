@@ -116,41 +116,51 @@
         $('.btn').on('click', function(e) {
             selectedMonth = document.getElementById('monthPicker').value;
             selectedCategory = document.getElementById('catPicker').value;
-            console.log(selectedCategory + " " + selectedMonth + " is chosen");
-            //output list of data
-            var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
-            var expSelectedList = [];
-            var expMonth;
-            var intMonth;
-            var i = 0;
-            var totalMonthAmt = 0;
-            var avgMonthAmt = 0;
-            var avgDays = 0;
+            //console.log(selectedCategory + " " + selectedMonth + " is chosen");
+            
+            if(selectedMonth == "" || selectedCategory == ""){
+                alert("Please select category or month for display expenses");
+                $('#recordList li').remove();
+                document.getElementById('monthPicker').value = "";
+                document.getElementById('catPicker').value = "";
+                document.getElementById("totalAmountByType").value = "";
+                document.getElementById("avgAmountByType").value = "";
+            } else {
+                //output list of data
+                var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+                var expSelectedList = [];
+                var expMonth;
+                var intMonth;
+                var i = 0;
+                var totalMonthAmt = 0;
+                var avgMonthAmt = 0;
+                var avgDays = 0;
 
-            $('#recordList li').remove();
-            expenseRef.on("value", function(snapshot) {
-                snapshot.forEach(function(childSnapshot){
-                    var expenseObj = childSnapshot.val();
-                    var expDate = expenseObj.expenseDate;
-                    var expCat = expenseObj.expenseCategory;
-                    var expAmt = parseFloat(expenseObj.expenseAmount);
-                    expMonth = parseInt(expDate);
-                    expenseObj.intMonth = expMonth;
-                    expSelectedList.push(expenseObj);
-                    //console.log(expSelectedList[i].intMonth);
-                    avgDays = daysInMonth(expSelectedList[i].intMonth, 2018); //fetch year from user input?
-                    console.log(avgDays);
-                    if(expSelectedList[i].intMonth == selectedMonth && expSelectedList[i].expenseCategory == selectedCategory){
-                        //console.log(expSelectedList[i].intMonth + " done");
-                        //recordList.remove(); remove list to refresh during new selection
-                        $('#recordList').append('<li class="list-group-item">' + expDate + " " + expCat + " " + expAmt.toFixed(2) + '</li>');
-                        totalMonthAmt += expAmt;
-                    }
-                    document.getElementById("totalAmountByType").value = totalMonthAmt.toFixed(2);
-                    document.getElementById("avgAmountByType").value = (totalMonthAmt / avgDays).toFixed(2);
-                    i += 1; 
-                }); 
-            });
+                $('#recordList li').remove();
+                expenseRef.on("value", function(snapshot) {
+                    snapshot.forEach(function(childSnapshot){
+                        var expenseObj = childSnapshot.val();
+                        var expDate = expenseObj.expenseDate;
+                        var expCat = expenseObj.expenseCategory;
+                        var expAmt = parseFloat(expenseObj.expenseAmount);
+                        expMonth = parseInt(expDate);
+                        expenseObj.intMonth = expMonth;
+                        expSelectedList.push(expenseObj);
+                        //console.log(expSelectedList[i].intMonth);
+                        avgDays = daysInMonth(expSelectedList[i].intMonth, 2018); //fetch year from user input?
+                        console.log(avgDays);
+                        if(expSelectedList[i].intMonth == selectedMonth && expSelectedList[i].expenseCategory == selectedCategory){
+                            //console.log(expSelectedList[i].intMonth + " done");
+                            //recordList.remove(); remove list to refresh during new selection
+                            $('#recordList').append('<li class="list-group-item">' + expDate + " " + expCat + " " + expAmt.toFixed(2) + '</li>');
+                            totalMonthAmt += expAmt;
+                        }
+                        document.getElementById("totalAmountByType").value = totalMonthAmt.toFixed(2);
+                        document.getElementById("avgAmountByType").value = (totalMonthAmt / avgDays).toFixed(2);
+                        i += 1; 
+                    }); 
+                });
+            }
         });
     </script>
   </body>
