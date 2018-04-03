@@ -145,62 +145,69 @@
             
             var validExpAmt = document.getElementById("expenseAmount").value;
             if ((reg.test(validExpAmt) && validExpAmt != null), parseFloat(validExpAmt) > 0){
-                //write records into list to firebase db
-                var expenseObj = {};
-                var expenseObjKey = expenseObjKey ? expenseObjKey : firebase.database().ref().child('expenseObj').push().key;
-                expenseObj[expenseObjKey] = {expenseDate: expDate, expenseAccount: expAcc, expenseCategory: expCat, expenseAmount: expAmt};            
-                firebase.database().ref().child('expenseObj').update(expenseObj);
+                if ($("#datepicker").datepicker("getDate") != null && (expAcc != "" && expCat != "")){
+                    //write records into list to firebase db
+                    var expenseObj = {};
+                    var expenseObjKey = expenseObjKey ? expenseObjKey : firebase.database().ref().child('expenseObj').push().key;
+                    expenseObj[expenseObjKey] = {expenseDate: expDate, expenseAccount: expAcc, expenseCategory: expCat, expenseAmount: expAmt};            
+                    firebase.database().ref().child('expenseObj').update(expenseObj);
 
-                //calculate and update current amount based on expense
-                var selectedAccount = document.getElementById('expenseAccount').value;
-                if (selectedAccount == "Bank"){
-                    var currentBankAmt = parseFloat(currentBankObj.currentBank);
-                    var currentexpenseAmt = parseFloat(expenseObj[expenseObjKey].expenseAmount);
-                    currentBankAmt -= currentexpenseAmt;
-                    
-                    //upload the current amount to firebase db
-                    currentBankObj.currentBank = currentBankAmt;
-                    firebase.database().ref().child('currentBankAmt').update(currentBankObj);
-                } else 
-                if(selectedAccount == "Cash"){
-                    var currentCashAmt = parseFloat(currentCashObj.currentCash);
-                    var currentexpenseAmt = parseFloat(expenseObj[expenseObjKey].expenseAmount);
-                    currentCashAmt -= currentexpenseAmt;
-                
-                    //upload the current amount to firebase db
-                    currentCashObj.currentCash = currentCashAmt;
-                    firebase.database().ref().child('currentCashAmt').update(currentCashObj);
+                    //calculate and update current amount based on expense
+                    var selectedAccount = document.getElementById('expenseAccount').value;
+                    if (selectedAccount == "Bank"){
+                        var currentBankAmt = parseFloat(currentBankObj.currentBank);
+                        var currentexpenseAmt = parseFloat(expenseObj[expenseObjKey].expenseAmount);
+                        currentBankAmt -= currentexpenseAmt;
+                        
+                        //upload the current amount to firebase db
+                        currentBankObj.currentBank = currentBankAmt;
+                        firebase.database().ref().child('currentBankAmt').update(currentBankObj);
+                    } else 
+                    if(selectedAccount == "Cash"){
+                        var currentCashAmt = parseFloat(currentCashObj.currentCash);
+                        var currentexpenseAmt = parseFloat(expenseObj[expenseObjKey].expenseAmount);
+                        currentCashAmt -= currentexpenseAmt;
+                        
+                        //upload the current amount to firebase db
+                        currentCashObj.currentCash = currentCashAmt;
+                        firebase.database().ref().child('currentCashAmt').update(currentCashObj);
+                    }
+            
+                    //clear the input form after success alert
+                    alert("Your expense added successfully!");
+                    document.getElementById("datepicker").value = '';
+                    document.getElementById("expenseAccount").value = '';
+                    document.getElementById("expenseCategory").value = '';
+                    document.getElementById("expenseAmount").value = '';
+                    $('#expenseList li').remove();
+            
+                    //output list of data
+                    var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+                    var expenseObj;
+                    expenseRef.on("value", function(snapshot) {
+                        snapshot.forEach(function(childSnapshot){
+                            expenseObj = childSnapshot.val();
+                            var expDate = expenseObj.expenseDate;
+                            var expAcc = expenseObj.expenseAccount;
+                            var expCat = expenseObj.expenseCategory;
+                            var expAmt = parseFloat(expenseObj.expenseAmount).toFixed(2);
+                            $('#expenseList').append('<li class="list-group-item">' + expDate + " " + expAcc + " " + expCat + " " + expAmt + '</li>');
+                        }); 
+                    });
+                } else {
+                    alert("Please check either date, account or category had been selected");
+                    document.getElementById("datepicker").value = '';
+                    document.getElementById("expenseAccount").value = '';                    
+                    document.getElementById("expenseCategory").value = '';
+                    document.getElementById("expenseAmount").value = '';
                 }
-            
-                /*clear the input form after success alert*/
-                alert("Your expense added successfully!");
-                document.getElementById("datepicker").value = '';
-                document.getElementById("expenseAccount").value = '';
-                document.getElementById("expenseCategory").value = '';
-                document.getElementById("expenseAmount").value = '';
-                $('#expenseList li').remove();
-            
-                //output list of data
-                var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
-                var expenseObj;
-                expenseRef.on("value", function(snapshot) {
-                    snapshot.forEach(function(childSnapshot){
-                        expenseObj = childSnapshot.val();
-                        var expDate = expenseObj.expenseDate;
-                        var expAcc = expenseObj.expenseAccount;
-                        var expCat = expenseObj.expenseCategory;
-                        var expAmt = parseFloat(expenseObj.expenseAmount).toFixed(2);
-                        $('#expenseList').append('<li class="list-group-item">' + expDate + " " + expAcc + " " + expCat + " " + expAmt.toFixed(2) + '</li>');
-                    }); 
-                });
             } else {
-                alert('Please fill up the correct starting amount');
+                alert('Please fill up the correct amount (NO negative number, character and amount must at least 1)');
                 document.getElementById("datepicker").value = '';
                 document.getElementById("expenseAccount").value = '';
                 document.getElementById("expenseCategory").value = '';
                 document.getElementById("expenseAmount").value = '';
-            }
-            
+            }            
         });
 
         //output list of data when loading the page and only appear if there are available data
