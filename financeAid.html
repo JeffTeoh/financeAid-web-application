@@ -183,7 +183,7 @@
       $('.saveCash').on('click', function(e) {
         e.preventDefault();
         var validCashAmt = document.getElementById("cashStartAmt").value;
-        if (reg.test(validCashAmt) && validCashAmt != null){
+        if ((!reg.test(validCashAmt) && validCashAmt != null), parseFloat(validCashAmt) > 0){
           startCashKey = startCashKey ? startCashKey : firebase.database().ref().child('startCash').push().key;
           startCashAmt.startCash = document.getElementById("cashStartAmt").value;
           firebase.database().ref().child('startCash').set(startCashAmt);
@@ -201,7 +201,7 @@
       $('.saveBank').on('click', function(e) {
         e.preventDefault();
         var validBankAmt = document.getElementById("bankStartAmt").value;
-        if (reg.test(validBankAmt) && validBankAmt != null){
+        if ((reg.test(validBankAmt) && validBankAmt != null), parseFloat(validBankAmt) > 0){
           startBankKey = startBankKey ? startBankKey : firebase.database().ref().child('startBank').push().key;
           startBankAmt.startBank = document.getElementById("bankStartAmt").value;
           firebase.database().ref().child('startBank').set(startBankAmt);

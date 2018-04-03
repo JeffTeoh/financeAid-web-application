@@ -127,7 +127,9 @@
             var incAcc = document.getElementById("incomeAccount").value;
             var incAmt = document.getElementById("incomeAmount").value;
             
-            if ((reg.test(validIncAmt) && validIncAmt != null), $("#datepicker").datepicker("getDate") != null){
+            var validIncAmt = document.getElementById("incomeAmount").value;
+            console.log(reg.test(validIncAmt));
+            if ((reg.test(validIncAmt) && validIncAmt != null), parseFloat(validIncAmt) > 0){
                 //write records into list to firebase db
                 var incomeObj = {}; //(if without var, override on same object, never update)
                 var incomeObjKey = incomeObjKey ? incomeObjKey : firebase.database().ref().child('incomeObj').push().key;

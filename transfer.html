@@ -153,7 +153,8 @@
             var trfTo = document.getElementById("transferTo").value;
             var trfAmt = document.getElementById("transferAmount").value;
             
-            if ((reg.test(validTrfAmt) && validTrfAmt != null), $("#datepicker").datepicker("getDate") != null){
+            var validTrfAmt = document.getElementById("transferAmount").value;
+            if ((reg.test(validTrfAmt) && validTrfAmt != null), parseFloat(validTrfAmt) > 0){
                 //write records into list to firebase db
                 var transferObj = {}; //(override on same object, never update)
                 var transferObjKey = transferObjKey ? transferObjKey : firebase.database().ref().child('transferObj').push().key;
