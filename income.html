@@ -125,59 +125,65 @@
             //return in MM-DD-YYYY
             var incDate = $.datepicker.formatDate("mm-dd-yy", incomeDateObj);
             var incAcc = document.getElementById("incomeAccount").value;
+            console.log(incAcc);
             var incAmt = document.getElementById("incomeAmount").value;
             
             var validIncAmt = document.getElementById("incomeAmount").value;
-            console.log(reg.test(validIncAmt));
             if ((reg.test(validIncAmt) && validIncAmt != null), parseFloat(validIncAmt) > 0){
-                //write records into list to firebase db
-                var incomeObj = {}; //(if without var, override on same object, never update)
-                var incomeObjKey = incomeObjKey ? incomeObjKey : firebase.database().ref().child('incomeObj').push().key;
-                incomeObj[incomeObjKey] = {incomeDate: incDate,incomeAccount: incAcc, incomeAmount: incAmt};            
-                firebase.database().ref().child('incomeObj').update(incomeObj);
+                if ($("#datepicker").datepicker("getDate") != null && incAcc != ""){
+                    //write records into list to firebase db
+                    var incomeObj = {}; //(if without var, override on same object, never update)
+                    var incomeObjKey = incomeObjKey ? incomeObjKey : firebase.database().ref().child('incomeObj').push().key;
+                    incomeObj[incomeObjKey] = {incomeDate: incDate,incomeAccount: incAcc, incomeAmount: incAmt};            
+                    firebase.database().ref().child('incomeObj').update(incomeObj);
             
-                //calculate and update current amount based on income
-                var selectedAccount = document.getElementById('incomeAccount').value;
-                if (selectedAccount == "Bank"){
-                    var currentBankAmt = parseFloat(currentBankObj.currentBank);
-                    var currentIncomeAmt = parseFloat(incomeObj[incomeObjKey].incomeAmount);
-                    currentBankAmt += currentIncomeAmt;
-                
-                    //upload the current amount to firebase db
-                    currentBankObj.currentBank = currentBankAmt;
-                    firebase.database().ref().child('currentBankAmt').update(currentBankObj);
-                } else 
-                if(selectedAccount == "Cash"){
-                    var currentCashAmt = parseFloat(currentCashObj.currentCash);
-                    var currentIncomeAmt = parseFloat(incomeObj[incomeObjKey].incomeAmount);
-                    currentCashAmt += currentIncomeAmt;
+                    //calculate and update current amount based on income
+                    var selectedAccount = document.getElementById('incomeAccount').value;
+                    if (selectedAccount == "Bank"){
+                        var currentBankAmt = parseFloat(currentBankObj.currentBank);
+                        var currentIncomeAmt = parseFloat(incomeObj[incomeObjKey].incomeAmount);
+                        currentBankAmt += currentIncomeAmt;
+                        
+                        //upload the current amount to firebase db
+                        currentBankObj.currentBank = currentBankAmt;
+                        firebase.database().ref().child('currentBankAmt').update(currentBankObj);
+                    } else 
+                    if(selectedAccount == "Cash"){
+                        var currentCashAmt = parseFloat(currentCashObj.currentCash);
+                        var currentIncomeAmt = parseFloat(incomeObj[incomeObjKey].incomeAmount);
+                        currentCashAmt += currentIncomeAmt;
 
-                    //upload the current amount to firebase db
-                    currentCashObj.currentCash = currentCashAmt;
-                    firebase.database().ref().child('currentCashAmt').update(currentCashObj);
-                }
+                        //upload the current amount to firebase db
+                        currentCashObj.currentCash = currentCashAmt;
+                        firebase.database().ref().child('currentCashAmt').update(currentCashObj);
+                    }
 
-                //clear the input form after success alert
-                alert("Your income added successfully!");
-                document.getElementById("datepicker").value = '';
-                document.getElementById("incomeAccount").value = '';
-                document.getElementById("incomeAmount").value = '';
-                $('#incomeList li').remove();
+                    //clear the input form after success alert
+                    alert("Your income added successfully!");
+                    document.getElementById("datepicker").value = '';
+                    document.getElementById("incomeAccount").value = '';
+                    document.getElementById("incomeAmount").value = '';
+                    $('#incomeList li').remove();
 
-                //output list of data
-                var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
-                incomeRef.on("value", function(snapshot) {
-                    snapshot.forEach(function(childSnapshot){
-                        var incomeObj = childSnapshot.val();
-                        var incDate = incomeObj.incomeDate;
-                        var incAcc = incomeObj.incomeAccount;
-                        var incAmt = parseFloat(incomeObj.incomeAmount).toFixed(2);
-                        $('#incomeList').append('<li class="list-group-item">' + incDate + " " + incAcc + " " + incAmt + '</li>');
+                    //output list of data
+                    var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
+                    incomeRef.on("value", function(snapshot) {
+                        snapshot.forEach(function(childSnapshot){
+                            var incomeObj = childSnapshot.val();
+                            var incDate = incomeObj.incomeDate;
+                            var incAcc = incomeObj.incomeAccount;
+                            var incAmt = parseFloat(incomeObj.incomeAmount).toFixed(2);
+                            $('#incomeList').append('<li class="list-group-item">' + incDate + " " + incAcc + " " + incAmt + '</li>');
+                        }); 
                     }); 
-                });
-
+                } else {
+                    alert("Please check either date or account had been selected");
+                    document.getElementById("datepicker").value = '';
+                    document.getElementById("incomeAccount").value = '';
+                    document.getElementById("incomeAmount").value = '';
+                }
             } else {
-                alert('Please fill up the correct starting amount');
+                alert('Please fill up the correct amount (NO negative number, character and amount must at least 1)');
                 document.getElementById("datepicker").value = '';
                 document.getElementById("incomeAccount").value = '';
                 document.getElementById("incomeAmount").value = '';
