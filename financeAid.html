@@ -125,12 +125,12 @@
       <div class="sidebar-right">
         <div class="summary text-center mt-4 mx-0">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <button class="btn btn-secondary active">
+            <button class="btn btn-secondary active" id="sumByDate">
               <input type="radio" name="options" id="option1" autocomplete="off" checked>
                 <i class="fa fa-calendar-alt"></i>
                 By date
             </button>
-            <button class="btn btn-secondary">
+            <button class="btn btn-secondary" id="sumByCat">
               <input type="radio" name="options" id="option2" autocomplete="off">
                 <i class="fa fa-tag"></i>
                 By category
@@ -142,6 +142,11 @@
           <!--Insert from database-->                           
         </ul>
 
+        <!--Button for adding records-->
+        <button class="btn bg-dark" type="button" data-toggle="modal" data-target="#addRecord" id="addRecordBtn">
+          <i class="fa fa-plus p-3" style="color: white; font-size: 50px;"></i>
+        </button>
+
         <!-- Modal for adding records -->
         <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="addRecord" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered" role="document">
@@ -152,8 +157,8 @@
                 </button>
                 <select class="custom-select">
                   <option value="exp" selected>Add Expense</option>
-                  <option value="inc"><i class="fa fa-plus"></i>Add Income</option>
-                  <option value="trf"><i class="fa fa-exchange-alt"></i>Add Transfer</option>
+                  <option value="inc">Add Income</option>
+                  <option value="trf">Add Transfer</option>
                 </select>
                 <button type="button" class="close" aria-label="Save" id="saveBtn" disabled>
                   <span aria-hidden="true">&#10003;</span>
@@ -164,6 +169,12 @@
                   <input type="text" class="form-control" placeholder="Amount" aria-label="amount" aria-describedby="amount">
                   <div class="input-group-append">
                     <span class="input-group-text" id="amount">RM</span>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="Account" aria-label="account" aria-describedby="account">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="account"></span>
                   </div>
                 </div>
                 <div class="input-group mb-3">
@@ -244,16 +255,77 @@
               '<li class="list-group-item nopadding">' + 
                 '<div class="card">' + 
                   '<div class="card-header">' + expDate + '</div>' + 
-                  '<a class="card-body" href="#">' +
+                  '<div class="card-body" href="#">' +
                     '<div class="card-text">' + 
                       '<p>' + expAcc + '</p>' + 
                       '<p>' + expCat + '</p>' + 
                       '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
                     '</div>' +
-                  '</a>' +
+                  '</div>' +
                 '</div>' +
               '</li>');
-          }); 
+          });
+      });
+
+      $('#sumByDate').click(function(){
+        $('#expenseList li').remove();
+        var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+        var expenseObj;
+        expenseRef.on("value", function(snapshot) {
+          snapshot.forEach(function(childSnapshot){
+            expenseObj = childSnapshot.val();
+            var expDate = expenseObj.expenseDate;
+            var expAcc = expenseObj.expenseAccount;
+            var expCat = expenseObj.expenseCategory;
+            var expAmt = parseFloat(expenseObj.expenseAmount);
+            //console.log(expDate);
+            //console.log(expAcc);
+            //console.log(expAmt);
+            $('#expenseList').append(
+            '<li class="list-group-item nopadding">' + 
+              '<div class="card">' + 
+                '<div class="card-header">' + expDate + '</div>' + 
+                '<div class="card-body" href="#">' +
+                  '<div class="card-text">' + 
+                    '<p>' + expAcc + '</p>' + 
+                    '<p>' + expCat + '</p>' + 
+                    '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</li>');
+          });
+        });
+      });
+      $('#sumByCat').click(function(){
+        $('#expenseList li').remove();
+        var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseCategory');
+        var expenseObj;
+        expenseRef.on("value", function(snapshot) {
+          snapshot.forEach(function(childSnapshot){
+            expenseObj = childSnapshot.val();
+            var expDate = expenseObj.expenseDate;
+            var expAcc = expenseObj.expenseAccount;
+            var expCat = expenseObj.expenseCategory;
+            var expAmt = parseFloat(expenseObj.expenseAmount);
+            //console.log(expDate);
+            //console.log(expAcc);
+            //console.log(expAmt);
+            $('#expenseList').append(
+            '<li class="list-group-item nopadding">' + 
+              '<div class="card">' + 
+                '<div class="card-header">' + expCat + '</div>' + 
+                '<div class="card-body" href="#">' +
+                  '<div class="card-text">' + 
+                    '<p>' + expDate + '</p>' + 
+                    '<p>' + expAcc + '</p>' + 
+                    '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</li>');
+          });
+        });
       });
 
     </script>

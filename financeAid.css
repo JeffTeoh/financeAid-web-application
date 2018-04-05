@@ -44,6 +44,9 @@
     }
 }
 
+/*import Font awesome*/
+@import url("https://use.fontawesome.com/releases/v5.0.9/css/all.css");
+
 /*basic UI*/
 h1{
     color:black;
@@ -183,4 +186,8 @@ p{
 
 .list-group {
     margin: 1.5rem 1.5rem 0 1.5rem;
+}
+
+select {
+    font-family: FontAwesome, sans-serif;
 }
