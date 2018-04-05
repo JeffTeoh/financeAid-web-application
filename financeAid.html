@@ -50,7 +50,7 @@
               <div class="container">
                 <div class="row">
                   <div class="col-lg-2">
-                      <i class="fa fa-exchange-alt"></i>
+                    <i class="fa fa-exchange-alt"></i>
                   </div>
                   <div class="col-lg-10">
                     Transfer
@@ -65,7 +65,7 @@
               <div class="container">
                 <div class="row">
                   <div class="col-lg-2">
-                      <i class="fa fa-cog"></i>
+                    <i class="fa fa-cog"></i>
                   </div>
                   <div class="col-lg-10">
                     Settings
@@ -76,103 +76,115 @@
           </li>
         </ul>
       </nav>
+      
+      <!-- Content in middle of web page --> 
       <div class="content p-4">
-          <a class="sidebar-toggle text-light mr-3"><i class="fa fa-bars" style="color:blue;"></i></a>
-          <!-- Header that include balance and setting of starting amount for accounts -->
-          <div class="container py-md-2 pt-md-4">
-            <div class="row">
-              <div class="col-md-2"></div>
-              <div class="col-md-2 text-center">
-                <p style="font-size:2rem;">Balance:</p>
-              </div>
-              <div class="col-md-4 text-center">
-                <form>
-                  <label for="dispCurrentCash">Cash</label>
-                  <input class="form-control" id="dispCurrentCash" value="RM0.00" readonly>
-                </form>
-              </div>
-              <div class="col-md-4 text-center">
-                <form>
-                  <label for="dispCurrentBank">Bank</label>
-                  <input class="form-control" id="dispCurrentBank" value="RM0.00" readonly>
-                </form>
-              </div>  
+        <a class="sidebar-toggle text-light mr-3"><i class="fa fa-bars" style="color:blue; background-cokir: #4c4c4c"></i></a>
+        <!-- Header that include balance and setting of starting amount for accounts -->
+        <div class="container py-md-2 pt-md-4">
+          <div class="row">
+            <div class="col-md-2 text-center">
+              <p style="font-size:2rem;">Balance:</p>
             </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4 text-center">
+              <form>
+                <label for="dispCurrentCash">Cash</label>
+                <input class="form-control" id="dispCurrentCash" value="RM0.00" readonly>
+              </form>
+            </div>
+            <div class="col-md-4 text-center">
+              <form>
+                <label for="dispCurrentBank">Bank</label>
+                <input class="form-control" id="dispCurrentBank" value="RM0.00" readonly>
+              </form>
+            </div>  
           </div>
-      
-          <!-- Modal for cash -->
-          <div id="cashModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cashModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="cashModalCenterTitle">Set starting amount of Cash</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="form-group">
-                      <label for="startCash">RM</label>
-                      <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash" maxlength="10">
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="saveCash btn btn-primary" data-dismiss="modal">Save</button>
+        </div>
+              
+        <div class="container menu-items">
+          <div class="row">
+            <div class="col-lg-1"></div>
+            <div class="col-lg-3 col-sm-12">
+              <div class="dropdown d-flex align-items-center justify-content-center link" align="center">
+                <button class="btn btn-primary px-5 py-3 dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Summary
+                </button>
+                <div class="dropdown-menu dropdown-menu-wide" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="sumByMonth.html">By Month</a>
+                  <a class="dropdown-item" href="sumByType.html">By Type</a>
                 </div>
               </div>
             </div>
+            <div class="col-lg-2"></div>
           </div>
-      
-          <!-- Modal for bank -->
-          <div id="bankModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bankModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="bankModalCenterTitle">Set starting amount of Bank</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="form-group">
-                      <label for="startBank">RM</label>
-                      <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank" maxlength="10">
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="saveBank btn btn-primary" data-dismiss="modal">Save</button>
-                </div>
+        </div>
+      </div>
+
+      <!-- Content of right side bar -->
+      <div class="sidebar-right">
+        <div class="summary text-center mt-4 mx-0">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <button class="btn btn-secondary active">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked>
+                <i class="fa fa-calendar-alt"></i>
+                By date
+            </button>
+            <button class="btn btn-secondary">
+              <input type="radio" name="options" id="option2" autocomplete="off">
+                <i class="fa fa-tag"></i>
+                By category
+            </button>
+          </div>
+        </div>
+
+        <ul class="list-group" id="expenseList">
+          <!--Insert from database-->                           
+        </ul>
+
+        <!-- Modal for adding records -->
+        <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="addRecord" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeBtn">
+                  <span aria-hidden="true">&#10005;</span>
+                </button>
+                <select class="custom-select">
+                  <option value="exp" selected>Add Expense</option>
+                  <option value="inc"><i class="fa fa-plus"></i>Add Income</option>
+                  <option value="trf"><i class="fa fa-exchange-alt"></i>Add Transfer</option>
+                </select>
+                <button type="button" class="close" aria-label="Save" id="saveBtn" disabled>
+                  <span aria-hidden="true">&#10003;</span>
+                </button>
               </div>
-            </div>
-          </div>
-      
-          <!-- Link to each features -->
-               
-          <div class="container menu-items">
-              <div class="row">
-                <div class="col-lg-2"></div>
-                <div class="col-lg-3 col-sm-12">
-                  <div class="dropdown d-flex align-items-center justify-content-center link" align="center">
-                    <button class="btn btn-primary px-5 py-3 dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      Summary
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-wide" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="sumByMonth.html">By Month</a>
-                      <a class="dropdown-item" href="sumByType.html">By Type</a>
-                    </div>
+              <div class="modal-body">
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="Amount" aria-label="amount" aria-describedby="amount">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="amount">RM</span>
                   </div>
                 </div>
-                <div class="col-lg-2"></div>
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="Category" aria-label="category" aria-describedby="category">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="category"></span>
+                  </div>
+                </div>
+                <div class="input-group mb-3">
+                  <input type="text" class="form-control" placeholder="Date" aria-label="date" aria-describedby="date">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="date"></span>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-lg btn-block" disabled>Save</button>
               </div>
             </div>
+          </div>
+        </div>
       </div>
     </div>
-
-    
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -195,56 +207,6 @@
       };
       firebase.initializeApp(config);
 
-      //read only if input is number include number with decimal place
-      var reg = /[+-]?([0-9]*[.])?[0-9]+/;
-
-      //Write amount input by user to firebase database      
-      var startCashAmt = {};
-      var startCashKey;
-      var currentCashAmt = {};
-      var currentCashKey;
-
-      var startBankAmt = {};
-      var startBankKey;
-      var currentBankAmt = {};
-      var currentBankKey;
-
-      //saving cash from input
-      $('.saveCash').on('click', function(e) {
-        e.preventDefault();
-        var validCashAmt = document.getElementById("cashStartAmt").value;
-        if ((!reg.test(validCashAmt) && validCashAmt != null), parseFloat(validCashAmt) > 0){
-          startCashKey = startCashKey ? startCashKey : firebase.database().ref().child('startCash').push().key;
-          startCashAmt.startCash = document.getElementById("cashStartAmt").value;
-          firebase.database().ref().child('startCash').set(startCashAmt);
-          currentCashAmt = {currentCash: startCashAmt.startCash};
-          currefntCashKey = currentCashKey ? currentCashKey : firebase.database().ref().child('currentCashAmt').push().key;
-          firebase.database().ref().child('currentCashAmt').set(currentCashAmt);
-          document.getElementById("cashStartAmt").value = '';
-        } else {
-          alert('Please fill up the correct starting amount');
-          document.getElementById("cashStartAmt").value = '';
-        }        
-      });
-
-      //saving bank from input
-      $('.saveBank').on('click', function(e) {
-        e.preventDefault();
-        var validBankAmt = document.getElementById("bankStartAmt").value;
-        if ((reg.test(validBankAmt) && validBankAmt != null), parseFloat(validBankAmt) > 0){
-          startBankKey = startBankKey ? startBankKey : firebase.database().ref().child('startBank').push().key;
-          startBankAmt.startBank = document.getElementById("bankStartAmt").value;
-          firebase.database().ref().child('startBank').set(startBankAmt);
-          currentBankAmt = {currentBank: startBankAmt.startBank};
-          currentBankKey = currentBankKey ? currentBankKey : firebase.database().ref().child('currentBankAmt').push().key;
-          firebase.database().ref().child('currentBankAmt').set(currentBankAmt);
-          document.getElementById("bankStartAmt").value = '';
-        } else {
-          alert('Please fill up the correct starting amount');
-          document.getElementById("bankStartAmt").value = '';
-        }        
-      });
-
       //Read current cash from database
       var amountCashRef = firebase.database().ref('currentCashAmt');
       var dispCurrentCash;
@@ -265,9 +227,35 @@
           document.getElementById("dispCurrentBank").value = "RM" + dispCurrentBank;
       });
 
-      //styling for button of main menu
-      $('.menu-items').find('a').css('width','100%');
-      $('.menu-items').find('button').css('width','100%');
+      //output list of data when loading the page and only appear if there are available data
+      var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+      var expenseObj;
+      expenseRef.on("value", function(snapshot) {
+          snapshot.forEach(function(childSnapshot){
+              expenseObj = childSnapshot.val();
+              var expDate = expenseObj.expenseDate;
+              var expAcc = expenseObj.expenseAccount;
+              var expCat = expenseObj.expenseCategory;
+              var expAmt = parseFloat(expenseObj.expenseAmount);
+              //console.log(expDate);
+              //console.log(expAcc);
+              //console.log(expAmt);
+              $('#expenseList').append(
+              '<li class="list-group-item nopadding">' + 
+                '<div class="card">' + 
+                  '<div class="card-header">' + expDate + '</div>' + 
+                  '<a class="card-body" href="#">' +
+                    '<div class="card-text">' + 
+                      '<p>' + expAcc + '</p>' + 
+                      '<p>' + expCat + '</p>' + 
+                      '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                    '</div>' +
+                  '</a>' +
+                '</div>' +
+              '</li>');
+          }); 
+      });
+
     </script>
   </body>
 </html>

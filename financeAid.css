@@ -32,6 +32,10 @@
     .sidebar.toggled {
         margin-left: -250px;
     }
+
+    .content{
+        margin-left: 1rem;
+    }
 }
 
 @media (min-width: 1200px) {
@@ -73,8 +77,8 @@ p{
 }
 
 .sidebar{
-    min-width: 250px;
-    max-width: 250px;
+    min-width: 220px;
+    max-width: 220px;
     min-height: 100vh;
     transition: all 0.3s;
 }
@@ -105,4 +109,78 @@ p{
 
 .content {
     width: 100%;
+}
+
+.sidebar-right{
+    min-width: 450px;
+    max-width: 450px;
+    min-height: 100vh;
+    transition: all 0.3s;
+    background: #e6e5da;
+}
+
+.sidebar-right ul li a{
+    text-decoration: none;
+}
+
+.summary .btn-secondary{
+    background-color: rgb(217,216,206,0.7);
+    border: none;
+    border-radius: 0;
+    color: rgb(76,76,76);
+    width: 200px;
+    height: 50px;
+    margin: 0 auto;
+    padding: 0;
+    display: inline-block;
+    line-height: 50px;
+}
+
+.summary .btn-secondary:hover{
+    background-color: rgb(217,216,206,1);
+    border: none;
+    color: rgb(76,76,76);
+}
+
+.summary .btn-secondary.focus, .btn-secondary:focus{
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important;
+}
+
+.btn.focus, .btn:focus{
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important;
+}
+
+.modal-header {
+    padding: 0 1rem 0 1rem;
+}
+
+.close {
+    padding: 1.5rem 1rem 0 1rem !important;
+}
+
+#closeBtn {
+    margin: -1rem auto -1rem -1rem;
+}
+
+.custom-select {
+    padding: 0;
+    border-radius: 0;
+    border: 0;
+}
+
+.custom-select {
+    text-align: center;
+    text-align-last: center;
+}
+
+#addRecordBtn {
+    position: sticky;
+    right: 0;
+    margin-top: 2rem;
+}
+
+.list-group {
+    margin: 1.5rem 1.5rem 0 1.5rem;
 }
