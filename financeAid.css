@@ -191,3 +191,7 @@ p{
 select {
     font-family: FontAwesome, sans-serif;
 }
+
+#account, #category, #date {
+    width: 100%;
+}

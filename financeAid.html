@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="financeAid.css">
     
     <title>Finance Aid</title>
@@ -165,29 +166,33 @@
                 </button>
               </div>
               <div class="modal-body">
+                <label for="amount">Amount</label>
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" placeholder="Amount" aria-label="amount" aria-describedby="amount">
+                  <input type="text" class="form-control" id="amount" placeholder="Amount" aria-label="amount" aria-describedby="amount">
                   <div class="input-group-append">
-                    <span class="input-group-text" id="amount">RM</span>
+                    <span class="input-group-text">RM</span>
                   </div>
                 </div>
+                <label for="account">Account</label>
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" placeholder="Account" aria-label="account" aria-describedby="account">
-                  <div class="input-group-append">
-                    <span class="input-group-text" id="account"></span>
-                  </div>
+                  <select name="" id="account">
+                    <option value="">Choose an option:</option>
+                    <option value="Bank">Bank</option>
+                    <option value="Cash">Cash</option>
+                  </select>
                 </div>
+                <label for="category">Category</label>
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" placeholder="Category" aria-label="category" aria-describedby="category">
-                  <div class="input-group-append">
-                    <span class="input-group-text" id="category"></span>
-                  </div>
+                  <select name="" id="category">
+                    <option value="">Choose an option:</option>
+                    <option value="Foods and Drinks">Foods and Drinks</option>
+                    <option value="Vehicle">Vehicle</option>
+                    <option value="Entertainment">Entertainment</option>                                
+                  </select>
                 </div>
+                <label for="date">Date</label>
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" placeholder="Date" aria-label="date" aria-describedby="date">
-                  <div class="input-group-append">
-                    <span class="input-group-text" id="date"></span>
-                  </div>
+                  <input type="text" class="datepicker" id="datepicker"></p>
                 </div>
                 <button type="button" class="btn btn-secondary btn-lg btn-block" disabled>Save</button>
               </div>
@@ -202,11 +207,18 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
     <script src="financeAid.js"></script>
     <script>
+      //Initialise Datepicker
+      $('.datepicker').datepicker({ maxDate: new Date() }).datepicker("setDate", new Date());
+      
+      //show date in append group
+      
       // Initialize Firebase
       var config = {
         apiKey: "AIzaSyAR3t7qI2D5wRu4fO38FuPYbPegZwQd_yI",

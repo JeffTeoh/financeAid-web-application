@@ -87,7 +87,7 @@
                             </div>
                             <div class="row py-3">          <!--Datepicker-->
                                 <div class="col-md-3">
-                                    <input type="text" id="datepicker"></p>
+                                    <input type="text" class="datepicker" id="datepicker"></p>
                                 </div>
                             </div>                
                             <div class="row py-3">          <!--Account title-->
@@ -152,7 +152,7 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
     <script>
         //initiate datepicker
-        $('#datepicker').datepicker({ maxDate: new Date() });
+        $('.datepicker').datepicker({ maxDate: new Date() }).datepicker("setDate", new Date());
 
         // Initialize Firebase
         var config = {
@@ -194,7 +194,7 @@
             
             var validIncAmt = document.getElementById("incomeAmount").value;
             if ((reg.test(validIncAmt) && validIncAmt != null), parseFloat(validIncAmt) > 0){
-                if ($("#datepicker").datepicker("getDate") != null && incAcc != ""){
+                if (incAcc != ""){
                     //write records into list to firebase db
                     var incomeObj = {}; //(if without var, override on same object, never update)
                     var incomeObjKey = incomeObjKey ? incomeObjKey : firebase.database().ref().child('incomeObj').push().key;
@@ -242,13 +242,11 @@
                     }); 
                 } else {
                     alert("Please check either date or account had been selected");
-                    document.getElementById("datepicker").value = '';
                     document.getElementById("incomeAccount").value = '';
                     document.getElementById("incomeAmount").value = '';
                 }
             } else {
                 alert('Please fill up the correct amount (NO negative number, character and amount must at least 1)');
-                document.getElementById("datepicker").value = '';
                 document.getElementById("incomeAccount").value = '';
                 document.getElementById("incomeAmount").value = '';
             }

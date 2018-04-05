@@ -161,7 +161,7 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
     <script>
-        $('.datepicker').datepicker({ maxDate: new Date() });
+        $('.datepicker').datepicker({ maxDate: new Date() }).datepicker("setDate", new Date());
 
          // Initialize Firebase
          var config = {
@@ -217,7 +217,7 @@
             
             var validTrfAmt = document.getElementById("transferAmount").value;
             if ((reg.test(validTrfAmt) && validTrfAmt != null), parseFloat(validTrfAmt) > 0){
-                if ($("#datepicker").datepicker("getDate") != null && trfFrom != ""){
+                if (trfFrom != ""){
                     //write records into list to firebase db
                     var transferObj = {}; //(override on same object, never update)
                     var transferObjKey = transferObjKey ? transferObjKey : firebase.database().ref().child('transferObj').push().key;
@@ -238,7 +238,6 @@
                         
                         if (validTrfDiff < 0) {
                             alert("Your Bank account does not have sufficient money");
-                            document.getElementById("datepicker").value = '';
                             document.getElementById("transferFrom").value = '';
                             document.getElementById("transferTo").value = '';
                             document.getElementById("transferAmount").value = '';
@@ -255,7 +254,6 @@
 
                             //clear the input form after success alert
                             alert("Your transfer added successfully!");
-                            document.getElementById("datepicker").value = '';
                             document.getElementById("transferFrom").value = '';
                             document.getElementById("transferTo").value = '';
                             document.getElementById("transferAmount").value = '';
@@ -283,7 +281,6 @@
                         
                         if (validTrfDiff < 0) {
                             alert("Your Cash account does not have sufficient money");
-                            document.getElementById("datepicker").value = '';
                             document.getElementById("transferFrom").value = '';
                             document.getElementById("transferTo").value = '';
                             document.getElementById("transferAmount").value = '';
@@ -300,7 +297,6 @@
 
                             //clear the input form after success alert
                             alert("Your transfer added successfully!");
-                            document.getElementById("datepicker").value = '';
                             document.getElementById("transferFrom").value = '';
                             document.getElementById("transferTo").value = '';
                             document.getElementById("transferAmount").value = '';
@@ -323,14 +319,12 @@
                     }
                 } else {
                     alert("Please check either date or account had been selected");
-                    document.getElementById("datepicker").value = '';
                     document.getElementById("transferFrom").value = '';
                     document.getElementById("transferTo").value = '';
                     document.getElementById("transferAmount").value = '';
                 }
             } else {
                 alert('Please fill up the correct amount (NO negative number, character and amount must at least 1)');
-                document.getElementById("datepicker").value = '';
                 document.getElementById("transferFrom").value = '';
                 document.getElementById("transferTo").value = '';
                 document.getElementById("transferAmount").value = '';
