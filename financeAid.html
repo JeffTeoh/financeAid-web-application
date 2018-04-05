@@ -365,6 +365,21 @@
         }
       }
 
+      //only enable number and decimal points to be input
+      $('#amount').keypress(function(e) {
+        var a = [];
+        var k = e.which;
+
+        var y = 46;
+        a.push(y);
+
+        for (i = 48; i < 58; i++)
+          a.push(i);
+    
+        if (!(a.indexOf(k)>=0))
+          e.preventDefault();
+    
+      });
 
     </script>
   </body>
