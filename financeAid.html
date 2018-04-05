@@ -161,14 +161,14 @@
                   <option value="inc">Add Income</option>
                   <option value="trf">Add Transfer</option>
                 </select>
-                <button type="button" class="close" aria-label="Save" id="saveBtn" disabled>
+                <button type="button" class="close" aria-label="Save" id="saveTick">
                   <span aria-hidden="true">&#10003;</span>
                 </button>
               </div>
               <div class="modal-body">
                 <label for="amount">Amount</label>
                 <div class="input-group mb-3">
-                  <input type="text" class="form-control" id="amount" placeholder="Amount" aria-label="amount" aria-describedby="amount">
+                  <input onkeyup="checkFormsValidity();" type="text" class="form-control" id="amount" placeholder="Amount" aria-label="amount" aria-describedby="amount" required="required">
                   <div class="input-group-append">
                     <span class="input-group-text">RM</span>
                   </div>
@@ -194,7 +194,7 @@
                 <div class="input-group mb-3">
                   <input type="text" class="datepicker" id="datepicker"></p>
                 </div>
-                <button type="button" class="btn btn-secondary btn-lg btn-block" disabled>Save</button>
+                <button type="button" class="btn btn-secondary btn-lg btn-block" id="saveBtn">Save</button>
               </div>
             </div>
           </div>
@@ -216,8 +216,6 @@
     <script>
       //Initialise Datepicker
       $('.datepicker').datepicker({ maxDate: new Date() }).datepicker("setDate", new Date());
-      
-      //show date in append group
       
       // Initialize Firebase
       var config = {
@@ -254,31 +252,32 @@
       var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
       var expenseObj;
       expenseRef.on("value", function(snapshot) {
-          snapshot.forEach(function(childSnapshot){
-              expenseObj = childSnapshot.val();
-              var expDate = expenseObj.expenseDate;
-              var expAcc = expenseObj.expenseAccount;
-              var expCat = expenseObj.expenseCategory;
-              var expAmt = parseFloat(expenseObj.expenseAmount);
-              //console.log(expDate);
-              //console.log(expAcc);
-              //console.log(expAmt);
-              $('#expenseList').append(
-              '<li class="list-group-item nopadding">' + 
-                '<div class="card">' + 
-                  '<div class="card-header">' + expDate + '</div>' + 
-                  '<div class="card-body" href="#">' +
-                    '<div class="card-text">' + 
-                      '<p>' + expAcc + '</p>' + 
-                      '<p>' + expCat + '</p>' + 
-                      '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
-                    '</div>' +
-                  '</div>' +
+        snapshot.forEach(function(childSnapshot){
+          expenseObj = childSnapshot.val();
+          var expDate = expenseObj.expenseDate;
+          var expAcc = expenseObj.expenseAccount;
+          var expCat = expenseObj.expenseCategory;
+          var expAmt = parseFloat(expenseObj.expenseAmount);
+          //console.log(expDate);
+          //console.log(expAcc);
+          //console.log(expAmt);
+          $('#expenseList').append(
+          '<li class="list-group-item nopadding">' + 
+            '<div class="card">' + 
+              '<div class="card-header">' + expDate + '</div>' + 
+              '<div class="card-body" href="#">' +
+                '<div class="card-text">' + 
+                  '<p>' + expAcc + '</p>' + 
+                  '<p>' + expCat + '</p>' + 
+                  '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
                 '</div>' +
-              '</li>');
-          });
+              '</div>' +
+            '</div>' +
+          '</li>');
+        });
       });
 
+      //display expense records with filter
       $('#sumByDate').click(function(){
         $('#expenseList li').remove();
         var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
@@ -339,6 +338,33 @@
           });
         });
       });
+
+      // Disable function
+      jQuery.fn.extend({
+        disable: function(state) {
+          return this.each(function() {
+            this.disabled = state;
+          });
+        }
+      });
+
+      //change disabled state if the input area are filled
+      var saveButton = document.getElementById('saveBtn');
+      saveButton.disabled = true;
+      var saveTickButton = document.getElementById('saveTick');
+      saveTickButton.disabled = true;
+
+      function checkFormsValidity(){
+        var amountInput = document.getElementById('amount');
+        if (amountInput.checkValidity()) {
+          saveButton.disabled = false;
+          saveTickButton.disabled = false;
+        } else {
+          saveButton.disabled = true;
+          saveTickButton.disabled = true;
+        }
+      }
+
 
     </script>
   </body>
