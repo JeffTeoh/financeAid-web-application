@@ -106,7 +106,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="cashModalCenterTitle">Set starting amount of Cash</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="cashCloseBtn">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
@@ -114,7 +114,7 @@
                   <form>
                     <div class="form-group">
                       <label for="startCash">RM *</label>
-                      <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount (Max amount: 9999999999)" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash" maxlength="10">
+                      <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash" maxlength="10">
                     </div>
                   </form>
                   <!--div class="input-group mb-3">
@@ -137,7 +137,7 @@
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="bankModalCenterTitle">Set starting amount of Bank</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bankCloseBtn">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
@@ -145,7 +145,7 @@
                   <form>
                     <div class="form-group">
                       <label for="startBank">RM *</label>
-                      <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount (Max amount: 9999999999)" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank" maxlength="10">
+                      <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank" maxlength="10">
                     </div>
                   </form>
                 </div>
@@ -181,8 +181,34 @@
       };
       firebase.initializeApp(config);
 
-      //read only if input is number include number with decimal place
-      var reg = /[+-]?([0-9]*[.])?[0-9]+/;
+      //only enable number and decimal points to be input
+      $('#cashStartAmt').keypress(function(e) {
+        var a = [];
+        var k = e.which;
+
+        var y = 46;
+        a.push(y);
+
+        for (i = 48; i < 58; i++)
+          a.push(i);
+    
+        if (!(a.indexOf(k)>=0))
+          e.preventDefault();    
+      });
+
+      $('#bankStartAmt').keypress(function(e) {
+        var a = [];
+        var k = e.which;
+
+        var y = 46;
+        a.push(y);
+
+        for (i = 48; i < 58; i++)
+          a.push(i);
+    
+        if (!(a.indexOf(k)>=0))
+          e.preventDefault();    
+      });
 
       //Write amount input by user to firebase database      
       var startCashAmt = {};
@@ -199,7 +225,7 @@
       $('.saveCash').on('click', function(e) {
         e.preventDefault();
         var validCashAmt = document.getElementById("cashStartAmt").value;
-        if ((!reg.test(validCashAmt) && validCashAmt != null), parseFloat(validCashAmt) > 0){
+        if (validCashAmt != null && parseFloat(validCashAmt) > 0){
           startCashKey = startCashKey ? startCashKey : firebase.database().ref().child('startCash').push().key;
           startCashAmt.startCash = document.getElementById("cashStartAmt").value;
           firebase.database().ref().child('startCash').set(startCashAmt);
@@ -208,7 +234,7 @@
           firebase.database().ref().child('currentCashAmt').set(currentCashAmt);
           document.getElementById("cashStartAmt").value = '';
         } else {
-          alert('Please fill up the correct starting amount');
+          alert('Please fill up the starting amount');
           document.getElementById("cashStartAmt").value = '';
         }        
       });
@@ -217,7 +243,7 @@
       $('.saveBank').on('click', function(e) {
         e.preventDefault();
         var validBankAmt = document.getElementById("bankStartAmt").value;
-        if ((reg.test(validBankAmt) && validBankAmt != null), parseFloat(validBankAmt) > 0){
+        if (validBankAmt != null && parseFloat(validBankAmt) > 0){
           startBankKey = startBankKey ? startBankKey : firebase.database().ref().child('startBank').push().key;
           startBankAmt.startBank = document.getElementById("bankStartAmt").value;
           firebase.database().ref().child('startBank').set(startBankAmt);
@@ -226,7 +252,7 @@
           firebase.database().ref().child('currentBankAmt').set(currentBankAmt);
           document.getElementById("bankStartAmt").value = '';
         } else {
-          alert('Please fill up the correct starting amount');
+          alert('Please fill up the starting amount');
           document.getElementById("bankStartAmt").value = '';
         }        
       });
@@ -250,10 +276,6 @@
           
           document.getElementById("dispCurrentBank").value = "RM" + dispCurrentBank;
       });
-
-      //styling for button of main menu
-      $('.menu-items').find('a').css('width','100%');
-      $('.menu-items').find('button').css('width','100%');
     </script>
   </body>
 </html>

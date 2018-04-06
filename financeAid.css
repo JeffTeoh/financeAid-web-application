@@ -203,3 +203,12 @@ select {
 #transferTo {
     padding: 0;
 }
+
+/* for setting.html */
+.modal-title {
+    margin: 1rem;
+}
+
+#cashCloseBtn, #bankCloseBtn {
+    margin: 0rem -1rem -1rem;
+}
