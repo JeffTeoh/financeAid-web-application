@@ -153,16 +153,13 @@
           <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeBtn">
-                  <span aria-hidden="true">&#10005;</span>
-                </button>
                 <select class="custom-select" id="selectFeature">
                   <option value="exp" selected="selected">Add Expense</option>
                   <option value="inc">Add Income</option>
                   <option value="trf">Add Transfer</option>
                 </select>
-                <button type="button" class="close" aria-label="Save" id="saveTick">
-                  <span aria-hidden="true">&#10003;</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeBtn">
+                  <span aria-hidden="true">&#10005;</span>
                 </button>
               </div>
               <div class="modal-body" id="modal-body">
@@ -375,17 +372,13 @@
       //change disabled state if the input area are filled
       var saveButton = document.getElementById('saveBtn');
       saveButton.disabled = true;
-      var saveTickButton = document.getElementById('saveTick');
-      saveTickButton.disabled = true;
 
       function checkFormsValidity(){
         var amountInput = document.getElementById('amount');
         if (amountInput.checkValidity()) {
           saveButton.disabled = false;
-          saveTickButton.disabled = false;
         } else {
           saveButton.disabled = true;
-          saveTickButton.disabled = true;
         }
       }
 
@@ -406,7 +399,8 @@
 
       //switch modal body view by selection
       $("#selectFeature").change(function(){
-        var selectedFeature = this.value;
+        var selectedFeature = this.value;        
+        console.log(selectedFeature);
         if (selectedFeature == "inc") {
           $("#account-group").show(500);
           $("#category-group").hide(500);

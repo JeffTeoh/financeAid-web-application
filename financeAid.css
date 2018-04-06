@@ -159,15 +159,12 @@ p{
     padding: 0 1rem 0 1rem;
 }
 
-.close {
-    padding: 1.5rem 1rem 0 1rem !important;
-}
-
 #closeBtn {
-    margin: -1rem auto -1rem -1rem;
+    margin: auto;
 }
 
 .custom-select {
+    margin: 1rem;
     padding: 0;
     border-radius: 0;
     border: 0;
@@ -179,9 +176,8 @@ p{
 }
 
 #addRecordBtn {
-    position: sticky;
     right: 0;
-    margin-top: 2rem;
+    bottom: 0;
 }
 
 .list-group {
