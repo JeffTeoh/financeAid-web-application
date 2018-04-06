@@ -215,7 +215,7 @@
                     <input type="text" class="datepicker" id="datepicker"></p>
                   </div>
                 </div>
-                <button type="button" class="btn btn-secondary btn-lg btn-block" id="saveBtn">Save</button>
+                <button type="button" data-dismiss="modal" class="btn btn-secondary btn-lg btn-block" id="saveBtn">Save</button>
               </div>
             </div>
           </div>
@@ -397,10 +397,23 @@
           e.preventDefault();    
       });
 
+      //auto set transfer account when user selected
+      var selectedAccount = $("#transferFrom option:selected");
+      $('#transferFrom').change(function(){
+        selectedAccount.each(function() {
+          if (document.getElementById("transferFrom").value == "Bank"){
+            document.getElementById("transferTo").value = "Cash";
+          } else if (document.getElementById("transferFrom").value == "Cash"){
+            document.getElementById("transferTo").value = "Bank";
+          } else {
+            document.getElementById("transferTo").value = "";
+          }
+        });
+      });
+
       //switch modal body view by selection
       $("#selectFeature").change(function(){
         var selectedFeature = this.value;        
-        console.log(selectedFeature);
         if (selectedFeature == "inc") {
           $("#account-group").show(500);
           $("#category-group").hide(500);
@@ -420,6 +433,7 @@
           $("#trfTo-group").hide(500);
         }
       });
+      
 
     </script>
   </body>

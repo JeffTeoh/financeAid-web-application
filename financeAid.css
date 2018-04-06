@@ -204,6 +204,11 @@ select {
     padding: 0;
 }
 
+#selectFeature {
+    border: 1px solid rgba(19, 2, 2, 0.5);
+    border-radius: 25px;
+}
+
 /* for setting.html */
 .modal-title {
     margin: 1rem;
