@@ -192,10 +192,18 @@ select {
     font-family: FontAwesome, sans-serif;
 }
 
-#account, #category, #date {
+#account, #category, #transferFrom, #date {
     width: 100%;
 }
 
 #saveBtn {
     background-color: #4d4d4d;
+}
+
+#trfFrom-group, #trfTo-group {
+    display: none;
+}
+
+#transferTo {
+    padding: 0;
 }

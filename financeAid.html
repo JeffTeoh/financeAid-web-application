@@ -156,8 +156,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeBtn">
                   <span aria-hidden="true">&#10005;</span>
                 </button>
-                <select class="custom-select">
-                  <option value="exp" selected>Add Expense</option>
+                <select class="custom-select" id="selectFeature">
+                  <option value="exp" selected="selected">Add Expense</option>
                   <option value="inc">Add Income</option>
                   <option value="trf">Add Transfer</option>
                 </select>
@@ -165,34 +165,58 @@
                   <span aria-hidden="true">&#10003;</span>
                 </button>
               </div>
-              <div class="modal-body">
-                <label for="amount">Amount</label>
-                <div class="input-group mb-3">
-                  <input onkeyup="checkFormsValidity();" type="text" class="form-control" id="amount" placeholder="Amount" aria-label="amount" aria-describedby="amount" required="required">
-                  <div class="input-group-append">
-                    <span class="input-group-text">RM</span>
+              <div class="modal-body" id="modal-body">
+                <div id="amount-group">
+                  <label for="amount">Amount</label>
+                  <div class="input-group mb-3">
+                    <input onkeyup="checkFormsValidity();" type="text" class="form-control" id="amount" placeholder="Amount" aria-label="amount" aria-describedby="amount" required="required">
+                    <div class="input-group-append">
+                      <span class="input-group-text">RM</span>
+                    </div>
                   </div>
                 </div>
-                <label for="account">Account</label>
-                <div class="input-group mb-3">
-                  <select name="" id="account">
-                    <option value="">Choose an option:</option>
-                    <option value="Bank">Bank</option>
-                    <option value="Cash">Cash</option>
-                  </select>
+                <div id="account-group">
+                  <label for="account">Account</label>
+                  <div class="input-group mb-3">
+                    <select name="" id="account">
+                      <option value="">Choose an option:</option>
+                      <option value="Bank">Bank</option>
+                      <option value="Cash">Cash</option>
+                    </select>
+                  </div>
                 </div>
-                <label for="category">Category</label>
-                <div class="input-group mb-3">
-                  <select name="" id="category">
-                    <option value="">Choose an option:</option>
-                    <option value="Foods and Drinks">Foods and Drinks</option>
-                    <option value="Vehicle">Vehicle</option>
-                    <option value="Entertainment">Entertainment</option>                                
-                  </select>
+                <div id="category-group">
+                  <label for="category">Category</label>
+                  <div class="input-group mb-3">
+                    <select name="" id="category">
+                      <option value="">Choose an option:</option>
+                      <option value="Foods and Drinks">Foods and Drinks</option>
+                      <option value="Vehicle">Vehicle</option>
+                      <option value="Entertainment">Entertainment</option>                                
+                    </select>
+                  </div>
+                </div>                
+                <div id="trfFrom-group">
+                  <label for="transferFrom">Transfer From</label>
+                  <div class="input-group mb-3">
+                    <select name="" id="transferFrom">
+                      <option value="" selected="selected">Choose an option:</option>
+                      <option value="Bank">Bank</option>
+                      <option value="Cash">Cash</option>
+                    </select>
+                  </div>
                 </div>
-                <label for="date">Date</label>
-                <div class="input-group mb-3">
-                  <input type="text" class="datepicker" id="datepicker"></p>
+                <div id="trfTo-group">
+                  <label for="transferTo">Transfer To</label>
+                  <div class="input-group mb-3">
+                    <input class="form-control" id="transferTo" readonly>
+                  </div>                  
+                </div>
+                <div id="date-group">
+                  <label for="date">Date</label>
+                  <div class="input-group mb-3">
+                    <input type="text" class="datepicker" id="datepicker"></p>
+                  </div>
                 </div>
                 <button type="button" class="btn btn-secondary btn-lg btn-block" id="saveBtn">Save</button>
               </div>
@@ -377,8 +401,30 @@
           a.push(i);
     
         if (!(a.indexOf(k)>=0))
-          e.preventDefault();
-    
+          e.preventDefault();    
+      });
+
+      //switch modal body view by selection
+      $("#selectFeature").change(function(){
+        var selectedFeature = this.value;
+        if (selectedFeature == "inc") {
+          $("#account-group").show(500);
+          $("#category-group").hide(500);
+          $("#trfFrom-group").hide(500);          
+          $("#trfTo-group").hide(500);
+        } else
+        if (selectedFeature == "trf") {
+          $("#account-group").hide(500);
+          $("#category-group").hide(500);
+          $("#trfFrom-group").show(500);          
+          $("#trfTo-group").show(500);
+        } else
+        if (selectedFeature == "exp") {
+          $("#account-group").show(500);
+          $("#category-group").show(500);
+          $("#trfFrom-group").hide(500);          
+          $("#trfTo-group").hide(500);
+        }
       });
 
     </script>
