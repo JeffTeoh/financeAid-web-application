@@ -325,7 +325,30 @@
             });
             $('#sumByCat').click(function(){
               $('#transferList li').remove();
-              var transferRef = firebase.database().ref('transferObj').orderByChild('transferFrom');
+              var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+              var transferObj;
+              transferRef.on("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                    transferObj = childSnapshot.val();
+                    var trfDate = transferObj.transferDate;
+                    var trfFrom = transferObj.transferFrom;
+                    var trfTo = transferObj.transferTo;
+                    var trfAmt = parseFloat(transferObj.transferAmount);
+                    $('#transferList').append(
+                    '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                            '<div class="card-header">' + trfFrom + " &#8594; " + trfTo + '</div>' + 
+                            '<div class="card-body">' +
+                                '<div class="card-text">' + 
+                                    '<p>' + trfDate + '</p>' + 
+                                    '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>' +
+                    '</li>');
+                });
+              });
+              var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
               var transferObj;
               transferRef.on("value", function(snapshot) {
                 snapshot.forEach(function(childSnapshot){
@@ -457,7 +480,8 @@
                   var expenseObj = {};
                   var expenseObjKey = expenseObjKey ? expenseObjKey : firebase.database().ref().child('expenseObj').push().key;
                   expenseObj[expenseObjKey] = {expenseDate: expDate, expenseAccount: expAcc, expenseCategory: expCat, expenseAmount: expAmt};
-      
+                  firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
+
                   //calculate and update current amount based on expense
                   var selectedAccount = expAcc;
                   var currentexpenseAmt = parseFloat(expenseObj[expenseObjKey].expenseAmount);
@@ -527,6 +551,7 @@
                   var incomeObjKey = incomeObjKey ? incomeObjKey : firebase.database().ref().child('incomeObj').push().key;
                   incomeObj[incomeObjKey] = {incomeDate: incDate,incomeAccount: incAcc, incomeAmount: incAmt};            
                   firebase.database().ref().child('incomeObj').update(incomeObj);
+                  firebase.database().ref('incomeAcc').child(incAcc).update(incomeObj);
                   
                   //calculate and update current amount based on income
                   var selectedAccount = document.getElementById('account').value;
@@ -567,6 +592,7 @@
                   var transferObj = {}; //(override on same object, never update)
                   var transferObjKey = transferObjKey ? transferObjKey : firebase.database().ref().child('transferObj').push().key;
                   transferObj[transferObjKey] = {transferDate: trfDate, transferFrom: trfFrom, transferTo: trfTo, transferAmount: trfAmt};
+                  firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
       
                   //calculate and update current amount based on transfer
                   var selectedAccountFrom = trfFrom;

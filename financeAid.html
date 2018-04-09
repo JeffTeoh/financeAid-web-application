@@ -101,16 +101,18 @@
             </div>
           </div>
           <div class="row mt-5">
-            <div class="col-md-12 text-center">
-              <p><mark id="dispCurrentCash"></mark> ARE LEFT TO SPENT IN CASH ACCOUNT</p>              
-              <p><mark id="avgCash"></mark> ARE LEFT PER DAY</p>
-            </div>
-          </div>
-          <div class="row mt-5">
-            <div class="col-md-12 text-center">
+              <div class="col-md-2"></div>
+              <div class="col-md-10 text-left">
               <p><mark id="dispCurrentBank"></mark> ARE LEFT TO SPENT IN BANK ACCOUNT</p>
               <p><mark id="avgBank"></mark> ARE LEFT PER DAY</p>
             </div>  
+          </div>
+          <div class="row mt-5">
+            <div class="col-md-2"></div>
+            <div class="col-md-10 text-left">
+              <p><mark id="dispCurrentCash"></mark> ARE LEFT TO SPENT IN CASH ACCOUNT</p>              
+              <p><mark id="avgCash"></mark> ARE LEFT PER DAY</p>
+            </div>
           </div>
         </div>
       </div>
@@ -286,9 +288,6 @@
           var expAcc = expenseObj.expenseAccount;
           var expCat = expenseObj.expenseCategory;
           var expAmt = parseFloat(expenseObj.expenseAmount);
-          //console.log(expDate);
-          //console.log(expAcc);
-          //console.log(expAmt);
           $('#expenseList').append(
           '<li class="list-group-item nopadding">' + 
             '<div class="card">' + 
@@ -335,19 +334,63 @@
       });
       $('#sumByCat').click(function(){
         $('#expenseList li').remove();
-        var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseCategory');
+        var expenseRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
         var expenseObj;
         expenseRef.on("value", function(snapshot) {
           snapshot.forEach(function(childSnapshot){
             expenseObj = childSnapshot.val();
-            //console.log(expenseObj);
             var expDate = expenseObj.expenseDate;
             var expAcc = expenseObj.expenseAccount;
             var expCat = expenseObj.expenseCategory;
             var expAmt = parseFloat(expenseObj.expenseAmount);
-            //console.log(expDate);
-            //console.log(expAcc);
-            //console.log(expAmt);
+            $('#expenseList').append(
+            '<li class="list-group-item nopadding">' + 
+              '<div class="card">' + 
+                '<div class="card-header">' + expCat + '</div>' + 
+                '<div class="card-body">' +
+                  '<div class="card-text">' + 
+                    '<p>' + expDate + '</p>' + 
+                    '<p>' + expAcc + '</p>' + 
+                    '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</li>');
+          });
+        });
+        var expenseRef = firebase.database().ref('expenseCat/Foods and Drinks').orderByChild('expenseDate');
+        var expenseObj;
+        expenseRef.on("value", function(snapshot) {
+          snapshot.forEach(function(childSnapshot){
+            expenseObj = childSnapshot.val();
+            var expDate = expenseObj.expenseDate;
+            var expAcc = expenseObj.expenseAccount;
+            var expCat = expenseObj.expenseCategory;
+            var expAmt = parseFloat(expenseObj.expenseAmount);
+            $('#expenseList').append(
+            '<li class="list-group-item nopadding">' + 
+              '<div class="card">' + 
+                '<div class="card-header">' + expCat + '</div>' + 
+                '<div class="card-body">' +
+                  '<div class="card-text">' + 
+                    '<p>' + expDate + '</p>' + 
+                    '<p>' + expAcc + '</p>' + 
+                    '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</li>');
+          });
+        });
+        var expenseRef = firebase.database().ref('expenseCat/Vehicle').orderByChild('expenseDate');
+        var expenseObj;
+        expenseRef.on("value", function(snapshot) {
+          snapshot.forEach(function(childSnapshot){
+            expenseObj = childSnapshot.val();
+            var expDate = expenseObj.expenseDate;
+            var expAcc = expenseObj.expenseAccount;
+            var expCat = expenseObj.expenseCategory;
+            var expAmt = parseFloat(expenseObj.expenseAmount);
             $('#expenseList').append(
             '<li class="list-group-item nopadding">' + 
               '<div class="card">' + 
@@ -472,6 +515,7 @@
             var expenseObj = {};
             var expenseObjKey = expenseObjKey ? expenseObjKey : firebase.database().ref().child('expenseObj').push().key;
             expenseObj[expenseObjKey] = {expenseDate: expDate, expenseAccount: expAcc, expenseCategory: expCat, expenseAmount: expAmt};
+            firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
 
             //calculate and update current amount based on expense
             var selectedAccount = expAcc;
@@ -511,9 +555,6 @@
                     var expAcc = expenseObj.expenseAccount;
                     var expCat = expenseObj.expenseCategory;
                     var expAmt = parseFloat(expenseObj.expenseAmount);
-                    //console.log(expDate);
-                    //console.log(expAcc);
-                    //console.log(expAmt);
                     $('#expenseList').append(
                     '<li class="list-group-item nopadding">' + 
                       '<div class="card">' + 
@@ -565,9 +606,6 @@
                     var expAcc = expenseObj.expenseAccount;
                     var expCat = expenseObj.expenseCategory;
                     var expAmt = parseFloat(expenseObj.expenseAmount);
-                    //console.log(expDate);
-                    //console.log(expAcc);
-                    //console.log(expAmt);
                     $('#expenseList').append(
                     '<li class="list-group-item nopadding">' + 
                       '<div class="card">' + 
@@ -602,6 +640,7 @@
             var incomeObjKey = incomeObjKey ? incomeObjKey : firebase.database().ref().child('incomeObj').push().key;
             incomeObj[incomeObjKey] = {incomeDate: incDate,incomeAccount: incAcc, incomeAmount: incAmt};            
             firebase.database().ref().child('incomeObj').update(incomeObj);
+            firebase.database().ref('incomeAcc').child(incAcc).update(incomeObj);
             
             //calculate and update current amount based on income
             var selectedAccount = document.getElementById('account').value;
@@ -642,6 +681,7 @@
             var transferObj = {}; //(override on same object, never update)
             var transferObjKey = transferObjKey ? transferObjKey : firebase.database().ref().child('transferObj').push().key;
             transferObj[transferObjKey] = {transferDate: trfDate, transferFrom: trfFrom, transferTo: trfTo, transferAmount: trfAmt};
+            firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
 
             //calculate and update current amount based on transfer
             var selectedAccountFrom = trfFrom;
