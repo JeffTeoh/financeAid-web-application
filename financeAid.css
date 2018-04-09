@@ -10,10 +10,6 @@
     .dropdown{
         margin-bottom: 40%;
     }
-
-    .sidebar .sidebar-right{
-        display: 
-    }
 }
 
 @media (max-width:1200px){
@@ -32,9 +28,6 @@
 @media (max-width: 768px) {
     .sidebar {
         margin-left: 0;
-    }
-    .sidebar.toggled {
-        margin-left: -250px;
     }
 
     .content{
@@ -185,7 +178,7 @@ p{
 #addRecordBtn {
     bottom: 0;
     right: 0;
-    position: absolute;
+    position: fixed;
     z-index: 10;
 }
 
