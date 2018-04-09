@@ -671,6 +671,11 @@
           }
         }
 
+        //reset list for records
+        $("#sumByDate").addClass('active');
+        $("#sumByCat").removeClass('active');
+
+        //reset modal dialog input area
         $("#selectFeature").prop('selectedIndex', 1);
         document.getElementById("amount").value = '';
         document.getElementById("account").value = '';
