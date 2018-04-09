@@ -10,6 +10,10 @@
     .dropdown{
         margin-bottom: 40%;
     }
+
+    .sidebar .sidebar-right{
+        display: 
+    }
 }
 
 @media (max-width:1200px){
@@ -39,7 +43,7 @@
 }
 
 @media (min-width: 1200px) {
-    .sidebar-toggle{
+    .sidebar-toggle, .sidebar-toggleright{
         display: none;
     }
 }
@@ -118,8 +122,11 @@ p{
     min-width: 450px;
     max-width: 450px;
     min-height: 100vh;
-    transition: all 0.3s;
     background: #e6e5da;
+}
+
+.sidebar-right.toggled {
+    margin-left: -450px;
 }
 
 .sidebar-right ul li a{
@@ -176,8 +183,10 @@ p{
 }
 
 #addRecordBtn {
-    right: 0;
     bottom: 0;
+    right: 0;
+    position: absolute;
+    z-index: 10;
 }
 
 .list-group {

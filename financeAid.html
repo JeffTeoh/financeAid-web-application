@@ -80,44 +80,37 @@
       
       <!-- Content in middle of web page --> 
       <div class="content p-4">
-        <a class="sidebar-toggle text-light mr-3"><i class="fa fa-bars" style="color:blue; background-color: #4c4c4c"></i></a>
+        <!--Button to toggle side bar-->
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-2">
+              <a class="sidebar-toggle text-light mr-3"><i class="fa fa-bars" style="color:blue;"></i></a>
+            </div>
+            <div class="col-sm-8"></div>
+            <div class="col-sm-2">
+              <a class="sidebar-toggleright text-light mr-3"><i class="fa fa-bars" style="color:yellow;"></i></a>
+            </div>
+          </div>
+        </div>
+        
         <!-- Header that include balance and setting of starting amount for accounts -->
         <div class="container py-md-2 pt-md-4">
           <div class="row">
-            <div class="col-md-2 text-center">
-              <p style="font-size:2rem;">Balance:</p>
+            <div class="col-md-12 text-center">
+              <p style="font-size:3rem; color: green;">Balance</p>
             </div>
-            <div class="col-md-1"></div>
-            <div class="col-md-4 text-center">
-              <form>
-                <label for="dispCurrentCash">Cash</label>
-                <input class="form-control" id="dispCurrentCash" value="RM0.00" readonly>
-              </form>
-            </div>
-            <div class="col-md-4 text-center">
-              <form>
-                <label for="dispCurrentBank">Bank</label>
-                <input class="form-control" id="dispCurrentBank" value="RM0.00" readonly>
-              </form>
-            </div>  
           </div>
-        </div>
-              
-        <div class="container menu-items">
-          <div class="row">
-            <div class="col-lg-1"></div>
-            <div class="col-lg-3 col-sm-12">
-              <div class="dropdown d-flex align-items-center justify-content-center link" align="center">
-                <button class="btn btn-primary px-5 py-3 dropdown-toggle " type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Summary
-                </button>
-                <div class="dropdown-menu dropdown-menu-wide" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="sumByMonth.html">By Month</a>
-                  <a class="dropdown-item" href="sumByType.html">By Type</a>
-                </div>
-              </div>
+          <div class="row mt-5">
+            <div class="col-md-12 text-center">
+              <p><mark id="dispCurrentCash"></mark> ARE LEFT TO SPENT IN CASH ACCOUNT</p>              
+              <p><mark id="avgCash"></mark> ARE LEFT PER DAY</p>
             </div>
-            <div class="col-lg-2"></div>
+          </div>
+          <div class="row mt-5">
+            <div class="col-md-12 text-center">
+              <p><mark id="dispCurrentBank"></mark> ARE LEFT TO SPENT IN BANK ACCOUNT</p>
+              <p><mark id="avgBank"></mark> ARE LEFT PER DAY</p>
+            </div>  
           </div>
         </div>
       </div>
@@ -249,14 +242,24 @@
       };
       firebase.initializeApp(config);
 
+      //for calculation of average amount in month
+      var currentDayNum = new Date().getDate();
+      var currentMonth = new Date().getMonth() + 1;
+      var currentYear = new Date().getFullYear();      
+      var currentTotalDaysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+      var dayDiff = currentTotalDaysInMonth - currentDayNum;
+      var avgAmt = 0;
+
       //Read current cash from database
       var amountCashRef = firebase.database().ref('currentCashAmt');
       var dispCurrentCash;
       amountCashRef.on('value', function(snapshot){
           var childData = snapshot.val();
-          dispCurrentCash = parseFloat(childData.currentCash).toFixed(2);
-          
-          document.getElementById("dispCurrentCash").value = "RM" + dispCurrentCash;
+          dispCurrentCash = parseFloat(childData.currentCash);
+          avgAmt = dispCurrentCash / dayDiff;
+
+          document.getElementById("dispCurrentCash").innerHTML = "RM" + dispCurrentCash.toFixed(2);
+          document.getElementById("avgCash").innerHTML = "RM" + avgAmt.toFixed(2);
       });
 
       //Read current bank from database
@@ -264,10 +267,14 @@
       var dispCurrentBank;
       amountBankRef.on('value', function(snapshot){
           var childData = snapshot.val();
-          dispCurrentBank = parseFloat(childData.currentBank).toFixed(2);
-          
-          document.getElementById("dispCurrentBank").value = "RM" + dispCurrentBank;
+          dispCurrentBank = parseFloat(childData.currentBank);
+          avgAmt = dispCurrentBank / dayDiff;
+
+          document.getElementById("dispCurrentBank").innerHTML = "RM" + dispCurrentBank.toFixed(2);
+          document.getElementById("avgBank").innerHTML = "RM" + avgAmt.toFixed(2);
       });
+
+
 
       //output list of data when loading the page and only appear if there are available data
       var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
@@ -310,9 +317,6 @@
             var expAcc = expenseObj.expenseAccount;
             var expCat = expenseObj.expenseCategory;
             var expAmt = parseFloat(expenseObj.expenseAmount);
-            //console.log(expDate);
-            //console.log(expAcc);
-            //console.log(expAmt);
             $('#expenseList').append(
             '<li class="list-group-item nopadding">' + 
               '<div class="card">' + 
@@ -336,6 +340,7 @@
         expenseRef.on("value", function(snapshot) {
           snapshot.forEach(function(childSnapshot){
             expenseObj = childSnapshot.val();
+            //console.log(expenseObj);
             var expDate = expenseObj.expenseDate;
             var expAcc = expenseObj.expenseAccount;
             var expCat = expenseObj.expenseCategory;
