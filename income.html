@@ -14,130 +14,61 @@
   </head>
   <body>
     <div class="d-flex">
-        <nav class="sidebar bg-dark">
+        <nav class="sidebar bg-dark" id="sidebar">
             <ul class="list-unstyled">
                 <li><a class="navbar-brand text-center" href="financeAid.html">Finance Aid</a></li>
                 <li>
-                    <a href="#">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <i class="fa fa-plus"></i>
-                                </div>
-                                <div class="col-lg-10">
-                                    Income
-                                </div>
-                            </div>
-                        </div>              
+                    <a href="#" class="text-center">
+                      <i class="fa fa-plus"></i>
+                      <span class="d-none d-lg-block">Income</span>
                     </a>
                 </li>
                 <li>
-                    <a href="expense.html">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <i class="fa fa-minus"></i>
-                                </div>
-                                <div class="col-lg-10">
-                                    Expense
-                                </div>
-                            </div>
-                        </div>               
-                    </a>
+                  <a href="expense.html" class="text-center">
+                    <i class="fa fa-minus"></i>
+                    <span class="d-none d-lg-block">Expense</span>                   
+                  </a>
                 </li>
                 <li>
-                    <a href="transfer.html">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <i class="fa fa-exchange-alt"></i>
-                                </div>
-                                <div class="col-lg-10">
-                                    Transfer
-                                </div>
-                            </div>
-                        </div>               
-                    </a>
+                  <a href="transfer.html" class="text-center">
+                    <i class="fa fa-exchange-alt"></i>
+                    <span class="d-none d-lg-block">Transfer</span>
+                  </a>
                 </li>
                 <hr style="background-color: white;">
                 <li>
-                    <a href="settings.html">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <i class="fa fa-cog"></i>
-                                </div>
-                                <div class="col-lg-10">
-                                    Settings
-                                </div>
-                            </div>
-                        </div>               
-                    </a>
+                  <a href="settings.html" class="text-center">
+                    <i class="fa fa-cog"></i>
+                    <span class="d-none d-lg-block">Settings</span>
+                  </a>
                 </li>
             </ul>
         </nav>
+        
+        <!-- Content in middle of web page --> 
         <div class="content p-4">
-            <div class="container py-5">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="row py-3">
-                            <div class="col-md-6">
-                                Date *
-                            </div>
-                        </div>
-                        <div class="row py-3">
-                            <div class="col-md-3">
-                                <input type="text"></p>
-                            </div>
-                        </div>                
-                        <div class="row py-3">
-                            <div class="col-md-12">
-                                Account *
-                            </div>
-                        </div>
-                        <div class="row py-3">
-                            <div class="col-md-12">
-                                <form>
-                                    <select name="" id="expenseAccount">
-                                        <option value="">Choose an option:</option>
-                                        <option value="Bank">Bank</option>
-                                        <option value="Cash">Cash</option>
-                                    </select>
-                                </form>
-                            </div>
-                        </div>
-                        <div class="row py-3">
-                            <div class="col-md-12">
-                                Amount *
-                            </div>
-                        </div>
-                        <div class="row py-3">
-                            <div class="col-md-6">
-                                <input class="form-control" id="expenseAmount" placeholder="Amount" maxlength="10">
-                            </div>
-                        </div>
-                        <div class="row py-3">
-                            <div class="col-md-6">
-                                <button type="button" class="btn btn-primary">Add</button>
-                            </div>
-                        </div>
-                        <div class="row py-3">
-                            <div class="col-md-6">
-                                <p>* Required to input</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6"></div>
-                </div>
+          <!--Button to toggle side bar-->
+          <ul id="toggle-group" class="p-0">
+            <li>
+              <a class="sidebar-toggle btn text-light"><i class="fa fa-bars" style="color:white;"></i>Menu</a>
+            </li>
+            <li>
+              <a class="sidebar-toggleright btn text-light float-right"><i class="fa fa-list-ul" style="color:white;"></i>Menu</a>
+            </li>
+          </ul>       
+          
+          <!-- Header -->
+          <div class="container py-md-2 pt-md-4">
+            <div class="row">
+              <div class="col-md-12 text-center">
+                <p style="font-size:3rem; color: green;">Income</p>
+              </div>
             </div>
-        </div>
-        <!-- Content in middle of web page -->
-        <div class="content p-4">
-            <a class="sidebar-toggle text-light mr-3"><i class="fa fa-bars" style="color:blue; background-color: #4c4c4c"></i></a>
+          </div>
         </div>
 
         <!-- Content of right side bar -->
-      <div class="sidebar-right">
+      <div class="sidebar-right" id="sidebar-right">
         <div class="summary text-center mt-4 mx-0">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <button class="btn btn-secondary active" id="sumByDate">
@@ -249,6 +180,7 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
+    <script src="financeAid.js"></script>
     <script>
       //Initialise Datepicker
       $('.datepicker').datepicker({ maxDate: new Date() }).datepicker("setDate", new Date());

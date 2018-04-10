@@ -16,6 +16,7 @@
 @media (max-width: 767px) {
     .sidebar {
         margin-left: 0;
+        min-height: 52rem;
     }
 
     .sidebar-right {
@@ -33,6 +34,10 @@
 }
 
 @media (max-width:1200px){
+    .sidebar {
+        min-height: 64rem;
+    }
+
     .sidebar-right {
         position: absolute;
         top: 6rem;
@@ -52,13 +57,17 @@
 }
 
 @media (min-width: 1200px) {
+    .sidebar {
+        min-height: 44rem;
+    }
+
     .sidebar-toggle, .sidebar-toggleright{
         display: none;
     }
 
     .sidebar-right {
         width: 30%;
-        min-height: 100%;
+        min-height: 43rem;
     }
 
     #addRecordBtn {
@@ -103,14 +112,13 @@ p{
     width:100%;
 }
 
-.sidebar{
-    width: 34%;
-    min-height: 100%;
+.sidebar {
+    width: 28rem;
     transition: all 0.3s;
 }
 
 .sidebar.toggled {
-    margin-left: -34%;
+    margin-left: -28rem;
 }
 
 .sidebar ul li a{

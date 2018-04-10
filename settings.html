@@ -14,64 +14,32 @@
   </head>
   <body>
     <div class="d-flex">
-      <nav class="sidebar bg-dark">
+      <nav class="sidebar bg-dark" id="sidebar" style="width: 18rem;">
         <ul class="list-unstyled">
           <li><a class="navbar-brand text-center" href="financeAid.html">Finance Aid</a></li>
           <li>
-            <a href="income.html">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-2">
-                    <i class="fa fa-plus"></i>
-                  </div>
-                  <div class="col-lg-10">
-                    Income
-                  </div>
-                </div>
-              </div>              
+            <a href="income.html" class="text-center">
+              <i class="fa fa-plus"></i>
+              <span class="d-none d-lg-block">Income</span>
             </a>
           </li>
           <li>
-            <a href="expense.html">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-2">
-                    <i class="fa fa-minus"></i>
-                  </div>
-                  <div class="col-lg-10">
-                    Expense
-                  </div>
-                </div>
-              </div>               
+            <a href="expense.html" class="text-center">
+              <i class="fa fa-minus"></i>
+              <span class="d-none d-lg-block">Expense</span>                   
             </a>
           </li>
           <li>
-            <a href="transfer.html">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-2">
-                      <i class="fa fa-exchange-alt"></i>
-                  </div>
-                  <div class="col-lg-10">
-                    Transfer
-                  </div>
-                </div>
-              </div>               
+            <a href="transfer.html" class="text-center">
+              <i class="fa fa-exchange-alt"></i>
+              <span class="d-none d-lg-block">Transfer</span>
             </a>
           </li>
           <hr style="background-color: white;">
           <li>
-            <a href="#">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-2">
-                      <i class="fa fa-cog"></i>
-                  </div>
-                  <div class="col-lg-10">
-                    Settings
-                  </div>
-                </div>
-              </div>               
+            <a href="#" class="text-center">
+              <i class="fa fa-cog"></i>
+              <span class="d-none d-lg-block">Settings</span>
             </a>
           </li>
         </ul>
@@ -79,7 +47,12 @@
 
       <!--content of page-->
       <div class="content p-4">
-          <a class="sidebar-toggle text-light mr-3"><i class="fa fa-bars" style="color:blue;"></i></a>
+        <!--Button to toggle side bar-->
+        <ul id="toggle-group" class="p-0">
+            <li>
+              <a class="sidebar-toggle btn text-light"><i class="fa fa-bars" style="color:white;"></i>Menu</a>
+            </li>
+          </ul>
           <!-- Header that include balance and setting of starting amount for accounts -->
           <div class="container py-md-2 pt-md-4">
             <div class="row">
