@@ -15,64 +15,32 @@
   </head>
   <body>
     <div class="d-flex">
-      <nav class="sidebar bg-dark">
+      <nav class="sidebar bg-dark" id="sidebar">
         <ul class="list-unstyled">
           <li><a class="navbar-brand text-center" href="#">Finance Aid</a></li>
           <li>
-            <a href="income.html">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-2">
-                    <i class="fa fa-plus"></i>
-                  </div>
-                  <div class="col-lg-10">
-                    Income
-                  </div>
-                </div>
-              </div>              
+            <a href="income.html" class="text-center">
+              <i class="fa fa-plus"></i>
+              <span class="d-none d-lg-block">Income</span>
             </a>
           </li>
           <li>
-            <a href="expense.html">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-2">
-                    <i class="fa fa-minus"></i>
-                  </div>
-                  <div class="col-lg-10">
-                    Expense
-                  </div>
-                </div>
-              </div>               
+            <a href="expense.html" class="text-center">
+              <i class="fa fa-minus"></i>
+              <span class="d-none d-lg-block">Expense</span>                   
             </a>
           </li>
           <li>
-            <a href="transfer.html">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-2">
-                    <i class="fa fa-exchange-alt"></i>
-                  </div>
-                  <div class="col-lg-10">
-                    Transfer
-                  </div>
-                </div>
-              </div>               
+            <a href="transfer.html" class="text-center">
+              <i class="fa fa-exchange-alt"></i>
+              <span class="d-none d-lg-block">Transfer</span>
             </a>
           </li>
           <hr style="background-color: white;">
           <li>
-            <a href="settings.html">
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-2">
-                    <i class="fa fa-cog"></i>
-                  </div>
-                  <div class="col-lg-10">
-                    Settings
-                  </div>
-                </div>
-              </div>               
+            <a href="settings.html" class="text-center">
+              <i class="fa fa-cog"></i>
+              <span class="d-none d-lg-block">Settings</span>
             </a>
           </li>
         </ul>
@@ -81,17 +49,7 @@
       <!-- Content in middle of web page --> 
       <div class="content p-4">
         <!--Button to toggle side bar-->
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-2">
-              <a class="sidebar-toggle text-light mr-3"><i class="fa fa-bars" style="color:blue;"></i></a>
-            </div>
-            <div class="col-sm-8"></div>
-            <div class="col-sm-2">
-              <a class="sidebar-toggleright text-light mr-3"><i class="fa fa-bars" style="color:yellow;"></i></a>
-            </div>
-          </div>
-        </div>
+              <a class="sidebar-toggle text-light"><i class="fa fa-bars" style="color:blue;"></i></a>
         
         <!-- Header that include balance and setting of starting amount for accounts -->
         <div class="container py-md-2 pt-md-4">
@@ -119,17 +77,17 @@
 
       <!-- Content of right side bar -->
       <div class="sidebar-right">
-        <div class="summary text-center mt-4 mx-0">
+        <div class="summary mt-4 mx-0">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <button class="btn btn-secondary active" id="sumByDate">
               <input type="radio" name="options" id="option1" autocomplete="off" checked>
                 <i class="fa fa-calendar-alt"></i>
-                By date
+                <span>By date</span>                
             </button>
             <button class="btn btn-secondary" id="sumByCat">
               <input type="radio" name="options" id="option2" autocomplete="off">
                 <i class="fa fa-tag"></i>
-                By category
+                <span>By category</span>                
             </button>
           </div>
         </div>
@@ -137,85 +95,86 @@
         <ul class="list-group" id="expenseList">
           <!--Insert from database-->                           
         </ul>
+      </div>
+      
 
         <!--Button for adding records-->
         <button class="btn bg-dark mt-2" type="button" data-toggle="modal" data-target="#addRecord" id="addRecordBtn">
-          <i class="fa fa-plus p-3" style="color: white; font-size: 50px;"></i>
-        </button>
+            <i class="fa fa-plus p-3" style="color: white; font-size: 50px;"></i>
+          </button>          
 
         <!-- Modal for adding records -->
         <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="addRecord" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <select class="custom-select" id="selectFeature">
-                  <option value="exp" selected="selected">Add Expense</option>
-                  <option value="inc">Add Income</option>
-                  <option value="trf">Add Transfer</option>
-                </select>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeBtn">
-                  <span aria-hidden="true">&#10005;</span>
-                </button>
-              </div>
-              <div class="modal-body" id="modal-body">
-                <div id="amount-group">
-                  <label for="amount">Amount</label>
-                  <div class="input-group mb-3">
-                    <input onkeyup="checkFormsValidity();" type="text" class="form-control" id="amount" placeholder="Amount" aria-label="amount" aria-describedby="amount" required="required">
-                    <div class="input-group-append">
-                      <span class="input-group-text">RM</span>
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <select class="custom-select" id="selectFeature">
+                    <option value="exp" selected="selected">Add Expense</option>
+                    <option value="inc">Add Income</option>
+                    <option value="trf">Add Transfer</option>
+                  </select>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeBtn">
+                    <span aria-hidden="true">&#10005;</span>
+                  </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                  <div id="amount-group">
+                    <label for="amount">Amount</label>
+                    <div class="input-group mb-3">
+                      <input onkeyup="checkFormsValidity();" type="text" class="form-control" id="amount" placeholder="Amount" aria-label="amount" aria-describedby="amount" required="required">
+                      <div class="input-group-append">
+                        <span class="input-group-text">RM</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div id="account-group">
-                  <label for="account">Account</label>
-                  <div class="input-group mb-3">
-                    <select name="" id="account">
-                      <option value="">Choose an option:</option>
-                      <option value="Bank">Bank</option>
-                      <option value="Cash">Cash</option>
-                    </select>
+                  <div id="account-group">
+                    <label for="account">Account</label>
+                    <div class="input-group mb-3">
+                      <select name="" id="account">
+                        <option value="">Choose an option:</option>
+                        <option value="Bank">Bank</option>
+                        <option value="Cash">Cash</option>
+                      </select>
+                    </div>
                   </div>
-                </div>
-                <div id="category-group">
-                  <label for="category">Category</label>
-                  <div class="input-group mb-3">
-                    <select name="" id="category">
-                      <option value="">Choose an option:</option>
-                      <option value="Foods and Drinks">Foods and Drinks</option>
-                      <option value="Vehicle">Vehicle</option>
-                      <option value="Entertainment">Entertainment</option>                                
-                    </select>
+                  <div id="category-group">
+                    <label for="category">Category</label>
+                    <div class="input-group mb-3">
+                      <select name="" id="category">
+                        <option value="">Choose an option:</option>
+                        <option value="Foods and Drinks">Foods and Drinks</option>
+                        <option value="Vehicle">Vehicle</option>
+                        <option value="Entertainment">Entertainment</option>                                
+                      </select>
+                    </div>
+                  </div>                
+                  <div id="trfFrom-group" style="display: none;">
+                    <label for="transferFrom">Transfer From</label>
+                    <div class="input-group mb-3">
+                      <select name="" id="transferFrom">
+                        <option value="" selected="selected">Choose an option:</option>
+                        <option value="Bank">Bank</option>
+                        <option value="Cash">Cash</option>
+                      </select>
+                    </div>
                   </div>
-                </div>                
-                <div id="trfFrom-group" style="display: none;">
-                  <label for="transferFrom">Transfer From</label>
-                  <div class="input-group mb-3">
-                    <select name="" id="transferFrom">
-                      <option value="" selected="selected">Choose an option:</option>
-                      <option value="Bank">Bank</option>
-                      <option value="Cash">Cash</option>
-                    </select>
+                  <div id="trfTo-group"  style="display: none;">
+                    <label for="transferTo">Transfer To</label>
+                    <div class="input-group mb-3">
+                      <input class="form-control" id="transferTo" readonly>
+                    </div>                  
                   </div>
-                </div>
-                <div id="trfTo-group"  style="display: none;">
-                  <label for="transferTo">Transfer To</label>
-                  <div class="input-group mb-3">
-                    <input class="form-control" id="transferTo" readonly>
-                  </div>                  
-                </div>
-                <div id="date-group">
-                  <label for="date">Date</label>
-                  <div class="input-group mb-3">
-                    <input type="text" class="datepicker" id="datepicker"></p>
+                  <div id="date-group">
+                    <label for="date">Date</label>
+                    <div class="input-group mb-3">
+                      <input type="text" class="datepicker" id="datepicker"></p>
+                    </div>
                   </div>
+                  <button type="button" data-dismiss="modal" class="btn btn-secondary btn-lg btn-block" id="saveBtn">Save</button>
                 </div>
-                <button type="button" data-dismiss="modal" class="btn btn-secondary btn-lg btn-block" id="saveBtn">Save</button>
               </div>
             </div>
           </div>
-        </div>
-      </div>
     </div>
 
     <!-- Optional JavaScript -->

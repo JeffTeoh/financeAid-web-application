@@ -3,9 +3,15 @@ $(document).ready(function(){
     $('.sidebar-toggle').on('click', function(){
         $('.sidebar').toggleClass('toggled');
     });
-
-    //toggle sidebar when button clicked
-    $('.sidebar-toggleright').on('click', function(){
-        $('.sidebar-right').toggle(200);
+    
+    //hide side bar while resize
+    $(window).resize(function(){
+        if ($(this).width() < 1200) {
+            $("#sidebar").addClass("toggled");
+        }
+        else {
+            $("#sidebar").removeClass("toggled");
+        }
     });
+      
 });

@@ -13,15 +13,7 @@
 }
 
 @media (max-width:1200px){
-    .menu-items a{
-        margin-top:1%;
-        margin-bottom:1%;
-    }
 
-    .menu-items button{
-        margin-top:1%;
-        margin-bottom:1%;
-    }
 }
 
 /*responsive for sidebar*/
@@ -36,8 +28,13 @@
 }
 
 @media (min-width: 1200px) {
-    .sidebar-toggle, .sidebar-toggleright{
+    /*.sidebar-toggle, .sidebar-toggleright{
         display: none;
+    }*/
+
+    .sidebar-right {
+        width: 30%;
+        min-height: 100vh;
     }
 }
 
@@ -77,10 +74,14 @@ p{
 }
 
 .sidebar{
-    min-width: 220px;
-    max-width: 220px;
-    min-height: 100vh;
+    min-width: 18%;
+    max-width: 18%;
+    min-height: 100%;
     transition: all 0.3s;
+}
+
+.sidebar.toggled {
+    margin-left: -18%;
 }
 
 .sidebar-toggle:hover{
@@ -99,10 +100,6 @@ p{
     background: rgba(0, 0, 0, .25);
 }
 
-.sidebar.toggled {
-    margin-left: -250px;
-}
-
 .fa{
     font-size:1rem;
 }
@@ -112,14 +109,7 @@ p{
 }
 
 .sidebar-right{
-    min-width: 450px;
-    max-width: 450px;
-    min-height: 100vh;
     background: #e6e5da;
-}
-
-.sidebar-right.toggled {
-    margin-left: -450px;
 }
 
 .sidebar-right ul li a{
@@ -131,12 +121,11 @@ p{
     border: none;
     border-radius: 0;
     color: rgb(76,76,76);
-    width: 200px;
-    height: 50px;
+    width: 12rem;
     margin: 0 auto;
     padding: 0;
     display: inline-block;
-    line-height: 50px;
+    line-height: 3rem;
 }
 
 .summary .btn-secondary:hover{
