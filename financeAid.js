@@ -2,6 +2,12 @@ $(document).ready(function(){
     //toggle sidebar when button clicked
     $('.sidebar-toggle').on('click', function(){
         $('.sidebar').toggleClass('toggled');
+        if ($('.sidebar').hasClass('toggled')) {
+            $('.sidebar-toggleright').show();
+        } else {
+            $('.sidebar-toggleright').hide();
+            $("#sidebar-right").css("display", "none");
+        }
     });
 
     $(".sidebar-toggleright").on('click', function(){
@@ -20,10 +26,12 @@ $(document).ready(function(){
     //hide side bar while resize
     $(window).resize(function(){
         if ($(this).width() < 1200) {
+            $('.sidebar-toggleright').show();
             $("#sidebar").addClass("toggled");
             $("#sidebar-right").css("display", "none");
         }
         else {
+            $('.sidebar-toggleright').hide();
             $("#sidebar").removeClass("toggled");
             $("#sidebar-right").css("display", "block");
         }

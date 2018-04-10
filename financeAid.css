@@ -104,14 +104,13 @@ p{
 }
 
 .sidebar{
-    min-width: 18%;
-    max-width: 18%;
+    width: 34%;
     min-height: 100%;
     transition: all 0.3s;
 }
 
 .sidebar.toggled {
-    margin-left: -18%;
+    margin-left: -34%;
 }
 
 .sidebar ul li a{
