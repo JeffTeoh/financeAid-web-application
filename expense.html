@@ -87,7 +87,8 @@
             <ul class="list-group" id="expenseList">
               <!--Insert from database-->                           
             </ul>
-    
+        </div>
+          
             <!--Button for adding records-->
             <button class="btn bg-dark mt-2" type="button" data-toggle="modal" data-target="#addRecord" id="addRecordBtn">
               <i class="fa fa-plus p-3" style="color: white; font-size: 50px;"></i>
@@ -164,8 +165,7 @@
                   </div>
                 </div>
               </div>
-            </div>
-        </div>
+            </div>  
     </div>
 
     <!-- Optional JavaScript -->
@@ -193,26 +193,6 @@
         messagingSenderId: "165519709635"
       };
       firebase.initializeApp(config);
-
-      //Read current cash from database
-      var amountCashRef = firebase.database().ref('currentCashAmt');
-      var dispCurrentCash;
-      amountCashRef.on('value', function(snapshot){
-          var childData = snapshot.val();
-          dispCurrentCash = parseFloat(childData.currentCash).toFixed(2);
-          
-          document.getElementById("dispCurrentCash").value = "RM" + dispCurrentCash;
-      });
-
-      //Read current bank from database
-      var amountBankRef = firebase.database().ref('currentBankAmt');
-      var dispCurrentBank;
-      amountBankRef.on('value', function(snapshot){
-          var childData = snapshot.val();
-          dispCurrentBank = parseFloat(childData.currentBank).toFixed(2);
-          
-          document.getElementById("dispCurrentBank").value = "RM" + dispCurrentBank;
-      });
 
       //output list of data when loading the page and only appear if there are available data
       var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');

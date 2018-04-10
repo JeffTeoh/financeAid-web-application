@@ -16,7 +16,7 @@
 @media (max-width: 767px) {
     .sidebar {
         margin-left: 0;
-        min-height: 52rem;
+        min-height: 55rem;
     }
 
     .sidebar-right {
@@ -31,14 +31,21 @@
     .content{
         margin-left: 1rem;
     }
+
+    #addRecordBtn {
+        bottom: 0;
+        right: 0;
+        position: fixed;        
+    }
 }
 
-@media (max-width:1200px){
+@media (min-width: 768px) and (max-width:1200px){
     .sidebar {
         min-height: 64rem;
     }
 
     .sidebar-right {
+        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .7);
         position: absolute;
         top: 6rem;
         right: 0;
@@ -52,7 +59,9 @@
     }
 
     #addRecordBtn {
-        display: none;
+        bottom: 0;
+        right: 0;
+        position: fixed;        
     }
 }
 

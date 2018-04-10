@@ -4,9 +4,11 @@ $(document).ready(function(){
         $('.sidebar').toggleClass('toggled');
         if ($('.sidebar').hasClass('toggled')) {
             $('.sidebar-toggleright').show();
+            $("#addRecordBtn").css("display", "block");
         } else {
             $('.sidebar-toggleright').hide();
             $("#sidebar-right").css("display", "none");
+            $("#addRecordBtn").css("display", "none");
         }
     });
 
