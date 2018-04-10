@@ -121,6 +121,15 @@ p{
     margin-left: -28rem;
 }
 
+.settingsidebar {
+    width: 18rem;
+    transition: all 0.3s;
+}
+
+.settingsidebar.toggled {
+    margin-left: -18rem;
+}
+
 .sidebar ul li a{
     display: block;
     padding: 0.75rem 1rem;
