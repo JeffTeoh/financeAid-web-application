@@ -49,7 +49,14 @@
       <!-- Content in middle of web page --> 
       <div class="content p-4">
         <!--Button to toggle side bar-->
-              <a class="sidebar-toggle text-light"><i class="fa fa-bars" style="color:blue;"></i></a>
+        <ul id="toggle-group" class="p-0">
+          <li>
+            <a class="sidebar-toggle btn text-light"><i class="fa fa-bars" style="color:white;"></i>Menu</a>
+          </li>
+          <li>
+            <a class="sidebar-toggleright btn text-light float-right"><i class="fa fa-list-ul" style="color:white;"></i>Menu</a>
+          </li>
+        </ul>       
         
         <!-- Header that include balance and setting of starting amount for accounts -->
         <div class="container py-md-2 pt-md-4">
@@ -76,7 +83,7 @@
       </div>
 
       <!-- Content of right side bar -->
-      <div class="sidebar-right">
+      <div class="sidebar-right" id="sidebar-right">
         <div class="summary mt-4 mx-0">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
             <button class="btn btn-secondary active" id="sumByDate">
@@ -100,8 +107,8 @@
 
         <!--Button for adding records-->
         <button class="btn bg-dark mt-2" type="button" data-toggle="modal" data-target="#addRecord" id="addRecordBtn">
-            <i class="fa fa-plus p-3" style="color: white; font-size: 50px;"></i>
-          </button>          
+          <i class="fa fa-plus p-3" style="color: white; font-size: 50px;"></i>
+        </button>          
 
         <!-- Modal for adding records -->
         <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="addRecord" aria-hidden="true">
