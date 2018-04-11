@@ -630,66 +630,90 @@
         $("#trfTo-group").hide(1000);
       });
 
+      //read total amount for both Bank and Cash and assign to chart
       var bankTotal = 0;
-      var incomeRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
-      var incomeObj;
-      incomeRef.once("value", function(snapshot) {
-        snapshot.forEach(function(childSnapshot){
-          incomeObj = childSnapshot.val();
-          var incDate = incomeObj.incomeDate;
-          var incAcc = incomeObj.incomeAccount;
-          var incAmt = parseFloat(incomeObj.incomeAmount);
-          bankTotal += incAmt;
-          console.log(bankTotal);
+      var cashTotal = 0;
+      function delay() {
+        var totalAmt = [];
+        // `delay` returns a promise
+        return new Promise(function(resolve, reject) {
+          // Only `delay` is able to resolve or reject the promise
+          var incomeBankRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
+          var incomeBankObj;
+          incomeBankRef.once("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              incomeBankObj = childSnapshot.val();
+              var incAmt = parseFloat(incomeBankObj.incomeAmount);
+              bankTotal += incAmt;
+            });
+            totalAmt.push(bankTotal);
+          });
+          var incomeCashRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+          var incomeCashObj;
+          incomeCashRef.once("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              incomeCashObj = childSnapshot.val();
+              var incAmt = parseFloat(incomeCashObj.incomeAmount);
+              cashTotal += incAmt;
+            });
+            totalAmt.push(cashTotal);
+            resolve(totalAmt);
+          });
         });
-      });
-      console.log(bankTotal+" done");
-      
-      //integrate chart.js
-      var ctx = $("#myChart");
-      var myChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ["Bank", "Cash"],
-          datasets: [{
-            label: '# of Votes',
-            data: [70, 60],
-            backgroundColor: [
-                'rgba(0, 0, 139, 0.2)',
-                'rgba(178, 34, 34, 0.2)'
-            ],
-            borderColor: [
-              'rgba(0, 0, 139, 1)',
-              'rgba(178, 34, 34, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            xAxes: [{
-              ticks: {
-                display: false,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false,
+      }
+
+      delay()
+        .then(function(v) { // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+          //integrate chart.js
+          var ctx = $("#myChart");
+          var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: ["Bank", "Cash"],
+              datasets: [{
+                label: '# of Votes',
+                data: [bankTotal, cashTotal],
+                backgroundColor: [
+                    'rgba(0, 0, 139, 0.2)',
+                    'rgba(178, 34, 34, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(0, 0, 139, 1)',
+                  'rgba(178, 34, 34, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                xAxes: [{
+                  ticks: {
+                    display: false,
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    display: false,
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }]
               }
-            }],
-            yAxes: [{
-              ticks: {
-                display: false,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false,
-              }
-            }]
-          }
-        }
-      });
+            }
+          });
+        })
+        .catch(function(v) {
+          alert("Chart will not display if income of Bank or Account empty");
+        });
+        
     </script>
   </body>
 </html>
