@@ -688,53 +688,103 @@
         $("#trfTo-group").hide(1000);
       });
 
-      //integrate chart.js
-      var ctx = $("#myChart");
-      var myChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ["Entertainment", "Foods and Drinks", "Vehicle"],
-          datasets: [{
-            label: '# of Votes',
-            data: [70, 60, 50],
-            backgroundColor: [
-                'rgba(0, 0, 139, 0.2)',
-                'rgba(178, 34, 34, 0.2)',
-                'rgba(255, 255, 0, 0.2)'
-            ],
-            borderColor: [
-              'rgba(0, 0, 139, 1)',
-              'rgba(178, 34, 34, 1)',
-              'rgba(255, 255, 0, 1)'
-            ],
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            xAxes: [{
-              ticks: {
-                display: false,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false,
+      //read total amount for categories and assign to chart
+      var entTotal = 0;
+      var foodTotal = 0;
+      var vehTotal = 0;
+      function delay() {
+        var totalAmt = [];
+        // `delay` returns a promise
+        return new Promise(function(resolve, reject) {
+          // Only `delay` is able to resolve or reject the promise
+          var entRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
+          var entObj;
+          entRef.once("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              entObj = childSnapshot.val();
+              var entAmt = parseFloat(entObj.expenseAmount);
+              entTotal += entAmt;
+            });
+            totalAmt.push(entTotal);
+          });
+          var foodRef = firebase.database().ref('expenseCat/Foods and Drinks').orderByChild('expenseDate');
+          var foodObj;
+          foodRef.once("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              foodObj = childSnapshot.val();
+              var foodAmt = parseFloat(entObj.expenseAmount);
+              foodTotal += foodAmt;
+            });
+            totalAmt.push(foodTotal);
+          });
+          var vehRef = firebase.database().ref('expenseCat/Vehicle').orderByChild('expenseDate');
+          var vehObj;
+          vehRef.once("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              vehObj = childSnapshot.val();
+              var vehAmt = parseFloat(entObj.expenseAmount);
+              vehTotal += vehAmt;
+            });
+            totalAmt.push(vehTotal);
+            resolve(totalAmt);
+          });
+        });
+      }
+
+      delay()
+        .then(function(v) { // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+          //integrate chart.js
+          var ctx = $("#myChart");
+          var myChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+              labels: ["Entertainment", "Foods and Drinks", "Vehicle"],
+              datasets: [{
+                label: '# of Votes',
+                data: [entTotal, foodTotal, vehTotal],
+                backgroundColor: [
+                  'rgba(0, 0, 139, 0.2)',
+                  'rgba(178, 34, 34, 0.2)',
+                  'rgba(255, 255, 0, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(0, 0, 139, 1)',
+                  'rgba(178, 34, 34, 1)',
+                  'rgba(255, 255, 0, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                xAxes: [{
+                  ticks: {
+                    display: false,
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    display: false,
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }]
               }
-            }],
-            yAxes: [{
-              ticks: {
-                display: false,
-              },
-              gridLines: {
-                display: false,
-                drawBorder: false,
-              }
-            }]
-          }
-        }
-      });
+            }
+          });
+        })
+        .catch(function(v) {
+          alert("Chart will not display if income of Bank or Account empty");
+        });
+
     </script>
   </body>
 </html>
