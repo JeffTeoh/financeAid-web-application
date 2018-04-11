@@ -24,7 +24,6 @@
         top: 6rem;
         right: 0;
         bottom: 6rem;
-        width: 20rem;
         overflow: scroll;
     }
 
@@ -45,12 +44,10 @@
     }
 
     .sidebar-right {
-        box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, .7);
         position: absolute;
         top: 6rem;
         right: 0;
         bottom: 6rem;
-        width: 24rem;
         overflow: scroll;
     }
 
@@ -270,4 +267,8 @@ ul#toggle-group li i {
 
 .sidebar-toggle:hover{
     cursor: pointer;
+}
+
+.btn-group {
+    margin: 0 .5rem 0 .5rem;
 }
