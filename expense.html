@@ -829,7 +829,7 @@
       }
 
       delay()
-        .then(function(v) { // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+        .then(function(v) { // `delay` returns a promise, 'v' is an array contain total amount of all categories
           //integrate chart.js
           var ctx = $("#myChart");
           var myChart = new Chart(ctx, {
