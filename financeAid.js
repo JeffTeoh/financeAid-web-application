@@ -36,7 +36,7 @@ $(document).ready(function(){
             $('.sidebar-toggleright').hide();
             $("#sidebar").removeClass("toggled");
             $("#sidebar-right").css("display", "block");
-            $(".container").css("max-width", "500px");
+            $(".chart").css("max-width", "500px");
         }
     });
       

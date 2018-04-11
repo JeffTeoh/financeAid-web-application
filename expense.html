@@ -64,6 +64,15 @@
             <p style="font-size:3rem; color: green;">Expense</p>
           </div>
         </div>
+
+        <!-- Canva for doughnut chart -->
+        <div class="container chart py-md-2 pt-md-4">
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <canvas id="myChart" width="500" height="500"></canvas>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -178,6 +187,7 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
     <script src="financeAid.js"></script>
     <script>
        //Initialise Datepicker
@@ -678,6 +688,53 @@
         $("#trfTo-group").hide(1000);
       });
 
+      //integrate chart.js
+      var ctx = $("#myChart");
+      var myChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ["Entertainment", "Foods and Drinks", "Vehicle"],
+          datasets: [{
+            label: '# of Votes',
+            data: [70, 60, 50],
+            backgroundColor: [
+                'rgba(0, 0, 139, 0.2)',
+                'rgba(178, 34, 34, 0.2)',
+                'rgba(255, 255, 0, 0.2)'
+            ],
+            borderColor: [
+              'rgba(0, 0, 139, 1)',
+              'rgba(178, 34, 34, 1)',
+              'rgba(255, 255, 0, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            xAxes: [{
+              ticks: {
+                display: false,
+              },
+              gridLines: {
+                display: false,
+                drawBorder: false,
+              }
+            }],
+            yAxes: [{
+              ticks: {
+                display: false,
+              },
+              gridLines: {
+                display: false,
+                drawBorder: false,
+              }
+            }]
+          }
+        }
+      });
     </script>
   </body>
 </html>
