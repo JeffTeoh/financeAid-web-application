@@ -5,10 +5,20 @@ $(document).ready(function(){
         if ($('.sidebar').hasClass('toggled')) {
             $('.sidebar-toggleright').show();
             $("#addRecordBtn").css("display", "block");
+            $(".sidebar").css("min-height", "100vh");            
         } else {
             $('.sidebar-toggleright').hide();
             $("#sidebar-right").css("display", "none");
             $("#addRecordBtn").css("display", "none");
+            if ($(window).width() <= 320) {
+                $(".sidebar").css("min-height", "152vh");
+            } else
+            if ($(window).width() < 768) {
+                $(".sidebar").css("min-height", "145vh");
+            } else 
+            if ($(window).width() < 1200) {
+                $(".sidebar").css("min-height", "120vh");
+            }
         }
     });
 
