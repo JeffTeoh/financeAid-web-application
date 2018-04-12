@@ -672,21 +672,6 @@
           }
         }
 
-        //reset list for records
-        $("#sumByDate").addClass('active');
-        $("#sumByCat").removeClass('active');
-
-        //reset modal dialog input area
-        $("#selectFeature").prop('selectedIndex', 0);
-        document.getElementById("amount").value = '';
-        document.getElementById("account").value = '';
-        document.getElementById("category").value = '';
-        document.getElementById("transferFrom").value = '';
-        $("#account-group").show(1000);
-        $("#category-group").show(1000);
-        $("#trfFrom-group").hide(1000);          
-        $("#trfTo-group").hide(1000);
-        
         //update total amount for categories and assign to chart
         var entTotal = 0;
         var foodTotal = 0;
@@ -711,7 +696,7 @@
             foodRef.once("value", function(snapshot) {
               snapshot.forEach(function(childSnapshot){
                 foodObj = childSnapshot.val();
-                var foodAmt = parseFloat(entObj.expenseAmount);
+                var foodAmt = parseFloat(foodObj.expenseAmount);
                 foodTotal += foodAmt;
               });
               totalAmt.push(foodTotal);
@@ -721,10 +706,11 @@
             vehRef.once("value", function(snapshot) {
               snapshot.forEach(function(childSnapshot){
                 vehObj = childSnapshot.val();
-                var vehAmt = parseFloat(entObj.expenseAmount);
+                var vehAmt = parseFloat(vehObj.expenseAmount);
                 vehTotal += vehAmt;
               });
               totalAmt.push(vehTotal);
+              console.log(totalAmt);
               resolve(totalAmt);
             }); 
           });
@@ -783,6 +769,21 @@
           .catch(function(v) {
             alert("Chart will not display if income of Bank or Account empty");
           }); 
+
+        //reset list for records
+        $("#sumByDate").addClass('active');
+        $("#sumByCat").removeClass('active');
+
+        //reset modal dialog input area
+        $("#selectFeature").prop('selectedIndex', 0);
+        document.getElementById("amount").value = '';
+        document.getElementById("account").value = '';
+        document.getElementById("category").value = '';
+        document.getElementById("transferFrom").value = '';
+        $("#account-group").show(1000);
+        $("#category-group").show(1000);
+        $("#trfFrom-group").hide(1000);          
+        $("#trfTo-group").hide(1000);
       });
 
       //read total amount for categories and assign to chart
@@ -809,7 +810,7 @@
           foodRef.once("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){
               foodObj = childSnapshot.val();
-              var foodAmt = parseFloat(entObj.expenseAmount);
+              var foodAmt = parseFloat(foodObj.expenseAmount);
               foodTotal += foodAmt;
             });
             totalAmt.push(foodTotal);
@@ -819,7 +820,7 @@
           vehRef.once("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){
               vehObj = childSnapshot.val();
-              var vehAmt = parseFloat(entObj.expenseAmount);
+              var vehAmt = parseFloat(vehObj.expenseAmount);
               vehTotal += vehAmt;
             });
             totalAmt.push(vehTotal);
