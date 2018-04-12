@@ -31,12 +31,12 @@ $(document).ready(function(){
             $('.sidebar-toggleright').show();
             $("#sidebar").addClass("toggled");
             $("#sidebar-right").css("display", "none");
+            $(".chart").css("height", "500px");
         }
         else {
             $('.sidebar-toggleright').hide();
             $("#sidebar").removeClass("toggled");
             $("#sidebar-right").css("display", "block");
-            $(".chart").css("max-width", "500px");
         }
     });
       

@@ -16,7 +16,7 @@
 @media (max-width: 767px) {
     .sidebar {
         margin-left: 0;
-        min-height: 55rem;
+        min-height: 100vh;
     }
 
     .sidebar-right {
@@ -40,7 +40,7 @@
 
 @media (min-width: 768px) and (max-width:1200px){
     .sidebar {
-        min-height: 64rem;
+        min-height: 100vh;
     }
 
     .sidebar-right {
@@ -64,7 +64,7 @@
 
 @media (min-width: 1200px) {
     .sidebar {
-        min-height: 43rem;
+        min-height: 100vh;
     }
 
     .sidebar-toggle, .sidebar-toggleright{
@@ -73,15 +73,18 @@
 
     .sidebar-right {
         width: 51rem;
-        height: 43rem;
+        min-height: 100vh;
         overflow: scroll;
-        min-height: 43rem;
     }
 
     #addRecordBtn {
         bottom: 0;
         right: 0;
         position: fixed;        
+    }
+
+    .chart {
+        height: 500px;
     }
 }
 
