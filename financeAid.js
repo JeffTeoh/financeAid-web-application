@@ -33,6 +33,7 @@ $(document).ready(function(){
     else {
         $("#sidebar").removeClass("toggled");
         $("#sidebar-right").css("display", "block");
+        $(".middleicon").css("line-height", "1.2");
     }
     
     //hide side bar while resize
@@ -42,6 +43,7 @@ $(document).ready(function(){
             $("#sidebar").addClass("toggled");
             $("#sidebar-right").css("display", "none");
             $(".chart").css("height", "500px");
+            $(".nav-item").removeClass("float-left");
         }
         else {
             $('.sidebar-toggleright').hide();

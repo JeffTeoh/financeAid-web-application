@@ -16,32 +16,36 @@
     <div class="d-flex">
       <nav class="sidebar bg-dark" id="sidebar">
         <ul class="list-unstyled">
-            <li><a class="navbar-brand text-center" href="financeAid.html">Finance Aid</a></li>
-            <li>
-                <a href="income.html" class="text-center">
-                  <i class="fa fa-plus"></i>
+          <li><a class="navbar-brand text-center" href="#">Finance Aid</a></li>
+          <li>
+            <a href="income.html" class="text-center d-block">
+                <i class="fa fa-plus nav-item float-left"></i>
+                <div class="text">
                   <span class="d-none d-lg-block">Income</span>
-                </a>
-            </li>
-            <li>
-              <a href="expense.html" class="text-center">
-                <i class="fa fa-minus"></i>
-                <span class="d-none d-lg-block">Expense</span>                   
-              </a>
-            </li>
-            <li>
-              <a href="#" class="text-center">
-                <i class="fa fa-exchange-alt"></i>
-                <span class="d-none d-lg-block">Transfer</span>
-              </a>
-            </li>
-            <hr style="background-color: white;">
-            <li>
-              <a href="settings.html" class="text-center">
-                <i class="fa fa-cog"></i>
-                <span class="d-none d-lg-block">Settings</span>
-              </a>
-            </li>
+                  <span class="d-none d-lg-block" id="totalIncome">RM0.00</span>
+                </div>
+            </a>
+          </li>
+          <li>
+            <a href="expense.html" class="text-center d-block">
+              <i class="fa fa-minus nav-item float-left"></i>
+              <span class="d-none d-lg-block">Expense</span>
+              <span class="d-none d-lg-block" id="totalExpense">RM0.00</span>                   
+            </a>
+          </li>
+          <li>
+            <a href="transfer.html" class="text-center d-block">
+              <i class="fa fa-exchange-alt nav-item float-left middleicon"></i>
+              <span class="d-none d-lg-inline align-middle">Transfer</span>
+            </a>
+          </li>
+          <hr style="background-color: white;">
+          <li>
+            <a href="settings.html" class="text-center d-block">
+              <i class="fa fa-cog nav-item float-left middleicon"></i>
+              <span class="d-none d-lg-inline align-middle">Settings</span>
+            </a>
+          </li>
         </ul>
       </nav>
     
@@ -69,7 +73,7 @@
         <!-- Canva for doughnut chart -->
         <div class="container chart py-md-2 pt-md-4">
           <div class="row">
-            <div class="col-md-12 text-center">
+            <div class="col-md-12 text-center chart">
               <canvas id="myChart"></canvas>
             </div>
           </div>
