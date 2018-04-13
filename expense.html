@@ -412,6 +412,32 @@
         }
       });
 
+      //Read the total amount of income from database
+      var totalIncomeRef = firebase.database().ref('incomeObj');
+      var totalIncomeObj;
+      var totalIncome = 0;
+      totalIncomeRef.on('value', function(snapshot){
+        snapshot.forEach(function(childSnapshot){
+          totalIncomeObj = childSnapshot.val();
+          var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+          totalIncome += incAmt;
+        });
+        document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+      });
+
+      //Read the total amount of expense from database
+      var totalExpenseRef = firebase.database().ref('expenseObj');
+      var totalExpenseObj;
+      var totalExpense = 0;
+      totalExpenseRef.on('value', function(snapshot){
+        snapshot.forEach(function(childSnapshot){
+          totalExpenseObj = childSnapshot.val();
+          var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+          totalExpense += expAmt;
+        });
+        document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+      });
+
       //fetch current amount for both account
       var currentCashObj = {};
       var currentCashAmtRef = firebase.database().ref('currentCashAmt');
