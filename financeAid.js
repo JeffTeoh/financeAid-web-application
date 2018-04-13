@@ -29,6 +29,7 @@ $(document).ready(function(){
     if ($(window).width() < 1200) {
         $("#sidebar").addClass("toggled");
         $("#sidebar-right").css("display", "none");
+        $(".nav-item").removeClass("float-left");
     }
     else {
         $("#sidebar").removeClass("toggled");
