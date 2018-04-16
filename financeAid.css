@@ -27,10 +27,6 @@
         overflow: scroll;
     }
 
-    .content{
-        margin-left: 1rem;
-    }
-
     #addRecordBtn {
         bottom: 0;
         right: 0;
@@ -97,6 +93,10 @@
 /*import Font awesome*/
 @import url("https://use.fontawesome.com/releases/v5.0.9/css/all.css");
 
+body {
+    background: #f2f1e6;
+}
+
 /*basic UI*/
 h1{
     color:black;
@@ -122,6 +122,39 @@ p{
 
 .nopadding{
     padding:0;
+}
+
+.pagination {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.page-link {
+    background: #f2f1e6;
+    border: 0;
+    padding: 0.5rem 0;
+}
+
+.page-link:hover {
+    background: #b7b7b7;
+}
+
+.page-link:focus {
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important;
+}
+
+.page-link > input {
+    padding: 5px 0 4px 0;
+    border: 0;
+}
+
+#monthDisplay:hover {
+    background: #b7b7b7;
+}
+
+.page-link-space {
+    padding: 0.2rem 0.5rem 0.25rem;
 }
 
 /*side bar properties*/
@@ -258,13 +291,10 @@ select {
 }
 
 /*toggle group properties*/
-ul#toggle-group li {
-    display: inline;
+
+.sidebar-toggle i, .sidebar-toggleright i {
     text-align: center;
     margin: 0;
-}
-
-ul#toggle-group li i {
     display: block;
 }
 
