@@ -220,6 +220,51 @@
       //Display current month in Month Picker input field
       var currentMonth = new Date().getMonth() + 1;
       switch (currentMonth) {
+        case 1:
+          $("#monthPicker").val("January");
+          break;
+        case 2:
+          $("#monthPicker").val("February");
+          break;
+        case 3:
+          $("#monthPicker").val("March");
+          break;
+        case 4:
+          $("#monthPicker").val("April");
+          break;
+        case 5:
+          $("#monthPicker").val("May");
+          break;
+        case 6:
+          $("#monthPicker").val("June");
+          break;
+        case 7:
+          $("#monthPicker").val("July");
+          break;
+        case 8:
+          $("#monthPicker").val("August");
+          break;
+        case 9:
+          $("#monthPicker").val("September");
+          break;
+        case 10:
+          $("#monthPicker").val("October");
+          break;
+        case 11:
+          $("#monthPicker").val("November");
+          break;
+        case 12:
+          $("#monthPicker").val("December");
+          break;
+      }
+
+      //Display the value return from month picker
+      $('#monthPicker').MonthPicker({ 
+        OnAfterChooseMonth: function( selectedDate ){
+          var selectedMonth = $('#monthPicker').MonthPicker('GetSelectedDate');
+          var formattedMonth = $.datepicker.formatDate("mm", selectedMonth);
+          var x = parseInt(formattedMonth);
+          switch (x) {
             case 1:
               $("#monthPicker").val("January");
               break;
@@ -255,51 +300,6 @@
               break;
             case 12:
               $("#monthPicker").val("December");
-              break;
-          }
-
-      //Display the value return from month picker
-      $('#monthPicker').MonthPicker({ 
-        OnAfterChooseMonth: function( selectedDate ){
-          var selectedMonth = $('#monthPicker').MonthPicker('GetSelectedDate');
-          var formattedMonth = $.datepicker.formatDate("mm", selectedMonth);
-          var x = parseInt(formattedMonth);
-          switch (x) {
-            case 1:
-              document.getElementById("monthPicker").innerHTML = "January";
-              break;
-            case 2:
-              document.getElementById("monthPicker").innerHTML = "February";
-              break;
-            case 3:
-              document.getElementById("monthPicker").innerHTML = "March";
-              break;
-            case 4:
-              document.getElementById("monthPicker").innerHTML = "April";
-              break;
-            case 5:
-              document.getElementById("monthPicker").innerHTML = "May";
-              break;
-            case 6:
-              document.getElementById("monthPicker").innerHTML = "June";
-              break;
-            case 7:
-              document.getElementById("monthPicker").innerHTML = "July";
-              break;
-            case 8:
-              document.getElementById("monthPicker").innerHTML = "August";
-              break;
-            case 9:
-              document.getElementById("monthPicker").innerHTML = "September";
-              break;
-            case 10:
-              document.getElementById("monthPicker").innerHTML = "October";
-              break;
-            case 11:
-              document.getElementById("monthPicker").innerHTML = "November";
-              break;
-            case 12:
-              document.getElementById("monthPicker").innerHTML = "December";
               break;
           }
         } 
