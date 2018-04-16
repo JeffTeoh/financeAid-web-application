@@ -32,6 +32,7 @@
         right: 0;
         position: fixed;        
     }
+
 }
 
 @media (min-width: 768px) and (max-width:1200px){
@@ -149,7 +150,7 @@ p{
     border: 0;
 }
 
-#monthDisplay:hover {
+#monthPicker:hover {
     background: #b7b7b7;
 }
 

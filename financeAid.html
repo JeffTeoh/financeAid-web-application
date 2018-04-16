@@ -63,7 +63,7 @@
                 <span class="sr-only">Previous</span>
               </a>
             </li>
-            <li class="page-item"><a class="page-link" href="#" style="cursor: pointer;"><input id="monthDisplay" value="April" readonly style="background:transparent; text-align: center; cursor: pointer;"></a></li>
+            <li class="page-item"><a class="page-link" href="#" style="cursor: pointer;"><input id="monthPicker" value="April" readonly style="background:transparent; text-align: center; cursor: pointer;"></a></li>
             <li class="page-item">
               <a class="page-link page-link-space" href="#" aria-label="Next">
                 <span aria-hidden="true" style="color: #4c4c4c; font-size: 30px;">&raquo;</span>
@@ -208,7 +208,6 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
-    <script src="jquery.maskedinput/dist/jquery.maskedinput.min.js"></script>
     <script src="jquery-ui-month-picker/demo/MonthPicker.min.js"></script>
     <script src="financeAid.js"></script>
     <script>
@@ -216,7 +215,54 @@
       $('.datepicker').datepicker({ maxDate: new Date() }).datepicker("setDate", new Date());
 
       //Initialise month picker
-      $('#monthPicker').MonthPicker({ StartYear: 2018, ShowIcon: false });
+      $('#monthPicker').MonthPicker({ StartYear: 2018, ShowIcon: false, MaxMonth: 0 });
+
+      //Display the value return from month picker
+      $('#monthPicker').MonthPicker({ 
+        OnAfterChooseMonth: function( selectedDate ){
+          var selectedMonth = $('#monthPicker').MonthPicker('GetSelectedDate');
+          var formattedMonth = $.datepicker.formatDate("mm", selectedMonth);
+          var x = parseInt(formattedMonth);
+          switch (x) {
+            case 1:
+              document.getElementById("monthPicker").innerHTML = "January";
+              break;
+            case 2:
+              document.getElementById("monthPicker").innerHTML = "February";
+              break;
+            case 3:
+              document.getElementById("monthPicker").innerHTML = "March";
+              break;
+            case 4:
+              document.getElementById("monthPicker").innerHTML = "April";
+              break;
+            case 5:
+              document.getElementById("monthPicker").innerHTML = "May";
+              break;
+            case 6:
+              document.getElementById("monthPicker").innerHTML = "June";
+              break;
+            case 7:
+              document.getElementById("monthPicker").innerHTML = "July";
+              break;
+            case 8:
+              document.getElementById("monthPicker").innerHTML = "August";
+              break;
+            case 9:
+              document.getElementById("monthPicker").innerHTML = "September";
+              break;
+            case 10:
+              document.getElementById("monthPicker").innerHTML = "October";
+              break;
+            case 11:
+              document.getElementById("monthPicker").innerHTML = "November";
+              break;
+            case 12:
+              document.getElementById("monthPicker").innerHTML = "December";
+              break;
+          }
+        } 
+      });
       
       // Initialize Firebase
       var config = {
