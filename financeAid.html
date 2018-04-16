@@ -63,7 +63,7 @@
                 <span class="sr-only">Previous</span>
               </a>
             </li>
-            <li class="page-item"><a class="page-link" href="#" style="cursor: pointer;"><input id="monthPicker" readonly style="background:transparent; text-align: center; cursor: pointer;"></a></li>
+            <li class="page-item"><a class="page-link" href="#" style="cursor: pointer;"><input type="month" id="monthPicker" readonly style="background:transparent; cursor: pointer;"></a></li>
             <li class="page-item">
               <a class="page-link page-link-space" href="#" aria-label="Next" id="nextMonth">
                 <span aria-hidden="true" style="color: #4c4c4c; font-size: 30px;">&raquo;</span>
@@ -217,44 +217,46 @@
       //Initialise month picker
       $('#monthPicker').MonthPicker({ StartYear: new Date().getFullYear(), ShowIcon: false, MaxMonth: 0 });
 
+      //Initialise month object for validate the increase and decrease selectedMonth
+      var monthObj = {currentMonth: new Date().getMonth() + 1, currentYear: new Date().getFullYear()};
+
       //Display current month in Month Picker input field
-      var currentMonth = new Date().getMonth() + 1;
-      switch (currentMonth) {
+      switch (monthObj.currentMonth) {
         case 1:
-          $("#monthPicker").val("January");
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
           break;
         case 2:
-          $("#monthPicker").val("February");
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
           break;
         case 3:
-          $("#monthPicker").val("March");
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
           break;
         case 4:
-          $("#monthPicker").val("April");
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
           break;
         case 5:
-          $("#monthPicker").val("May");
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
           break;
         case 6:
-          $("#monthPicker").val("June");
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
           break;
         case 7:
-          $("#monthPicker").val("July");
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
           break;
         case 8:
-          $("#monthPicker").val("August");
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
           break;
         case 9:
-          $("#monthPicker").val("September");
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
           break;
         case 10:
-          $("#monthPicker").val("October");
+          $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
           break;
         case 11:
-          $("#monthPicker").val("November");
+          $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
           break;
         case 12:
-          $("#monthPicker").val("December");
+          $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
           break;
       }
 
@@ -262,44 +264,44 @@
       $('#monthPicker').MonthPicker({ 
         OnAfterChooseMonth: function( selectedDate ){
           var selectedMonth = $('#monthPicker').MonthPicker('GetSelectedDate');
-          var formattedMonth = $.datepicker.formatDate("mm", selectedMonth);
-          var x = parseInt(formattedMonth);
-          switch (x) {
+          monthObj.currentMonth = selectedMonth.getMonth() + 1;
+          monthObj.currentYear = selectedMonth.getFullYear();
+          switch (monthObj.currentMonth) {
             case 1:
-              $("#monthPicker").val("January");
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
               break;
             case 2:
-              $("#monthPicker").val("February");
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
               break;
             case 3:
-              $("#monthPicker").val("March");
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
               break;
             case 4:
-              $("#monthPicker").val("April");
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
               break;
             case 5:
-              $("#monthPicker").val("May");
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
               break;
             case 6:
-              $("#monthPicker").val("June");
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
               break;
             case 7:
-              $("#monthPicker").val("July");
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
               break;
             case 8:
-              $("#monthPicker").val("August");
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
               break;
             case 9:
-              $("#monthPicker").val("September");
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
               break;
             case 10:
-              $("#monthPicker").val("October");
+              $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
               break;
             case 11:
-              $("#monthPicker").val("November");
+              $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
               break;
             case 12:
-              $("#monthPicker").val("December");
+              $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
               break;
           }
         } 
@@ -307,166 +309,10 @@
 
       //Increase or decrease the current selected month
       $("#previousMonth").click(function(){
-        var selectedMonth = $('#monthPicker').MonthPicker().val();
-        var monthInNum;
-        switch (selectedMonth) {
-          case "January":
-            monthInNum = 1;
-            break;
-          case "February":
-            monthInNum = 2;
-            break;
-          case "March":
-            monthInNum = 3;
-            break;
-          case "April":
-            monthInNum = 4;
-            break;
-          case "May":
-            monthInNum = 5;
-            break;
-          case "June":
-            monthInNum = 6;
-            break;
-          case "July":
-            monthInNum = 7;
-            break;
-          case "August":
-            monthInNum = 8;
-            break;
-          case "September":
-            monthInNum = 9;
-            break;
-          case "October":
-            monthInNum = 10;
-            break;
-          case "November":
-            monthInNum = 11;
-            break;
-          case "December":
-            monthInNum = 12;
-            break;
-        }
-        monthInNum -= 1;
-        switch (monthInNum) {
-          case 1:
-            $("#monthPicker").val("January");
-            break;
-          case 2:
-            $("#monthPicker").val("February");
-            break;
-          case 3:
-            $("#monthPicker").val("March");
-            break;
-          case 4:
-            $("#monthPicker").val("April");
-            break;
-          case 5:
-            $("#monthPicker").val("May");
-            break;
-          case 6:
-            $("#monthPicker").val("June");
-            break;
-          case 7:
-            $("#monthPicker").val("July");
-            break;
-          case 8:
-            $("#monthPicker").val("August");
-            break;
-          case 9:
-            $("#monthPicker").val("September");
-            break;
-          case 10:
-            $("#monthPicker").val("October");
-            break;
-          case 11:
-            $("#monthPicker").val("November");
-            break;
-          case 12:
-            $("#monthPicker").val("December");
-            break;
-        }
+        document.getElementById("monthPicker").stepDown(1);
       });
-      $("#nextMonth").click(function(){
-        var selectedMonth = $('#monthPicker').MonthPicker().val();
-        var monthInNum;
-        switch (selectedMonth) {
-          case "January":
-            monthInNum = 1;
-            break;
-          case "February":
-            monthInNum = 2;
-            break;
-          case "March":
-            monthInNum = 3;
-            break;
-          case "April":
-            monthInNum = 4;
-            break;
-          case "May":
-            monthInNum = 5;
-            break;
-          case "June":
-            monthInNum = 6;
-            break;
-          case "July":
-            monthInNum = 7;
-            break;
-          case "August":
-            monthInNum = 8;
-            break;
-          case "September":
-            monthInNum = 9;
-            break;
-          case "October":
-            monthInNum = 10;
-            break;
-          case "November":
-            monthInNum = 11;
-            break;
-          case "December":
-            monthInNum = 12;
-            break;
-        }
-        monthInNum += 1;
-        switch (monthInNum) {
-          case 1:
-            $("#monthPicker").val("January");
-            break;
-          case 2:
-            $("#monthPicker").val("February");
-            break;
-          case 3:
-            $("#monthPicker").val("March");
-            break;
-          case 4:
-            $("#monthPicker").val("April");
-            break;
-          case 5:
-            $("#monthPicker").val("May");
-            break;
-          case 6:
-            $("#monthPicker").val("June");
-            break;
-          case 7:
-            $("#monthPicker").val("July");
-            break;
-          case 8:
-            $("#monthPicker").val("August");
-            break;
-          case 9:
-            $("#monthPicker").val("September");
-            break;
-          case 10:
-            $("#monthPicker").val("October");
-            break;
-          case 11:
-            $("#monthPicker").val("November");
-            break;
-          case 12:
-            $("#monthPicker").val("December");
-            break;
-        }       
+      $("#nextMonth").click(function(){        
+        document.getElementById("monthPicker").stepUp(1);
       });
       
       // Initialize Firebase

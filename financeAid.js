@@ -39,7 +39,6 @@ $(document).ready(function(){
     
     //hide side bar while resize
     $(window).resize(function(){
-        $('#monthPicker').MonthPicker('Toggle');
         if ($(this).width() < 1200) {
             $('.sidebar-toggleright').show();
             $("#sidebar").addClass("toggled");
