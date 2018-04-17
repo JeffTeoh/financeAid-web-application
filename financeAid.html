@@ -515,7 +515,8 @@
               }
             });
           });
-        } else {
+        } 
+        else {
           $('#expenseList li').remove();
           var expenseRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
           var expenseObj;
@@ -667,7 +668,8 @@
               }
             });
           });
-        } else {
+        }
+        else {
           $('#expenseList li').remove();
           var expenseRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
           var expenseObj;
