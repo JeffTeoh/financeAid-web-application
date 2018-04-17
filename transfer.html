@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="jquery-ui-month-picker/demo/MonthPicker.min.css" type="text/css" />
     <link rel="stylesheet" href="financeAid.css">
     <title>Transfer</title>
   </head>
@@ -50,16 +51,27 @@
       </nav>
     
       <!-- Content in middle of web page --> 
-      <div class="content p-4">
-        <!--Button to toggle side bar-->
-        <ul id="toggle-group" class="p-0">
-          <li>
-            <a class="sidebar-toggle btn text-light"><i class="fa fa-bars" style="color:white;"></i>Menu</a>
-          </li>
-          <li>
-            <a class="sidebar-toggleright btn text-light float-right"><i class="fa fa-list-ul" style="color:white;"></i>Menu</a>
-          </li>
-        </ul>       
+      <div class="content p-1">
+        <div class="d-flex justify-content-between">
+          <!--Button to toggle side bar-->
+          <a class="sidebar-toggle btn text-light"><i class="fa fa-bars" style="color:white;"></i>Menu</a>
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link page-link-space" href="#" aria-label="Previous" id="previousMonth">
+                <span aria-hidden="true" style="color: #4c4c4c; font-size: 30px;">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#" style="cursor: pointer;"><input type="month" id="monthPicker" readonly style="background:transparent; cursor: pointer;"></a></li>
+            <li class="page-item">
+              <a class="page-link page-link-space btn btn-primary disabled" href="#" aria-label="Next" id="nextMonth">
+                <span aria-hidden="true" style="color: #4c4c4c; font-size: 30px;">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+          <a class="sidebar-toggleright btn text-light float-right"><i class="fa fa-list-ul" style="color:white;"></i>Menu</a>     
+        </div>      
       
         <!-- Header -->
         <div class="container py-md-2 pt-md-4">
@@ -83,24 +95,24 @@
 
       <!-- Content of right side bar -->
       <div class="sidebar-right" id="sidebar-right">
-            <div class="summary text-center mt-4 mx-0">
-              <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <button class="btn btn-secondary active" id="sumByDate">
-                  <input type="radio" name="options" id="option1" autocomplete="off" checked>
-                    <i class="fa fa-calendar-alt"></i>
-                    By date
-                </button>
-                <button class="btn btn-secondary" id="sumByCat">
-                  <input type="radio" name="options" id="option2" autocomplete="off">
-                    <i class="fa fa-tag"></i>
-                    By category
-                </button>
-              </div>
-            </div>
+        <div class="summary text-center mt-4 mx-0">
+          <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            <button class="btn btn-secondary active" id="sumByDate">
+              <input type="radio" name="options" id="option1" autocomplete="off" checked>
+                <i class="fa fa-calendar-alt"></i>
+                By date
+            </button>
+            <button class="btn btn-secondary" id="sumByCat">
+              <input type="radio" name="options" id="option2" autocomplete="off">
+                <i class="fa fa-tag"></i>
+                By category
+            </button>
+          </div>
+        </div>
     
-            <ul class="list-group" id="transferList">
-              <!--Insert from database-->                           
-            </ul>
+        <ul class="list-group" id="transferList">
+          <!--Insert from database-->
+        </ul>
       </div>
 
           
@@ -194,11 +206,472 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
+    <script src="jquery-ui-month-picker/demo/MonthPicker.min.js"></script>
     <script src="financeAid.js"></script>
     <script>
       //Initialise Datepicker
       $('.datepicker').datepicker({ maxDate: new Date() }).datepicker("setDate", new Date());
-            
+
+      //Initialise month picker
+      $('#monthPicker').MonthPicker({ StartYear: new Date().getFullYear(), ShowIcon: false, MaxMonth: 0 });
+
+      //Initialise month object for validate the increase and decrease selectedMonth
+      var monthObj = {currentMonth: new Date().getMonth() + 1, currentYear: new Date().getFullYear()};
+
+      //Display current month in Month Picker input field
+      switch (monthObj.currentMonth) {
+        case 1:
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+          break;
+        case 2:
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+          break;
+        case 3:
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+          break;
+        case 4:
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+          break;
+        case 5:
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+          break;
+        case 6:
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+          break;
+        case 7:
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+          break;
+        case 8:
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+          break;
+        case 9:
+          $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+          break;
+        case 10:
+          $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
+          break;
+        case 11:
+          $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
+          break;
+        case 12:
+          $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
+          break;
+      }
+      
+      //Display the value return from month picker
+      $('#monthPicker').MonthPicker({ 
+        OnAfterChooseMonth: function( selectedDate ){
+          var selectedMonth = $('#monthPicker').MonthPicker('GetSelectedDate');
+          monthObj.currentMonth = selectedMonth.getMonth() + 1;
+          monthObj.currentYear = selectedMonth.getFullYear();
+          switch (monthObj.currentMonth) {
+            case 1:
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+              break;
+            case 2:
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+              break;
+            case 3:
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+              break;
+            case 4:
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+              break;
+            case 5:
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+              break;
+            case 6:
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+              break;
+            case 7:
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+              break;
+            case 8:
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+              break;
+            case 9:
+              $("#monthPicker").val(monthObj.currentYear + "-0" + monthObj.currentMonth);
+              break;
+            case 10:
+              $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
+              break;
+            case 11:
+              $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
+              break;
+            case 12:
+              $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
+              break;
+          }
+
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+
+          //tempMonth use to get rid of leading zero of month
+          var tempMonth = currentSelectedMonth.substr(-2);
+          if (tempMonth.substr(0, 1) == 0) {
+            monthObj.currentMonth = parseInt(tempMonth.substr(-1));
+          } else {
+            monthObj.currentMonth = parseInt(tempMonth);
+          }   
+          monthObj.currentYear = parseInt(currentSelectedMonth.substr(0, 4));
+          var constCurrentMonth = new Date().getMonth() + 1;
+          var constCurrentYear = new Date().getFullYear();
+
+          //if not current year & month, enable next button
+          if (monthObj.currentMonth == constCurrentMonth && monthObj.currentYear == constCurrentYear) {
+            $("#nextMonth").addClass("disabled");
+          } else {
+            $("#nextMonth").removeClass("disabled");
+          }
+
+          //check whether sumByDate or sumByCat is selected
+          if ($("#sumByDate").hasClass('active')) {
+            $('#transferList li').remove();
+            var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+            var transferObj;
+            transferRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                transferObj = childSnapshot.val();
+                var trfDate = transferObj.transferDate;
+                var trfFrom = transferObj.transferFrom;
+                var trfTo = transferObj.transferTo;
+                var trfAmt = parseFloat(transferObj.transferAmount);
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = trfDate.substr(0, 2);
+                var firebaseYear = trfDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  $('#transferList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + trfDate + '</div>' + 
+                      '<div class="card-body">' +
+                        '<div class="card-text">' + 
+                          '<p>' + trfFrom + " &#8594; " + trfTo + '</p>' + 
+                          '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                        '</div>' +
+                      '</div>' +
+                    '</div>' +
+                  '</li>');
+                }
+              });
+            });
+          }
+          else {
+            $('#transferList li').remove();
+            var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+            var transferObj;
+            transferRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                transferObj = childSnapshot.val();
+                var trfDate = transferObj.transferDate;
+                var trfFrom = transferObj.transferFrom;
+                var trfTo = transferObj.transferTo;
+                var trfAmt = parseFloat(transferObj.transferAmount);
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = trfDate.substr(0, 2);
+                var firebaseYear = trfDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  $('#transferList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + trfFrom + " &#8594; " + trfTo + '</div>' + 
+                      '<div class="card-body">' +
+                        '<div class="card-text">' + 
+                          '<p>' + trfDate + '</p>' + 
+                          '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                        '</div>' +
+                      '</div>' +
+                    '</div>' +
+                  '</li>');
+                }
+              });
+            });
+            var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+            var transferObj;
+            transferRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                transferObj = childSnapshot.val();
+                var trfDate = transferObj.transferDate;
+                var trfFrom = transferObj.transferFrom;
+                var trfTo = transferObj.transferTo;
+                var trfAmt = parseFloat(transferObj.transferAmount);
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = trfDate.substr(0, 2);
+                var firebaseYear = trfDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  $('#transferList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + trfFrom + " &#8594; " + trfTo + '</div>' + 
+                      '<div class="card-body">' +
+                        '<div class="card-text">' + 
+                          '<p>' + trfDate + '</p>' + 
+                          '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                        '</div>' +
+                      '</div>' +
+                    '</div>' +
+                  '</li>');
+                }
+              });
+            });
+          }
+        } 
+      });
+
+      //Increase or decrease the current selected month
+      $("#previousMonth").click(function(){
+        document.getElementById("monthPicker").stepDown(1);
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        
+        //tempMonth use to get rid of leading zero of month
+        var tempMonth = currentSelectedMonth.substr(-2);
+        if (tempMonth.substr(0, 1) == 0) {
+          monthObj.currentMonth = parseInt(tempMonth.substr(-1));
+        } else {
+          monthObj.currentMonth = parseInt(tempMonth);
+        }   
+        monthObj.currentYear = parseInt(currentSelectedMonth.substr(0, 4));
+        var constCurrentMonth = new Date().getMonth() + 1;
+        var constCurrentYear = new Date().getFullYear();
+
+        //if not current year & month, enable next button
+        if (monthObj.currentMonth == constCurrentMonth && monthObj.currentYear == constCurrentYear) {
+          return true;
+        } else {
+          $("#nextMonth").removeClass("disabled");
+        }
+
+        //check whether sumByDate or sumByCat is selected
+        if ($("#sumByDate").hasClass('active')) {
+          $('#transferList li').remove();
+          var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+          var transferObj;
+          transferRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              transferObj = childSnapshot.val();
+              var trfDate = transferObj.transferDate;
+              var trfFrom = transferObj.transferFrom;
+              var trfTo = transferObj.transferTo;
+              var trfAmt = parseFloat(transferObj.transferAmount);
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = trfDate.substr(0, 2);
+              var firebaseYear = trfDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#transferList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + trfDate + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + trfFrom + " &#8594; " + trfTo + '</p>' + 
+                        '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+        } 
+        else {
+          $('#transferList li').remove();
+          var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+          var transferObj;
+          transferRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              transferObj = childSnapshot.val();
+              var trfDate = transferObj.transferDate;
+              var trfFrom = transferObj.transferFrom;
+              var trfTo = transferObj.transferTo;
+              var trfAmt = parseFloat(transferObj.transferAmount);
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = trfDate.substr(0, 2);
+              var firebaseYear = trfDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#transferList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + trfFrom + " &#8594; " + trfTo + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + trfDate + '</p>' + 
+                        '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+          var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+          var transferObj;
+          transferRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              transferObj = childSnapshot.val();
+              var trfDate = transferObj.transferDate;
+              var trfFrom = transferObj.transferFrom;
+              var trfTo = transferObj.transferTo;
+              var trfAmt = parseFloat(transferObj.transferAmount);
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = trfDate.substr(0, 2);
+              var firebaseYear = trfDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#transferList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + trfFrom + " &#8594; " + trfTo + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + trfDate + '</p>' + 
+                        '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+        }
+      });
+      $("#nextMonth").click(function(){        
+        document.getElementById("monthPicker").stepUp(1);
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+
+        //tempMonth use to get rid of leading zero of month
+        var tempMonth = currentSelectedMonth.substr(-2);
+        if (tempMonth.substr(0, 1) == 0) {
+          monthObj.currentMonth = parseInt(tempMonth.substr(-1));
+        } else {
+          monthObj.currentMonth = parseInt(tempMonth);
+        }   
+        monthObj.currentYear = parseInt(currentSelectedMonth.substr(0, 4));
+        var constCurrentMonth = new Date().getMonth() + 1;
+        var constCurrentYear = new Date().getFullYear();
+
+        //if not current year & month, enable next button
+        if (monthObj.currentMonth == constCurrentMonth && monthObj.currentYear == constCurrentYear) {
+          $("#nextMonth").addClass("disabled");
+        }
+
+        //check whether sumByDate or sumByCat is selected
+        if ($("#sumByDate").hasClass('active')) {
+          $('#transferList li').remove();
+          var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+          var transferObj;
+          transferRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              transferObj = childSnapshot.val();
+              var trfDate = transferObj.transferDate;
+              var trfFrom = transferObj.transferFrom;
+              var trfTo = transferObj.transferTo;
+              var trfAmt = parseFloat(transferObj.transferAmount);
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = trfDate.substr(0, 2);
+              var firebaseYear = trfDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#transferList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + trfDate + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + trfFrom + " &#8594; " + trfTo + '</p>' + 
+                        '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+        } 
+        else {
+          $('#transferList li').remove();
+          var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+          var transferObj;
+          transferRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              transferObj = childSnapshot.val();
+              var trfDate = transferObj.transferDate;
+              var trfFrom = transferObj.transferFrom;
+              var trfTo = transferObj.transferTo;
+              var trfAmt = parseFloat(transferObj.transferAmount);
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = trfDate.substr(0, 2);
+              var firebaseYear = trfDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#transferList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + trfFrom + " &#8594; " + trfTo + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + trfDate + '</p>' + 
+                        '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+          var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+          var transferObj;
+          transferRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              transferObj = childSnapshot.val();
+              var trfDate = transferObj.transferDate;
+              var trfFrom = transferObj.transferFrom;
+              var trfTo = transferObj.transferTo;
+              var trfAmt = parseFloat(transferObj.transferAmount);
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = trfDate.substr(0, 2);
+              var firebaseYear = trfDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#transferList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + trfFrom + " &#8594; " + trfTo + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + trfDate + '</p>' + 
+                        '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+        }
+      });
+
       // Initialize Firebase
       var config = {
         apiKey: "AIzaSyAR3t7qI2D5wRu4fO38FuPYbPegZwQd_yI",
@@ -220,19 +693,26 @@
           var trfFrom = transferObj.transferFrom;
           var trfTo = transferObj.transferTo;
           var trfAmt = parseFloat(transferObj.transferAmount);
-          $('#transferList').append(
-          '<li class="list-group-item nopadding">' + 
-            '<div class="card">' + 
-              '<div class="card-header">' + trfDate + '</div>' + 
-              '<div class="card-body">' +
-                '<div class="card-text">' + 
-                  '<p>' + trfFrom + '</p>' + 
-                  '<p>' + trfTo + '</p>' + 
-                  '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          //compare month of record with current selected month
+          var firebaseMonth = trfDate.substr(0, 2);
+          var firebaseYear = trfDate.substr(-4);
+          var validMonth = currentSelectedMonth.substr(-2);
+          var validYear = currentSelectedMonth.substr(0, 4);
+          if (firebaseMonth == validMonth && firebaseYear == validYear) {
+            $('#transferList').append(
+            '<li class="list-group-item nopadding">' + 
+              '<div class="card">' + 
+                '<div class="card-header">' + trfDate + '</div>' + 
+                '<div class="card-body">' +
+                  '<div class="card-text">' + 
+                    '<p>' + trfFrom + " &#8594; " + trfTo + '</p>' + 
+                    '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                  '</div>' +
                 '</div>' +
               '</div>' +
-            '</div>' +
-          '</li>');
+            '</li>');
+          }
         });
       });
 
@@ -248,19 +728,26 @@
             var trfFrom = transferObj.transferFrom;
             var trfTo = transferObj.transferTo;
             var trfAmt = parseFloat(transferObj.transferAmount);
-            $('#transferList').append(
+            var currentSelectedMonth = document.getElementById("monthPicker").value;
+            //compare month of record with current selected month
+            var firebaseMonth = trfDate.substr(0, 2);
+            var firebaseYear = trfDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              $('#transferList').append(
               '<li class="list-group-item nopadding">' + 
-              '<div class="card">' + 
-                '<div class="card-header">' + trfDate + '</div>' + 
-                '<div class="card-body">' +
-                  '<div class="card-text">' + 
-                    '<p>' + trfFrom + '</p>' + 
-                    '<p>' + trfTo + '</p>' + 
-                    '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                '<div class="card">' + 
+                  '<div class="card-header">' + trfDate + '</div>' + 
+                  '<div class="card-body">' +
+                    '<div class="card-text">' + 
+                      '<p>' + trfFrom + " &#8594; " + trfTo + '</p>' + 
+                      '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                    '</div>' +
                   '</div>' +
                 '</div>' +
-              '</div>' +
-            '</li>');
+              '</li>');
+            }
           });
         });
       });
@@ -276,18 +763,26 @@
             var trfFrom = transferObj.transferFrom;
             var trfTo = transferObj.transferTo;
             var trfAmt = parseFloat(transferObj.transferAmount);
-            $('#transferList').append(
-            '<li class="list-group-item nopadding">' + 
-              '<div class="card">' + 
-                '<div class="card-header">' + trfFrom + " &#8594; " + trfTo + '</div>' + 
-                '<div class="card-body">' +
-                  '<div class="card-text">' + 
-                    '<p>' + trfDate + '</p>' + 
-                    '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+            var currentSelectedMonth = document.getElementById("monthPicker").value;
+            //compare month of record with current selected month
+            var firebaseMonth = trfDate.substr(0, 2);
+            var firebaseYear = trfDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              $('#transferList').append(
+              '<li class="list-group-item nopadding">' + 
+                '<div class="card">' + 
+                  '<div class="card-header">' + trfFrom + " &#8594; " + trfTo + '</div>' + 
+                  '<div class="card-body">' +
+                    '<div class="card-text">' + 
+                      '<p>' + trfDate + '</p>' + 
+                      '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                    '</div>' +
                   '</div>' +
                 '</div>' +
-              '</div>' +
-            '</li>');
+              '</li>');
+            }
           });
         });
         var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
@@ -299,18 +794,26 @@
             var trfFrom = transferObj.transferFrom;
             var trfTo = transferObj.transferTo;
             var trfAmt = parseFloat(transferObj.transferAmount);
-            $('#transferList').append(
-            '<li class="list-group-item nopadding">' + 
-              '<div class="card">' + 
-                '<div class="card-header">' + trfFrom + " &#8594; " + trfTo + '</div>' + 
-                '<div class="card-body">' +
-                  '<div class="card-text">' + 
-                    '<p>' + trfDate + '</p>' + 
-                    '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+            var currentSelectedMonth = document.getElementById("monthPicker").value;
+            //compare month of record with current selected month
+            var firebaseMonth = trfDate.substr(0, 2);
+            var firebaseYear = trfDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              $('#transferList').append(
+              '<li class="list-group-item nopadding">' + 
+                '<div class="card">' + 
+                  '<div class="card-header">' + trfFrom + " &#8594; " + trfTo + '</div>' + 
+                  '<div class="card-body">' +
+                    '<div class="card-text">' + 
+                      '<p>' + trfDate + '</p>' + 
+                      '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                    '</div>' +
                   '</div>' +
                 '</div>' +
-              '</div>' +
-            '</li>');
+              '</li>');
+            }
           });
         });
       });
