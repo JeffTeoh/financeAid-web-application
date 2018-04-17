@@ -54,6 +54,7 @@ $(document).ready(function(){
             $('.sidebar-toggleright').hide();
             $("#sidebar").removeClass("toggled");
             $("#sidebar-right").css("display", "block");
+            $(".nav-item").addClass("float-left");
         }
     });
     
