@@ -36,6 +36,10 @@ $(document).ready(function(){
         $("#sidebar-right").css("display", "block");
         $(".middleicon").css("line-height", "1.2");
     }
+
+    $("#monthPicker").on('click', function(){
+        $("#sidebar-right").css("display", "none");
+    });
     
     //hide side bar while resize
     $(window).resize(function(){

@@ -304,6 +304,157 @@
               $("#monthPicker").val(monthObj.currentYear + "-" + monthObj.currentMonth);
               break;
           }
+
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+
+          //tempMonth use to get rid of leading zero of month
+          var tempMonth = currentSelectedMonth.substr(-2);
+          if (tempMonth.substr(0, 1) == 0) {
+            monthObj.currentMonth = parseInt(tempMonth.substr(-1));
+          } else {
+            monthObj.currentMonth = parseInt(tempMonth);
+          }   
+          monthObj.currentYear = parseInt(currentSelectedMonth.substr(0, 4));
+          var constCurrentMonth = new Date().getMonth() + 1;
+          var constCurrentYear = new Date().getFullYear();
+
+          //if not current year & month, enable next button
+          if (monthObj.currentMonth == constCurrentMonth && monthObj.currentYear == constCurrentYear) {
+            $("#nextMonth").addClass("disabled");
+          } else {
+            $("#nextMonth").removeClass("disabled");
+          }
+
+          //check whether sumByDate or sumByCat is selected
+          if ($("#sumByDate").hasClass('active')) {
+            $('#expenseList li').remove();
+            var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+            var expenseObj;
+            expenseRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                expenseObj = childSnapshot.val();
+                var expDate = expenseObj.expenseDate;
+                var expAcc = expenseObj.expenseAccount;
+                var expCat = expenseObj.expenseCategory;
+                var expAmt = parseFloat(expenseObj.expenseAmount);
+                //compare month of record with current selected month
+                var firebaseMonth = expDate.substr(0, 2);
+                var firebaseYear = expDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  $('#expenseList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + expDate + '</div>' + 
+                      '<div class="card-body">' +
+                        '<div class="card-text">' + 
+                          '<p>' + expAcc + '</p>' + 
+                          '<p>' + expCat + '</p>' + 
+                          '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                        '</div>' +
+                      '</div>' +
+                    '</div>' +
+                  '</li>');
+                }
+              });
+            });
+          } else {
+            $('#expenseList li').remove();
+            var expenseRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
+            var expenseObj;
+            expenseRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                expenseObj = childSnapshot.val();
+                var expDate = expenseObj.expenseDate;
+                var expAcc = expenseObj.expenseAccount;
+                var expCat = expenseObj.expenseCategory;
+                var expAmt = parseFloat(expenseObj.expenseAmount);
+                //compare month of record with current selected month
+                var firebaseMonth = expDate.substr(0, 2);
+                var firebaseYear = expDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  $('#expenseList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + expCat + '</div>' + 
+                      '<div class="card-body">' +
+                        '<div class="card-text">' + 
+                          '<p>' + expDate + '</p>' + 
+                          '<p>' + expAcc + '</p>' + 
+                          '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                        '</div>' +
+                      '</div>' +
+                    '</div>' +
+                  '</li>');
+                }
+              });
+            });
+            var expenseRef = firebase.database().ref('expenseCat/Foods and Drinks').orderByChild('expenseDate');
+            var expenseObj;
+            expenseRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                expenseObj = childSnapshot.val();
+                var expDate = expenseObj.expenseDate;
+                var expAcc = expenseObj.expenseAccount;
+                var expCat = expenseObj.expenseCategory;
+                var expAmt = parseFloat(expenseObj.expenseAmount);
+                //compare month of record with current selected month
+                var firebaseMonth = expDate.substr(0, 2);
+                var firebaseYear = expDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  $('#expenseList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + expCat + '</div>' + 
+                      '<div class="card-body">' +
+                        '<div class="card-text">' + 
+                          '<p>' + expDate + '</p>' + 
+                          '<p>' + expAcc + '</p>' + 
+                          '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                        '</div>' +
+                      '</div>' +
+                    '</div>' +
+                  '</li>');
+                }
+              });
+            });
+            var expenseRef = firebase.database().ref('expenseCat/Vehicle').orderByChild('expenseDate');
+            var expenseObj;
+            expenseRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                expenseObj = childSnapshot.val();
+                var expDate = expenseObj.expenseDate;
+                var expAcc = expenseObj.expenseAccount;
+                var expCat = expenseObj.expenseCategory;
+                var expAmt = parseFloat(expenseObj.expenseAmount);
+                //compare month of record with current selected month
+                var firebaseMonth = expDate.substr(0, 2);
+                var firebaseYear = expDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  $('#expenseList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + expCat + '</div>' +
+                      '<div class="card-body">' +
+                        '<div class="card-text">' + 
+                          '<p>' + expDate + '</p>' + 
+                          '<p>' + expAcc + '</p>' + 
+                          '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                        '</div>' +
+                      '</div>' +
+                    '</div>' +
+                  '</li>');
+                }
+              });
+            });
+          }
         } 
       });
 
@@ -311,6 +462,7 @@
       $("#previousMonth").click(function(){
         document.getElementById("monthPicker").stepDown(1);
         var currentSelectedMonth = document.getElementById("monthPicker").value;
+        
         //tempMonth use to get rid of leading zero of month
         var tempMonth = currentSelectedMonth.substr(-2);
         if (tempMonth.substr(0, 1) == 0) {
@@ -321,18 +473,149 @@
         monthObj.currentYear = parseInt(currentSelectedMonth.substr(0, 4));
         var constCurrentMonth = new Date().getMonth() + 1;
         var constCurrentYear = new Date().getFullYear();
+
         //if not current year & month, enable next button
         if (monthObj.currentMonth == constCurrentMonth && monthObj.currentYear == constCurrentYear) {
           return true;
         } else {
-          if ($("#nextMonth").hasClass("disabled")) {
-            $("#nextMonth").removeClass("disabled");
-          }
+          $("#nextMonth").removeClass("disabled");
+        }
+
+        //check whether sumByDate or sumByCat is selected
+        if ($("#sumByDate").hasClass('active')) {
+          $('#expenseList li').remove();
+          var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+          var expenseObj;
+          expenseRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              expenseObj = childSnapshot.val();
+              var expDate = expenseObj.expenseDate;
+              var expAcc = expenseObj.expenseAccount;
+              var expCat = expenseObj.expenseCategory;
+              var expAmt = parseFloat(expenseObj.expenseAmount);
+              //compare month of record with current selected month
+              var firebaseMonth = expDate.substr(0, 2);
+              var firebaseYear = expDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#expenseList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + expDate + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + expAcc + '</p>' + 
+                        '<p>' + expCat + '</p>' + 
+                        '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+        } else {
+          $('#expenseList li').remove();
+          var expenseRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
+          var expenseObj;
+          expenseRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              expenseObj = childSnapshot.val();
+              var expDate = expenseObj.expenseDate;
+              var expAcc = expenseObj.expenseAccount;
+              var expCat = expenseObj.expenseCategory;
+              var expAmt = parseFloat(expenseObj.expenseAmount);
+              //compare month of record with current selected month
+              var firebaseMonth = expDate.substr(0, 2);
+              var firebaseYear = expDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#expenseList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + expCat + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + expDate + '</p>' + 
+                        '<p>' + expAcc + '</p>' + 
+                        '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+          var expenseRef = firebase.database().ref('expenseCat/Foods and Drinks').orderByChild('expenseDate');
+          var expenseObj;
+          expenseRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              expenseObj = childSnapshot.val();
+              var expDate = expenseObj.expenseDate;
+              var expAcc = expenseObj.expenseAccount;
+              var expCat = expenseObj.expenseCategory;
+              var expAmt = parseFloat(expenseObj.expenseAmount);
+              //compare month of record with current selected month
+              var firebaseMonth = expDate.substr(0, 2);
+              var firebaseYear = expDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#expenseList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + expCat + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + expDate + '</p>' + 
+                        '<p>' + expAcc + '</p>' + 
+                        '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+          var expenseRef = firebase.database().ref('expenseCat/Vehicle').orderByChild('expenseDate');
+          var expenseObj;
+          expenseRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              expenseObj = childSnapshot.val();
+              var expDate = expenseObj.expenseDate;
+              var expAcc = expenseObj.expenseAccount;
+              var expCat = expenseObj.expenseCategory;
+              var expAmt = parseFloat(expenseObj.expenseAmount);
+              //compare month of record with current selected month
+              var firebaseMonth = expDate.substr(0, 2);
+              var firebaseYear = expDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#expenseList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + expCat + '</div>' +
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + expDate + '</p>' + 
+                        '<p>' + expAcc + '</p>' + 
+                        '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
         }
       });
       $("#nextMonth").click(function(){        
         document.getElementById("monthPicker").stepUp(1);
         var currentSelectedMonth = document.getElementById("monthPicker").value;
+
         //tempMonth use to get rid of leading zero of month
         var tempMonth = currentSelectedMonth.substr(-2);
         if (tempMonth.substr(0, 1) == 0) {
@@ -343,9 +626,145 @@
         monthObj.currentYear = parseInt(currentSelectedMonth.substr(0, 4));
         var constCurrentMonth = new Date().getMonth() + 1;
         var constCurrentYear = new Date().getFullYear();
+
         //if not current year & month, enable next button
         if (monthObj.currentMonth == constCurrentMonth && monthObj.currentYear == constCurrentYear) {
           $("#nextMonth").addClass("disabled");
+        }
+
+        //check whether sumByDate or sumByCat is selected
+        if ($("#sumByDate").hasClass('active')) {
+          $('#expenseList li').remove();
+          var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+          var expenseObj;
+          expenseRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              expenseObj = childSnapshot.val();
+              var expDate = expenseObj.expenseDate;
+              var expAcc = expenseObj.expenseAccount;
+              var expCat = expenseObj.expenseCategory;
+              var expAmt = parseFloat(expenseObj.expenseAmount);
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = expDate.substr(0, 2);
+              var firebaseYear = expDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#expenseList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + expDate + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + expAcc + '</p>' + 
+                        '<p>' + expCat + '</p>' + 
+                        '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+        } else {
+          $('#expenseList li').remove();
+          var expenseRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
+          var expenseObj;
+          expenseRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              expenseObj = childSnapshot.val();
+              var expDate = expenseObj.expenseDate;
+              var expAcc = expenseObj.expenseAccount;
+              var expCat = expenseObj.expenseCategory;
+              var expAmt = parseFloat(expenseObj.expenseAmount);
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = expDate.substr(0, 2);
+              var firebaseYear = expDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#expenseList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + expCat + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + expDate + '</p>' + 
+                        '<p>' + expAcc + '</p>' + 
+                        '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+          var expenseRef = firebase.database().ref('expenseCat/Foods and Drinks').orderByChild('expenseDate');
+          var expenseObj;
+          expenseRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              expenseObj = childSnapshot.val();
+              var expDate = expenseObj.expenseDate;
+              var expAcc = expenseObj.expenseAccount;
+              var expCat = expenseObj.expenseCategory;
+              var expAmt = parseFloat(expenseObj.expenseAmount);
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = expDate.substr(0, 2);
+              var firebaseYear = expDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#expenseList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + expCat + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + expDate + '</p>' + 
+                        '<p>' + expAcc + '</p>' + 
+                        '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
+          var expenseRef = firebase.database().ref('expenseCat/Vehicle').orderByChild('expenseDate');
+          var expenseObj;
+          expenseRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              expenseObj = childSnapshot.val();
+              var expDate = expenseObj.expenseDate;
+              var expAcc = expenseObj.expenseAccount;
+              var expCat = expenseObj.expenseCategory;
+              var expAmt = parseFloat(expenseObj.expenseAmount);
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = expDate.substr(0, 2);
+              var firebaseYear = expDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                $('#expenseList').append(
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + expCat + '</div>' + 
+                    '<div class="card-body">' +
+                      '<div class="card-text">' + 
+                        '<p>' + expDate + '</p>' + 
+                        '<p>' + expAcc + '</p>' + 
+                        '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                      '</div>' +
+                    '</div>' +
+                  '</div>' +
+                '</li>');
+              }
+            });
+          });
         }
       });
       
@@ -428,19 +847,27 @@
           var expAcc = expenseObj.expenseAccount;
           var expCat = expenseObj.expenseCategory;
           var expAmt = parseFloat(expenseObj.expenseAmount);
-          $('#expenseList').append(
-          '<li class="list-group-item nopadding">' + 
-            '<div class="card">' + 
-              '<div class="card-header">' + expDate + '</div>' + 
-              '<div class="card-body">' +
-                '<div class="card-text">' + 
-                  '<p>' + expAcc + '</p>' + 
-                  '<p>' + expCat + '</p>' + 
-                  '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          //compare month of record with current selected month
+          var firebaseMonth = expDate.substr(0, 2);
+          var firebaseYear = expDate.substr(-4);
+          var validMonth = currentSelectedMonth.substr(-2);
+          var validYear = currentSelectedMonth.substr(0, 4);
+          if (firebaseMonth == validMonth && firebaseYear == validYear) {
+            $('#expenseList').append(
+            '<li class="list-group-item nopadding">' + 
+              '<div class="card">' + 
+                '<div class="card-header">' + expDate + '</div>' + 
+                '<div class="card-body">' +
+                  '<div class="card-text">' + 
+                    '<p>' + expAcc + '</p>' + 
+                    '<p>' + expCat + '</p>' + 
+                    '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                  '</div>' +
                 '</div>' +
               '</div>' +
-            '</div>' +
-          '</li>');
+            '</li>');
+          }
         });
       });
 
@@ -456,19 +883,27 @@
             var expAcc = expenseObj.expenseAccount;
             var expCat = expenseObj.expenseCategory;
             var expAmt = parseFloat(expenseObj.expenseAmount);
-            $('#expenseList').append(
-            '<li class="list-group-item nopadding">' + 
-              '<div class="card">' + 
-                '<div class="card-header">' + expDate + '</div>' + 
-                '<div class="card-body">' +
-                  '<div class="card-text">' + 
-                    '<p>' + expAcc + '</p>' + 
-                    '<p>' + expCat + '</p>' + 
-                    '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+            var currentSelectedMonth = document.getElementById("monthPicker").value;
+            //compare month of record with current selected month
+            var firebaseMonth = expDate.substr(0, 2);
+            var firebaseYear = expDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              $('#expenseList').append(
+              '<li class="list-group-item nopadding">' + 
+                '<div class="card">' + 
+                  '<div class="card-header">' + expDate + '</div>' + 
+                  '<div class="card-body">' +
+                    '<div class="card-text">' + 
+                      '<p>' + expAcc + '</p>' + 
+                      '<p>' + expCat + '</p>' + 
+                      '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                    '</div>' +
                   '</div>' +
                 '</div>' +
-              '</div>' +
-            '</li>');
+              '</li>');
+            }
           });
         });
       });
@@ -483,19 +918,27 @@
             var expAcc = expenseObj.expenseAccount;
             var expCat = expenseObj.expenseCategory;
             var expAmt = parseFloat(expenseObj.expenseAmount);
-            $('#expenseList').append(
-            '<li class="list-group-item nopadding">' + 
-              '<div class="card">' + 
-                '<div class="card-header">' + expCat + '</div>' + 
-                '<div class="card-body">' +
-                  '<div class="card-text">' + 
-                    '<p>' + expDate + '</p>' + 
-                    '<p>' + expAcc + '</p>' + 
-                    '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+            var currentSelectedMonth = document.getElementById("monthPicker").value;
+            //compare month of record with current selected month
+            var firebaseMonth = expDate.substr(0, 2);
+            var firebaseYear = expDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              $('#expenseList').append(
+              '<li class="list-group-item nopadding">' + 
+                '<div class="card">' + 
+                  '<div class="card-header">' + expCat + '</div>' + 
+                  '<div class="card-body">' +
+                    '<div class="card-text">' + 
+                      '<p>' + expDate + '</p>' + 
+                      '<p>' + expAcc + '</p>' + 
+                      '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                    '</div>' +
                   '</div>' +
                 '</div>' +
-              '</div>' +
-            '</li>');
+              '</li>');
+            }
           });
         });
         var expenseRef = firebase.database().ref('expenseCat/Foods and Drinks').orderByChild('expenseDate');
@@ -507,19 +950,27 @@
             var expAcc = expenseObj.expenseAccount;
             var expCat = expenseObj.expenseCategory;
             var expAmt = parseFloat(expenseObj.expenseAmount);
-            $('#expenseList').append(
-            '<li class="list-group-item nopadding">' + 
-              '<div class="card">' + 
-                '<div class="card-header">' + expCat + '</div>' + 
-                '<div class="card-body">' +
-                  '<div class="card-text">' + 
-                    '<p>' + expDate + '</p>' + 
-                    '<p>' + expAcc + '</p>' + 
-                    '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+            var currentSelectedMonth = document.getElementById("monthPicker").value;
+            //compare month of record with current selected month
+            var firebaseMonth = expDate.substr(0, 2);
+            var firebaseYear = expDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              $('#expenseList').append(
+              '<li class="list-group-item nopadding">' + 
+                '<div class="card">' + 
+                  '<div class="card-header">' + expCat + '</div>' + 
+                  '<div class="card-body">' +
+                    '<div class="card-text">' + 
+                      '<p>' + expDate + '</p>' + 
+                      '<p>' + expAcc + '</p>' + 
+                      '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                    '</div>' +
                   '</div>' +
                 '</div>' +
-              '</div>' +
-            '</li>');
+              '</li>');
+            }
           });
         });
         var expenseRef = firebase.database().ref('expenseCat/Vehicle').orderByChild('expenseDate');
@@ -531,19 +982,27 @@
             var expAcc = expenseObj.expenseAccount;
             var expCat = expenseObj.expenseCategory;
             var expAmt = parseFloat(expenseObj.expenseAmount);
-            $('#expenseList').append(
-            '<li class="list-group-item nopadding">' + 
-              '<div class="card">' + 
-                '<div class="card-header">' + expCat + '</div>' + 
-                '<div class="card-body">' +
-                  '<div class="card-text">' + 
-                    '<p>' + expDate + '</p>' + 
-                    '<p>' + expAcc + '</p>' + 
-                    '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+            var currentSelectedMonth = document.getElementById("monthPicker").value;
+            //compare month of record with current selected month
+            var firebaseMonth = expDate.substr(0, 2);
+            var firebaseYear = expDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              $('#expenseList').append(
+              '<li class="list-group-item nopadding">' + 
+                '<div class="card">' + 
+                  '<div class="card-header">' + expCat + '</div>' + 
+                  '<div class="card-body">' +
+                    '<div class="card-text">' + 
+                      '<p>' + expDate + '</p>' + 
+                      '<p>' + expAcc + '</p>' + 
+                      '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                    '</div>' +
                   '</div>' +
                 '</div>' +
-              '</div>' +
-            '</li>');
+              '</li>');
+            }
           });
         });
       });
