@@ -30,16 +30,15 @@ $(document).ready(function(){
         $("#sidebar").addClass("toggled");
         $("#sidebar-right").css("display", "none");
         $(".nav-item").removeClass("float-left");
+        $("#monthPicker").on('click', function(){
+            $("#sidebar-right").css("display", "none");
+        });
     }
     else {
         $("#sidebar").removeClass("toggled");
         $("#sidebar-right").css("display", "block");
         $(".middleicon").css("line-height", "1.2");
-    }
-
-    $("#monthPicker").on('click', function(){
-        $("#sidebar-right").css("display", "none");
-    });
+    }    
     
     //hide side bar while resize
     $(window).resize(function(){
