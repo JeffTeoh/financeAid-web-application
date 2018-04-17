@@ -119,83 +119,83 @@
       </div>
       
 
-        <!--Button for adding records-->
-        <button class="btn bg-dark mt-2" type="button" data-toggle="modal" data-target="#addRecord" id="addRecordBtn">
-          <i class="fa fa-plus p-3" style="color: white; font-size: 50px;"></i>
-        </button>          
+      <!--Button for adding records-->
+      <button class="btn bg-dark mt-2" type="button" data-toggle="modal" data-target="#addRecord" id="addRecordBtn">
+        <i class="fa fa-plus p-3" style="color: white; font-size: 50px;"></i>
+      </button>          
 
-        <!-- Modal for adding records -->
-        <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="addRecord" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <select class="custom-select" id="selectFeature">
-                    <option value="exp" selected="selected">Add Expense</option>
-                    <option value="inc">Add Income</option>
-                    <option value="trf">Add Transfer</option>
-                  </select>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeBtn">
-                    <span aria-hidden="true">&#10005;</span>
-                  </button>
-                </div>
-                <div class="modal-body" id="modal-body">
-                  <div id="amount-group">
-                    <label for="amount">Amount</label>
-                    <div class="input-group mb-3">
-                      <input onkeyup="checkFormsValidity();" type="text" class="form-control" id="amount" placeholder="Amount" aria-label="amount" aria-describedby="amount" required="required">
-                      <div class="input-group-append">
-                        <span class="input-group-text">RM</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div id="account-group">
-                    <label for="account">Account</label>
-                    <div class="input-group mb-3">
-                      <select name="" id="account">
-                        <option value="">Choose an option:</option>
-                        <option value="Bank">Bank</option>
-                        <option value="Cash">Cash</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div id="category-group">
-                    <label for="category">Category</label>
-                    <div class="input-group mb-3">
-                      <select name="" id="category">
-                        <option value="">Choose an option:</option>
-                        <option value="Foods and Drinks">Foods and Drinks</option>
-                        <option value="Vehicle">Vehicle</option>
-                        <option value="Entertainment">Entertainment</option>                                
-                      </select>
-                    </div>
-                  </div>                
-                  <div id="trfFrom-group" style="display: none;">
-                    <label for="transferFrom">Transfer From</label>
-                    <div class="input-group mb-3">
-                      <select name="" id="transferFrom">
-                        <option value="" selected="selected">Choose an option:</option>
-                        <option value="Bank">Bank</option>
-                        <option value="Cash">Cash</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div id="trfTo-group"  style="display: none;">
-                    <label for="transferTo">Transfer To</label>
-                    <div class="input-group mb-3">
-                      <input class="form-control" id="transferTo" readonly>
-                    </div>                  
-                  </div>
-                  <div id="date-group">
-                    <label for="date">Date</label>
-                    <div class="input-group mb-3">
-                      <input type="text" class="datepicker" id="datepicker"></p>
-                    </div>
-                  </div>
-                  <button type="button" data-dismiss="modal" class="btn btn-secondary btn-lg btn-block" id="saveBtn">Save</button>
+      <!-- Modal for adding records -->
+      <div class="modal fade" id="addRecord" tabindex="-1" role="dialog" aria-labelledby="addRecord" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+          <div class="modal-header">
+            <select class="custom-select" id="selectFeature">
+              <option value="exp" selected="selected">Add Expense</option>
+              <option value="inc">Add Income</option>
+              <option value="trf">Add Transfer</option>
+            </select>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeBtn">
+              <span aria-hidden="true">&#10005;</span>
+            </button>
+          </div>
+          <div class="modal-body" id="modal-body">
+            <div id="amount-group">
+              <label for="amount">Amount</label>
+              <div class="input-group mb-3">
+                <input onkeyup="checkFormsValidity();" type="text" class="form-control" id="amount" placeholder="Amount" aria-label="amount" aria-describedby="amount" required="required">
+                <div class="input-group-append">
+                <span class="input-group-text">RM</span>
                 </div>
               </div>
             </div>
+            <div id="account-group">
+              <label for="account">Account</label>
+              <div class="input-group mb-3">
+                <select name="" id="account">
+                  <option value="">Choose an option:</option>
+                  <option value="Bank">Bank</option>
+                  <option value="Cash">Cash</option>
+                </select>
+              </div>
+            </div>
+            <div id="category-group">
+              <label for="category">Category</label>
+              <div class="input-group mb-3">
+                <select name="" id="category">
+                  <option value="">Choose an option:</option>
+                  <option value="Foods and Drinks">Foods and Drinks</option>
+                  <option value="Vehicle">Vehicle</option>
+                  <option value="Entertainment">Entertainment</option>
+                </select>
+              </div>
+            </div>
+            <div id="trfFrom-group" style="display: none;">
+              <label for="transferFrom">Transfer From</label>
+              <div class="input-group mb-3">
+                <select name="" id="transferFrom">
+                  <option value="" selected="selected">Choose an option:</option>
+                  <option value="Bank">Bank</option>
+                  <option value="Cash">Cash</option>
+                </select>
+              </div>
+            </div>
+            <div id="trfTo-group"  style="display: none;">
+              <label for="transferTo">Transfer To</label>
+              <div class="input-group mb-3">
+                <input class="form-control" id="transferTo" readonly>
+              </div>
+            </div>
+            <div id="date-group">
+              <label for="date">Date</label>
+              <div class="input-group mb-3">
+                <input type="text" class="datepicker" id="datepicker"></p>
+              </div>
+            </div>
+            <button type="button" data-dismiss="modal" class="btn btn-secondary btn-lg btn-block" id="saveBtn">Save</button>
           </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Optional JavaScript -->
