@@ -150,12 +150,24 @@ p{
     border: 0;
 }
 
+#monthPicker {
+    width: 11rem !important;
+}
+
 #monthPicker:hover {
     background: #b7b7b7;
 }
 
 .page-link-space {
     padding: 0.2rem 0.5rem 0.5rem;
+}
+
+#nextMonth {
+    background: transparent;
+}
+
+#nextMonth:hover {
+    background: #b7b7b7;
 }
 
 /*side bar properties*/

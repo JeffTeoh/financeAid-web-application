@@ -65,7 +65,7 @@
             </li>
             <li class="page-item"><a class="page-link" href="#" style="cursor: pointer;"><input type="month" id="monthPicker" readonly style="background:transparent; cursor: pointer;"></a></li>
             <li class="page-item">
-              <a class="page-link page-link-space" href="#" aria-label="Next" id="nextMonth">
+              <a class="page-link page-link-space btn btn-primary disabled" href="#" aria-label="Next" id="nextMonth">
                 <span aria-hidden="true" style="color: #4c4c4c; font-size: 30px;">&raquo;</span>
                 <span class="sr-only">Next</span>
               </a>
@@ -310,9 +310,43 @@
       //Increase or decrease the current selected month
       $("#previousMonth").click(function(){
         document.getElementById("monthPicker").stepDown(1);
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        //tempMonth use to get rid of leading zero of month
+        var tempMonth = currentSelectedMonth.substr(-2);
+        if (tempMonth.substr(0, 1) == 0) {
+          monthObj.currentMonth = parseInt(tempMonth.substr(-1));
+        } else {
+          monthObj.currentMonth = parseInt(tempMonth);
+        }   
+        monthObj.currentYear = parseInt(currentSelectedMonth.substr(0, 4));
+        var constCurrentMonth = new Date().getMonth() + 1;
+        var constCurrentYear = new Date().getFullYear();
+        //if not current year & month, enable next button
+        if (monthObj.currentMonth == constCurrentMonth && monthObj.currentYear == constCurrentYear) {
+          return true;
+        } else {
+          if ($("#nextMonth").hasClass("disabled")) {
+            $("#nextMonth").removeClass("disabled");
+          }
+        }
       });
       $("#nextMonth").click(function(){        
         document.getElementById("monthPicker").stepUp(1);
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        //tempMonth use to get rid of leading zero of month
+        var tempMonth = currentSelectedMonth.substr(-2);
+        if (tempMonth.substr(0, 1) == 0) {
+          monthObj.currentMonth = parseInt(tempMonth.substr(-1));
+        } else {
+          monthObj.currentMonth = parseInt(tempMonth);
+        }   
+        monthObj.currentYear = parseInt(currentSelectedMonth.substr(0, 4));
+        var constCurrentMonth = new Date().getMonth() + 1;
+        var constCurrentYear = new Date().getFullYear();
+        //if not current year & month, enable next button
+        if (monthObj.currentMonth == constCurrentMonth && monthObj.currentYear == constCurrentYear) {
+          $("#nextMonth").addClass("disabled");
+        }
       });
       
       // Initialize Firebase
