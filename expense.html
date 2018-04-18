@@ -1135,19 +1135,27 @@
                     var expAcc = expenseObj.expenseAccount;
                     var expCat = expenseObj.expenseCategory;
                     var expAmt = parseFloat(expenseObj.expenseAmount);
-                    $('#expenseList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                        '<div class="card-header">' + expDate + '</div>' + 
-                        '<div class="card-body">' +
-                          '<div class="card-text">' + 
-                            '<p>' + expAcc + '</p>' + 
-                            '<p>' + expCat + '</p>' + 
-                            '<p>' + "RM" +  expAmt.toFixed(2) + '</p>' +
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = expDate.substr(0, 2);
+                    var firebaseYear = expDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                      $('#expenseList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                          '<div class="card-header">' + expDate + '</div>' + 
+                          '<div class="card-body">' +
+                            '<div class="card-text">' + 
+                              '<p>' + expAcc + '</p>' + 
+                              '<p>' + expCat + '</p>' + 
+                              '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                            '</div>' +
                           '</div>' +
                         '</div>' +
-                      '</div>' +
-                    '</li>');
+                      '</li>');
+                    }
                   });
                 });
               }
@@ -1186,19 +1194,27 @@
                     var expAcc = expenseObj.expenseAccount;
                     var expCat = expenseObj.expenseCategory;
                     var expAmt = parseFloat(expenseObj.expenseAmount);
-                    $('#expenseList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                        '<div class="card-header">' + expDate + '</div>' + 
-                        '<div class="card-body">' +
-                          '<div class="card-text">' + 
-                            '<p>' + expAcc + '</p>' + 
-                            '<p>' + expCat + '</p>' + 
-                            '<p>' + "RM" +  expAmt.toFixed(2) + '</p>' +
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = expDate.substr(0, 2);
+                    var firebaseYear = expDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                      $('#expenseList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                          '<div class="card-header">' + expDate + '</div>' + 
+                          '<div class="card-body">' +
+                            '<div class="card-text">' + 
+                              '<p>' + expAcc + '</p>' + 
+                              '<p>' + expCat + '</p>' + 
+                              '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                            '</div>' +
                           '</div>' +
                         '</div>' +
-                      '</div>' +
-                    '</li>');
+                      '</li>');
+                    }
                   });
                 });
               }                
@@ -1442,6 +1458,10 @@
 
         delay()
           .then(function(v) { // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+            //remove existing chart before update
+            $("#myChart").remove();
+            $(".chart").append('<canvas id="myChart"></canvas>');
+
             //integrate chart.js
             var ctx = $("#myChart");
             var myChart = new Chart(ctx, {
