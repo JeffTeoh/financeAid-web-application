@@ -451,6 +451,173 @@
               });
             });
           }
+
+          //Update the total amount of income from database at navigation item
+          var totalIncomeRef = firebase.database().ref('incomeObj');
+          var totalIncomeObj;
+          var totalIncome = 0;
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          totalIncomeRef.on('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+              totalIncomeObj = childSnapshot.val();
+              //compare month of record with current selected month
+              var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+              var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+                totalIncome += incAmt;
+              }
+            });
+            document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+          });
+
+          //Update the total amount of expense from database at navigation item
+          var totalExpenseRef = firebase.database().ref('expenseObj');
+          var totalExpenseObj;
+          var totalExpense = 0;
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          totalExpenseRef.on('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+              totalExpenseObj = childSnapshot.val();
+              //compare month of record with current selected month
+              var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+              var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+                totalExpense += expAmt;
+              }
+            });
+            document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+          });
+
+          //update total amount for categories and assign to chart
+          var entTotal = 0;
+          var foodTotal = 0;
+          var vehTotal = 0;
+          function delay() {
+            var totalAmt = [];
+            // `delay` returns a promise
+            return new Promise(function(resolve, reject) {
+              // Only `delay` is able to resolve or reject the promise
+              var entRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
+              var entObj;
+              entRef.once("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  entObj = childSnapshot.val();
+                  var currentSelectedMonth = document.getElementById("monthPicker").value;
+                  //compare month of record with current selected month
+                  var firebaseMonth = entObj.expenseDate.substr(0, 2);
+                  var firebaseYear = entObj.expenseDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var entAmt = parseFloat(entObj.expenseAmount);
+                    entTotal += entAmt;
+                  }
+                });
+                totalAmt.push(entTotal);
+              });
+              var foodRef = firebase.database().ref('expenseCat/Foods and Drinks').orderByChild('expenseDate');
+              var foodObj;
+              foodRef.once("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  foodObj = childSnapshot.val();
+                  var currentSelectedMonth = document.getElementById("monthPicker").value;
+                  //compare month of record with current selected month
+                  var firebaseMonth = foodObj.expenseDate.substr(0, 2);
+                  var firebaseYear = foodObj.expenseDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var foodAmt = parseFloat(foodObj.expenseAmount);
+                    foodTotal += foodAmt;
+                  }
+                });
+                totalAmt.push(foodTotal);
+              });
+              var vehRef = firebase.database().ref('expenseCat/Vehicle').orderByChild('expenseDate');
+              var vehObj;
+              vehRef.once("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  vehObj = childSnapshot.val();
+                  var currentSelectedMonth = document.getElementById("monthPicker").value;
+                  //compare month of record with current selected month
+                  var firebaseMonth = vehObj.expenseDate.substr(0, 2);
+                  var firebaseYear = vehObj.expenseDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var vehAmt = parseFloat(vehObj.expenseAmount);
+                    vehTotal += vehAmt;
+                  }
+                });
+                totalAmt.push(vehTotal);
+                resolve(totalAmt);
+              }); 
+            });
+          }
+
+          delay()
+            .then(function(v) { // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+              //remove existing chart before update
+              $("#myChart").remove();
+              $(".chart").append('<canvas id="myChart"></canvas>');
+
+              //integrate chart.js
+              var ctx = $("#myChart");
+              var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                  labels: ["Entertainment", "Foods and Drinks", "Vehicle"],
+                  datasets: [{
+                    label: '# of Votes',
+                    data: [entTotal, foodTotal, vehTotal],
+                    backgroundColor: [
+                      'rgba(0, 0, 139, 0.2)',
+                      'rgba(178, 34, 34, 0.2)',
+                      'rgba(255, 255, 0, 0.2)'
+                    ],
+                    borderColor: [
+                      'rgba(0, 0, 139, 1)',
+                      'rgba(178, 34, 34, 1)',
+                      'rgba(255, 255, 0, 1)'
+                    ],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    xAxes: [{
+                      ticks: {
+                        display: false,
+                      },
+                      gridLines: {
+                        display: false,
+                        drawBorder: false,
+                      }
+                    }],
+                    yAxes: [{
+                      ticks: {
+                        display: false,
+                    },  
+                      gridLines: {
+                        display: false,
+                        drawBorder: false,
+                      }
+                    }]
+                  }
+                }
+              });
+            })
+            .catch(function(v) {
+              alert("Chart will not display if expense empty");
+            });
         } 
       });
 
@@ -607,7 +774,175 @@
             });
           });
         }
+
+        //Update the total amount of income from database at navigation item
+        var totalIncomeRef = firebase.database().ref('incomeObj');
+        var totalIncomeObj;
+        var totalIncome = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalIncomeRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalIncomeObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+            var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+              totalIncome += incAmt;
+            }
+          });
+          document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+        });
+
+        //Update the total amount of expense from database at navigation item
+        var totalExpenseRef = firebase.database().ref('expenseObj');
+        var totalExpenseObj;
+        var totalExpense = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalExpenseRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalExpenseObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+            var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+              totalExpense += expAmt;
+            }
+          });
+          document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+        });
+
+        //update total amount for categories and assign to chart
+        var entTotal = 0;
+        var foodTotal = 0;
+        var vehTotal = 0;
+        function delay() {
+          var totalAmt = [];
+          // `delay` returns a promise
+          return new Promise(function(resolve, reject) {
+            // Only `delay` is able to resolve or reject the promise
+            var entRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
+            var entObj;
+            entRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                entObj = childSnapshot.val();
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = entObj.expenseDate.substr(0, 2);
+                var firebaseYear = entObj.expenseDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var entAmt = parseFloat(entObj.expenseAmount);
+                  entTotal += entAmt;
+                }
+              });
+              totalAmt.push(entTotal);
+            });
+            var foodRef = firebase.database().ref('expenseCat/Foods and Drinks').orderByChild('expenseDate');
+            var foodObj;
+            foodRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                foodObj = childSnapshot.val();
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = foodObj.expenseDate.substr(0, 2);
+                var firebaseYear = foodObj.expenseDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var foodAmt = parseFloat(foodObj.expenseAmount);
+                  foodTotal += foodAmt;
+                }
+              });
+              totalAmt.push(foodTotal);
+            });
+            var vehRef = firebase.database().ref('expenseCat/Vehicle').orderByChild('expenseDate');
+            var vehObj;
+            vehRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                vehObj = childSnapshot.val();
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = vehObj.expenseDate.substr(0, 2);
+                var firebaseYear = vehObj.expenseDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var vehAmt = parseFloat(vehObj.expenseAmount);
+                  vehTotal += vehAmt;
+                }
+              });
+              totalAmt.push(vehTotal);
+              resolve(totalAmt);
+            }); 
+          });
+        }
+
+        delay()
+          .then(function(v) { // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+            //remove existing chart before update
+            $("#myChart").remove();
+            $(".chart").append('<canvas id="myChart"></canvas>');
+
+            //integrate chart.js
+            var ctx = $("#myChart");
+            var myChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                labels: ["Entertainment", "Foods and Drinks", "Vehicle"],
+                datasets: [{
+                  label: '# of Votes',
+                  data: [entTotal, foodTotal, vehTotal],
+                  backgroundColor: [
+                    'rgba(0, 0, 139, 0.2)',
+                    'rgba(178, 34, 34, 0.2)',
+                    'rgba(255, 255, 0, 0.2)'
+                  ],
+                  borderColor: [
+                    'rgba(0, 0, 139, 1)',
+                    'rgba(178, 34, 34, 1)',
+                    'rgba(255, 255, 0, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  xAxes: [{
+                    ticks: {
+                      display: false,
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false,
+                    }
+                  }],
+                  yAxes: [{
+                    ticks: {
+                      display: false,
+                  },  
+                    gridLines: {
+                      display: false,
+                      drawBorder: false,
+                    }
+                  }]
+                }
+              }
+            });
+          })
+          .catch(function(v) {
+            alert("Chart will not display if expense empty");
+          });
       });
+
       $("#nextMonth").click(function(){        
         document.getElementById("monthPicker").stepUp(1);
         var currentSelectedMonth = document.getElementById("monthPicker").value;
@@ -763,6 +1098,173 @@
             });
           });
         }
+
+        //Update the total amount of income from database at navigation item
+        var totalIncomeRef = firebase.database().ref('incomeObj');
+        var totalIncomeObj;
+        var totalIncome = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalIncomeRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalIncomeObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+            var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+              totalIncome += incAmt;
+            }
+          });
+          document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+        });
+
+        //Update the total amount of expense from database at navigation item
+        var totalExpenseRef = firebase.database().ref('expenseObj');
+        var totalExpenseObj;
+        var totalExpense = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalExpenseRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalExpenseObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+            var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+              totalExpense += expAmt;
+            }
+          });
+          document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+        });
+
+        //update total amount for categories and assign to chart
+        var entTotal = 0;
+        var foodTotal = 0;
+        var vehTotal = 0;
+        function delay() {
+          var totalAmt = [];
+          // `delay` returns a promise
+          return new Promise(function(resolve, reject) {
+            // Only `delay` is able to resolve or reject the promise
+            var entRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
+            var entObj;
+            entRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                entObj = childSnapshot.val();
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = entObj.expenseDate.substr(0, 2);
+                var firebaseYear = entObj.expenseDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var entAmt = parseFloat(entObj.expenseAmount);
+                  entTotal += entAmt;
+                }
+              });
+              totalAmt.push(entTotal);
+            });
+            var foodRef = firebase.database().ref('expenseCat/Foods and Drinks').orderByChild('expenseDate');
+            var foodObj;
+            foodRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                foodObj = childSnapshot.val();
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = foodObj.expenseDate.substr(0, 2);
+                var firebaseYear = foodObj.expenseDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var foodAmt = parseFloat(foodObj.expenseAmount);
+                  foodTotal += foodAmt;
+                }
+              });
+              totalAmt.push(foodTotal);
+            });
+            var vehRef = firebase.database().ref('expenseCat/Vehicle').orderByChild('expenseDate');
+            var vehObj;
+            vehRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                vehObj = childSnapshot.val();
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = vehObj.expenseDate.substr(0, 2);
+                var firebaseYear = vehObj.expenseDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var vehAmt = parseFloat(vehObj.expenseAmount);
+                  vehTotal += vehAmt;
+                }
+              });
+              totalAmt.push(vehTotal);
+              resolve(totalAmt);
+            }); 
+          });
+        }
+
+        delay()
+          .then(function(v) { // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+            //remove existing chart before update
+            $("#myChart").remove();
+            $(".chart").append('<canvas id="myChart"></canvas>');
+
+            //integrate chart.js
+            var ctx = $("#myChart");
+            var myChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                labels: ["Entertainment", "Foods and Drinks", "Vehicle"],
+                datasets: [{
+                  label: '# of Votes',
+                  data: [entTotal, foodTotal, vehTotal],
+                  backgroundColor: [
+                    'rgba(0, 0, 139, 0.2)',
+                    'rgba(178, 34, 34, 0.2)',
+                    'rgba(255, 255, 0, 0.2)'
+                  ],
+                  borderColor: [
+                    'rgba(0, 0, 139, 1)',
+                    'rgba(178, 34, 34, 1)',
+                    'rgba(255, 255, 0, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  xAxes: [{
+                    ticks: {
+                      display: false,
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false,
+                    }
+                  }],
+                  yAxes: [{
+                    ticks: {
+                      display: false,
+                  },  
+                    gridLines: {
+                      display: false,
+                      drawBorder: false,
+                    }
+                  }]
+                }
+              }
+            });
+          })
+          .catch(function(v) {
+            alert("Chart will not display if expense empty");
+          });
       });
       
       // Initialize Firebase
