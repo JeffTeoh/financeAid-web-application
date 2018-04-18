@@ -74,7 +74,7 @@
         </div>      
       
         <!-- Header -->
-        <div class="container py-md-2 pt-md-4">
+        <div class="container py-md-2">
           <div class="row">
             <div class="col-md-12 text-center">
               <p style="font-size:3rem; color: green;">Transfer</p>
@@ -83,15 +83,14 @@
         </div>
         
         <!-- Canva for doughnut chart -->
-        <div class="container chart py-md-2 pt-md-4">
+        <div class="container py-md-2">
           <div class="row">
             <div class="col-md-12 text-center chart">
               <canvas id="myChart"></canvas>
             </div>
           </div>
         </div>
-      </div>
-      
+      </div>      
 
       <!-- Content of right side bar -->
       <div class="sidebar-right" id="sidebar-right">
@@ -1282,12 +1281,12 @@
           });
       });
 
-      //read total amount for each type of transfer and assign to chart
+      //Initialise and read total amount for each type of transfer and assign to chart
       var bTcTotal = 0;
       var cTbTotal = 0;
       function delay() {
         var totalAmt = [];
-        // `delay` returns a promise
+        //`delay` returns a promise
         return new Promise(function(resolve, reject) {
           // Only `delay` is able to resolve or reject the promise
           var bTcRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
@@ -1295,8 +1294,16 @@
           bTcRef.once("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){
               bTcObj = childSnapshot.val();
-              var bTcAmt = parseFloat(bTcObj.transferAmount);
-              bTcTotal += bTcAmt;
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = bTcObj.transferDate.substr(0, 2);
+              var firebaseYear = bTcObj.transferDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var bTcAmt = parseFloat(bTcObj.transferAmount);
+                bTcTotal += bTcAmt;
+              }
             });
             totalAmt.push(bTcTotal);
           });
@@ -1305,8 +1312,16 @@
           cTbRef.once("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){
               cTbObj = childSnapshot.val();
-              var cTbAmt = parseFloat(cTbObj.transferAmount);
-              cTbTotal += cTbAmt;
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = bTcObj.transferDate.substr(0, 2);
+              var firebaseYear = bTcObj.transferDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var cTbAmt = parseFloat(cTbObj.transferAmount);
+                cTbTotal += cTbAmt;
+              }              
             });
             totalAmt.push(cTbTotal);
             resolve(totalAmt);
