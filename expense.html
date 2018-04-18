@@ -1020,28 +1020,44 @@
         }
       });
 
-      //Read the total amount of income from database
+      //Read the total amount of income from database at navigation item
       var totalIncomeRef = firebase.database().ref('incomeObj');
       var totalIncomeObj;
       var totalIncome = 0;
+      var currentSelectedMonth = document.getElementById("monthPicker").value;
       totalIncomeRef.on('value', function(snapshot){
         snapshot.forEach(function(childSnapshot){
           totalIncomeObj = childSnapshot.val();
-          var incAmt = parseFloat(totalIncomeObj.incomeAmount);
-          totalIncome += incAmt;
+          //compare month of record with current selected month
+          var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+          var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+          var validMonth = currentSelectedMonth.substr(-2);
+          var validYear = currentSelectedMonth.substr(0, 4);
+          if (firebaseMonth == validMonth && firebaseYear == validYear) {
+            var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+            totalIncome += incAmt;
+          }
         });
         document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
       });
 
-      //Read the total amount of expense from database
+      //Read the total amount of expense from database at navigation item
       var totalExpenseRef = firebase.database().ref('expenseObj');
       var totalExpenseObj;
       var totalExpense = 0;
+      var currentSelectedMonth = document.getElementById("monthPicker").value;
       totalExpenseRef.on('value', function(snapshot){
         snapshot.forEach(function(childSnapshot){
           totalExpenseObj = childSnapshot.val();
-          var expAmt = parseFloat(totalExpenseObj.expenseAmount);
-          totalExpense += expAmt;
+          //compare month of record with current selected month
+          var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+          var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+          var validMonth = currentSelectedMonth.substr(-2);
+          var validYear = currentSelectedMonth.substr(0, 4);
+          if (firebaseMonth == validMonth && firebaseYear == validYear) {
+            var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+            totalExpense += expAmt;
+          }
         });
         document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
       });
