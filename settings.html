@@ -50,88 +50,82 @@
       </nav>
 
       <!--content of page-->
-      <div class="content p-4">
+      <div class="content p-1">
         <!--Button to toggle side bar-->
         <ul id="toggle-group" class="p-0">
-            <li>
-              <a class="sidebar-toggle btn text-light"><i class="fa fa-bars" style="color:white;"></i>Menu</a>
-            </li>
-          </ul>
-          <!-- Header that include balance and setting of starting amount for accounts -->
-          <div class="container py-md-2 pt-md-4">
-            <div class="row">
-              <div class="col-md-2"></div>
-              <div class="col-md-4 card-item d-flex align-items-center justify-content-center" align="center">
-                <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#cashModal">
-                  <p>CASH</p>
-                  <p id="currentCashAmt"></p>
+          <li>
+            <a class="sidebar-toggle btn text-light"><i class="fa fa-bars" style="color:white;"></i>Menu</a>
+          </li>
+        </ul>
+        <!-- Header that include balance and setting of starting amount for accounts -->
+        <div class="container py-md-2 pt-md-4">
+          <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4 card-item d-flex align-items-center justify-content-center" align="center">
+              <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#cashModal">
+                <p>CASH</p>
+                <p id="currentCashAmt"></p>
+              </a>
+            </div>
+            <div class="col-md-1"></div>
+            <div class="col-md-4 card-item d-flex align-items-center justify-content-center" align="center">
+                <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#bankModal">
+                  <p>BANK</p>
+                  <p id="currentBankAmt"></p>
                 </a>
-              </div>
-              <div class="col-md-1"></div>
-              <div class="col-md-4 card-item d-flex align-items-center justify-content-center" align="center">
-                  <a href="#" class="py-4 px-5 bg-primary" data-toggle="modal" data-target="#bankModal">
-                    <p>BANK</p>
-                    <p id="currentBankAmt"></p>
-                  </a>
-              </div>
             </div>
           </div>
+        </div>
       
-          <!-- Modal for cash -->
-          <div id="cashModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cashModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="cashModalCenterTitle">Set starting amount of Cash</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="cashCloseBtn">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+        <!-- Modal for cash -->
+        <div id="cashModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cashModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="cashModalCenterTitle">Set starting amount of Cash</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="cashCloseBtn">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                <div class="form-group">
+                  <label for="startCash">RM *</label>
+                  <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash" maxlength="10">
                 </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="form-group">
-                      <label for="startCash">RM *</label>
-                      <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash" maxlength="10">
-                    </div>
-                  </form>
-                  <!--div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text" id="basic-addon1">RM</span>
-                    </div>
-                    <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash">
-                  </div-->
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="saveCash btn btn-primary" data-dismiss="modal">Save</button>
-                </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="saveCash btn btn-primary" data-dismiss="modal">Save</button>
               </div>
             </div>
           </div>
+        </div>
       
-          <!-- Modal for bank -->
-          <div id="bankModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bankModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="bankModalCenterTitle">Set starting amount of Bank</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bankCloseBtn">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+        <!-- Modal for bank -->
+        <div id="bankModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bankModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="bankModalCenterTitle">Set starting amount of Bank</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bankCloseBtn">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                <div class="form-group">
+                  <label for="startBank">RM *</label>
+                  <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank" maxlength="10">
                 </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="form-group">
-                      <label for="startBank">RM *</label>
-                      <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank" maxlength="10">
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="saveBank btn btn-primary" data-dismiss="modal">Save</button>
-                </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="saveBank btn btn-primary" data-dismiss="modal">Save</button>
               </div>
             </div>
           </div>
+        </div>
       </div>
     </div>
 

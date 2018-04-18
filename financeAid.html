@@ -75,22 +75,26 @@
         </div>
 
         <!-- Header that include balance and setting of starting amount for accounts -->
-        <div class="container py-md-2 pt-md-4">
-          <div class="row">
-            <div class="col-md-12 text-center">
-              <p style="font-size:3rem; color: green;">Balance</p>
-            </div>
-          </div>
-          <div class="row mt-5">
-              <div class="col-md-12 text-left">
+        <div class="container">
+          <div class="row mt-1">
+              <div class="col-md-12 text-left mt-1">
               <h4><mark id="dispCurrentBank"></mark> ARE LEFT TO SPENT IN BANK ACCOUNT</h4>
               <h5><mark id="avgBank"></mark> ARE LEFT PER DAY</h5>
             </div>  
           </div>
-          <div class="row mt-5">
+          <div class="row mt-1">
             <div class="col-md-12 text-left">
               <h4><mark id="dispCurrentCash"></mark> ARE LEFT TO SPENT IN CASH ACCOUNT</h4>              
               <h5><mark id="avgCash"></mark> ARE LEFT PER DAY</h5>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canva for bar chart -->
+        <div class="container py-md-2">
+          <div class="row">
+            <div class="col-md-12 text-center" id="chartContainer" style="height: 450px;">
+              <canvas id="myChart"></canvas>
             </div>
           </div>
         </div>
@@ -208,7 +212,9 @@
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
     <script src="jquery-ui-month-picker/demo/MonthPicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
     <script src="financeAid.js"></script>
     <script>
       //Initialise Datepicker
@@ -321,7 +327,8 @@
           //if not current year & month, enable next button
           if (monthObj.currentMonth == constCurrentMonth && monthObj.currentYear == constCurrentYear) {
             $("#nextMonth").addClass("disabled");
-          } else {
+          } 
+          else {
             $("#nextMonth").removeClass("disabled");
           }
 
@@ -359,7 +366,8 @@
                 }
               });
             });
-          } else {
+          } 
+          else {
             $('#expenseList li').remove();
             var expenseRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
             var expenseObj;
@@ -455,6 +463,142 @@
               });
             });
           }
+        
+          function delay() {
+            // `delay` returns a promise
+            return new Promise(function(resolve, reject) {
+              // Only `delay` is able to resolve or reject the promise
+              var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+              var expenseObj;
+              var labelArray = [];
+              var dailyTotal = 0;
+              var dailyTotalArray = [];
+              var resolveObj = {};
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              var arrayLength = moment(currentSelectedMonth).daysInMonth();
+              var i;
+              for (i = 0; i < arrayLength; ++i) {
+                labelArray[i] = i + 1;
+                dailyTotalArray[i] = 0;
+              }
+              expenseRef.on("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  expenseObj = childSnapshot.val();
+                  var expDate = expenseObj.expenseDate;
+                  var expAmt = parseFloat(expenseObj.expenseAmount);
+                  //compare month of record with current selected month
+                  var firebaseMonth = expDate.substr(0, 2);
+                  var firebaseYear = expDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var position = moment(expDate).format("D");
+                    dailyTotalArray[position - 1] += expAmt;
+                  }
+                });
+                resolveObj.labelArray = labelArray;
+                resolveObj.dailyTotalArray = dailyTotalArray;
+                resolve(resolveObj);
+              });
+            });
+          }
+
+          // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+          delay()
+          .then(function(v) {
+            //remove existing chart before update
+            $("#myChart").remove();
+            $("#chartContainer").append('<canvas id="myChart"></canvas>');
+
+            //integrate chart.js
+            var ctx = document.getElementById("myChart").getContext('2d');            
+            var labels = v.labelArray;
+            var data = v.dailyTotalArray;
+            var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: labels,
+                datasets: [{
+                  label: 'Total expense per day',
+                  data: data,
+                  backgroundColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(255, 99, 132, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                  display: false
+                },
+                tooltips: {
+                  callbacks: {
+                    label: function(tooltipItem) {
+                      return tooltipItem.yLabel;
+                    }
+                  }
+                },
+                scales: {
+                  xAxes: [{
+                    categoryPercentage: 1.0,
+                    barPercentage: 1.0,
+                    time: {
+                      unit: 'day'
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false,
+                    }
+                  }],
+                  yAxes: [{
+                    ticks: {
+                      display: false,
+                      beginAtZero:true
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false,
+                    }
+                  }]
+                }
+              }
+            });
+          })
+          .catch(function(v) {
+            alert("Chart will not display");
+          });
         } 
       });
 
@@ -612,7 +756,144 @@
             });
           });
         }
+      
+        function delay() {
+          // `delay` returns a promise
+          return new Promise(function(resolve, reject) {
+            // Only `delay` is able to resolve or reject the promise
+            var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+            var expenseObj;
+            var labelArray = [];
+            var dailyTotal = 0;
+            var dailyTotalArray = [];
+            var resolveObj = {};
+            var currentSelectedMonth = document.getElementById("monthPicker").value;
+            var arrayLength = moment(currentSelectedMonth).daysInMonth();
+            var i;
+            for (i = 0; i < arrayLength; ++i) {
+              labelArray[i] = i + 1;
+              dailyTotalArray[i] = 0;
+            }
+            expenseRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                expenseObj = childSnapshot.val();
+                var expDate = expenseObj.expenseDate;
+                var expAmt = parseFloat(expenseObj.expenseAmount);
+                //compare month of record with current selected month
+                var firebaseMonth = expDate.substr(0, 2);
+                var firebaseYear = expDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var position = moment(expDate).format("D");
+                  dailyTotalArray[position - 1] += expAmt;
+                }
+              });
+              resolveObj.labelArray = labelArray;
+              resolveObj.dailyTotalArray = dailyTotalArray;
+              resolve(resolveObj);
+            });
+          });
+        }
+
+        // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+        delay()
+        .then(function(v) {
+          //remove existing chart before update
+          $("#myChart").remove();
+          $("#chartContainer").append('<canvas id="myChart"></canvas>');
+
+          //integrate chart.js
+          var ctx = document.getElementById("myChart").getContext('2d');
+          var labels = v.labelArray;
+          var data = v.dailyTotalArray;
+          var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Total expense per day',
+                data: data,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              legend: {
+                display: false
+              },
+              tooltips: {
+                callbacks: {
+                label: function(tooltipItem) {
+                  return tooltipItem.yLabel;
+                }
+                }
+              },
+              scales: {
+                xAxes: [{
+                  categoryPercentage: 1.0,
+                  barPercentage: 1.0,
+                  time: {
+                    unit: 'day'
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    display: false,
+                    beginAtZero:true
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }]
+              }
+            }
+          });
+        })
+        .catch(function(v) {
+          alert("Chart will not display");
+        });
       });
+
       $("#nextMonth").click(function(){        
         document.getElementById("monthPicker").stepUp(1);
         var currentSelectedMonth = document.getElementById("monthPicker").value;
@@ -645,7 +926,6 @@
               var expAcc = expenseObj.expenseAccount;
               var expCat = expenseObj.expenseCategory;
               var expAmt = parseFloat(expenseObj.expenseAmount);
-              var currentSelectedMonth = document.getElementById("monthPicker").value;
               //compare month of record with current selected month
               var firebaseMonth = expDate.substr(0, 2);
               var firebaseYear = expDate.substr(-4);
@@ -680,7 +960,6 @@
               var expAcc = expenseObj.expenseAccount;
               var expCat = expenseObj.expenseCategory;
               var expAmt = parseFloat(expenseObj.expenseAmount);
-              var currentSelectedMonth = document.getElementById("monthPicker").value;
               //compare month of record with current selected month
               var firebaseMonth = expDate.substr(0, 2);
               var firebaseYear = expDate.substr(-4);
@@ -712,7 +991,6 @@
               var expAcc = expenseObj.expenseAccount;
               var expCat = expenseObj.expenseCategory;
               var expAmt = parseFloat(expenseObj.expenseAmount);
-              var currentSelectedMonth = document.getElementById("monthPicker").value;
               //compare month of record with current selected month
               var firebaseMonth = expDate.substr(0, 2);
               var firebaseYear = expDate.substr(-4);
@@ -744,7 +1022,6 @@
               var expAcc = expenseObj.expenseAccount;
               var expCat = expenseObj.expenseCategory;
               var expAmt = parseFloat(expenseObj.expenseAmount);
-              var currentSelectedMonth = document.getElementById("monthPicker").value;
               //compare month of record with current selected month
               var firebaseMonth = expDate.substr(0, 2);
               var firebaseYear = expDate.substr(-4);
@@ -768,6 +1045,142 @@
             });
           });
         }
+        
+        function delay() {
+          // `delay` returns a promise
+          return new Promise(function(resolve, reject) {
+            // Only `delay` is able to resolve or reject the promise
+            var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+            var expenseObj;
+            var labelArray = [];
+            var dailyTotal = 0;
+            var dailyTotalArray = [];
+            var resolveObj = {};
+            var currentSelectedMonth = document.getElementById("monthPicker").value;
+            var arrayLength = moment(currentSelectedMonth).daysInMonth();
+            var i;
+            for (i = 0; i < arrayLength; ++i) {
+              labelArray[i] = i + 1;
+              dailyTotalArray[i] = 0;
+            }
+            expenseRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                expenseObj = childSnapshot.val();
+                var expDate = expenseObj.expenseDate;
+                var expAmt = parseFloat(expenseObj.expenseAmount);
+                //compare month of record with current selected month
+                var firebaseMonth = expDate.substr(0, 2);
+                var firebaseYear = expDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var position = moment(expDate).format("D");
+                  dailyTotalArray[position - 1] += expAmt;
+                }
+              });
+              resolveObj.labelArray = labelArray;
+              resolveObj.dailyTotalArray = dailyTotalArray;
+              resolve(resolveObj);
+            });
+          });
+        }
+
+        // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+        delay()
+        .then(function(v) {
+          //remove existing chart before update
+          $("#myChart").remove();
+          $("#chartContainer").append('<canvas id="myChart"></canvas>');
+
+          //integrate chart.js
+          var ctx = document.getElementById("myChart").getContext('2d');
+          var labels = v.labelArray;
+          var data = v.dailyTotalArray;
+          var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Total expense per day',
+                data: data,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              legend: {
+                display: false
+              },
+              tooltips: {
+                callbacks: {
+                label: function(tooltipItem) {
+                  return tooltipItem.yLabel;
+                }
+                }
+              },
+              scales: {
+                xAxes: [{
+                  categoryPercentage: 1.0,
+                  barPercentage: 1.0,
+                  time: {
+                    unit: 'day'
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    display: false,
+                    beginAtZero:true
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }]
+              }
+            }
+          });
+        })
+        .catch(function(v) {
+          alert("Chart will not display");
+        });
       });
       
       // Initialize Firebase
@@ -1347,6 +1760,142 @@
           }
         }
 
+        function delay() {
+          // `delay` returns a promise
+          return new Promise(function(resolve, reject) {
+            // Only `delay` is able to resolve or reject the promise
+            var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+            var expenseObj;
+            var labelArray = [];
+            var dailyTotal = 0;
+            var dailyTotalArray = [];
+            var resolveObj = {};
+            var currentSelectedMonth = document.getElementById("monthPicker").value;
+            var arrayLength = moment(currentSelectedMonth).daysInMonth();
+            var i;
+            for (i = 0; i < arrayLength; ++i) {
+              labelArray[i] = i + 1;
+              dailyTotalArray[i] = 0;
+            }
+            expenseRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                expenseObj = childSnapshot.val();
+                var expDate = expenseObj.expenseDate;
+                var expAmt = parseFloat(expenseObj.expenseAmount);
+                //compare month of record with current selected month
+                var firebaseMonth = expDate.substr(0, 2);
+                var firebaseYear = expDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var position = moment(expDate).format("D");
+                  dailyTotalArray[position - 1] += expAmt;
+                }
+              });
+              resolveObj.labelArray = labelArray;
+              resolveObj.dailyTotalArray = dailyTotalArray;
+              resolve(resolveObj);
+            });
+          });
+        }
+
+        // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+        delay()
+        .then(function(v) {
+          //remove existing chart before update
+          $("#myChart").remove();
+          $("#chartContainer").append('<canvas id="myChart"></canvas>');
+
+          //integrate chart.js
+          var ctx = document.getElementById("myChart").getContext('2d');
+          var labels = v.labelArray;
+          var data = v.dailyTotalArray;
+          var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Total expense per day',
+                data: data,
+                backgroundColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(153, 102, 255, 1)',
+                  'rgba(255, 159, 64, 1)',
+                  'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              legend: {
+                display: false
+              },
+              tooltips: {
+                callbacks: {
+                label: function(tooltipItem) {
+                  return tooltipItem.yLabel;
+                }
+                }
+              },
+              scales: {
+                xAxes: [{
+                  categoryPercentage: 1.0,
+                  barPercentage: 1.0,
+                  time: {
+                    unit: 'day'
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    display: false,
+                    beginAtZero:true
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }]
+              }
+            }
+          });
+        })
+        .catch(function(v) {
+          alert("Chart will not display");
+        });
+
         //reset list for records
         $("#sumByDate").addClass('active');
         $("#sumByCat").removeClass('active');
@@ -1363,6 +1912,139 @@
         $("#trfTo-group").hide(1000);
       });
 
+      function delay() {
+        // `delay` returns a promise
+        return new Promise(function(resolve, reject) {
+          // Only `delay` is able to resolve or reject the promise
+          var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+          var expenseObj;
+          var labelArray = [];
+          var dailyTotal = 0;
+          var dailyTotalArray = [];
+          var resolveObj = {};
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          var arrayLength = moment(currentSelectedMonth).daysInMonth();
+          var i;
+          for (i = 0; i < arrayLength; ++i) {
+            labelArray[i] = i + 1;
+            dailyTotalArray[i] = 0;
+          }
+          expenseRef.on("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              expenseObj = childSnapshot.val();
+              var expDate = expenseObj.expenseDate;
+              var expAmt = parseFloat(expenseObj.expenseAmount);
+              //compare month of record with current selected month
+              var firebaseMonth = expDate.substr(0, 2);
+              var firebaseYear = expDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var position = moment(expDate).format("D");
+                dailyTotalArray[position - 1] += expAmt;
+              }
+            });
+            resolveObj.labelArray = labelArray;
+            resolveObj.dailyTotalArray = dailyTotalArray;
+            resolve(resolveObj);
+          });
+        });
+      }
+
+      // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+      delay()
+      .then(function(v) { 
+        //integrate chart.js
+        var ctx = document.getElementById("myChart").getContext('2d');
+        var labels = v.labelArray;
+        var data = v.dailyTotalArray;
+        var myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Total expense per day',
+              data: data,
+              backgroundColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 99, 132, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+              display: false
+            },
+            tooltips: {
+              callbacks: {
+                 label: function(tooltipItem) {
+                  return tooltipItem.yLabel;
+                 }
+              }
+            },
+            scales: {
+              xAxes: [{
+                categoryPercentage: 1.0,
+                barPercentage: 1.0,
+                time: {
+                  unit: 'day'
+                },
+                gridLines: {
+                  display: false,
+                  drawBorder: false,
+                }
+              }],
+              yAxes: [{
+                ticks: {
+                  display: false,
+                  beginAtZero:true
+                },
+                gridLines: {
+                  display: false,
+                  drawBorder: false,
+                }
+              }]
+            }
+          }
+        });
+      })
+      .catch(function(v) {
+        alert("Chart will not display");
+      });
+
+      
     </script>
   </body>
 </html>
