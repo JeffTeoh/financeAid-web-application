@@ -74,7 +74,7 @@
         </div>      
       
         <!-- Header -->
-        <div class="container py-md-2 pt-md-4">
+        <div class="container py-md-2">
           <div class="row">
             <div class="col-md-12 text-center">
               <p style="font-size:3rem; color: green;">Transfer</p>
@@ -83,15 +83,14 @@
         </div>
         
         <!-- Canva for doughnut chart -->
-        <div class="container chart py-md-2 pt-md-4">
+        <div class="container py-md-2">
           <div class="row">
             <div class="col-md-12 text-center chart">
               <canvas id="myChart"></canvas>
             </div>
           </div>
         </div>
-      </div>
-      
+      </div>      
 
       <!-- Content of right side bar -->
       <div class="sidebar-right" id="sidebar-right">
@@ -423,6 +422,153 @@
               });
             });
           }
+
+          //Update the total amount of income from database at navigation item
+          var totalIncomeRef = firebase.database().ref('incomeObj');
+          var totalIncomeObj;
+          var totalIncome = 0;
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          totalIncomeRef.on('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+              totalIncomeObj = childSnapshot.val();
+              //compare month of record with current selected month
+              var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+              var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+                totalIncome += incAmt;
+              }
+            });
+            document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+          });
+
+          //Update the total amount of expense from database at navigation item
+          var totalExpenseRef = firebase.database().ref('expenseObj');
+          var totalExpenseObj;
+          var totalExpense = 0;
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          totalExpenseRef.on('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+              totalExpenseObj = childSnapshot.val();
+              //compare month of record with current selected month
+              var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+              var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+                totalExpense += expAmt;
+              }
+            });
+            document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+          });
+
+          //update total amount for each type of transfer and assign to chart
+          var bTcTotal = 0;
+          var cTbTotal = 0;
+          function delay() {
+            var totalAmt = [];
+            // `delay` returns a promise
+            return new Promise(function(resolve, reject) {
+              // Only `delay` is able to resolve or reject the promise
+              var bTcRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+              var bTcObj;
+              bTcRef.once("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  bTcObj = childSnapshot.val();
+                  var currentSelectedMonth = document.getElementById("monthPicker").value;
+                  //compare month of record with current selected month
+                  var firebaseMonth = bTcObj.transferDate.substr(0, 2);
+                  var firebaseYear = bTcObj.transferDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var bTcAmt = parseFloat(bTcObj.transferAmount);
+                    bTcTotal += bTcAmt;
+                  }
+                });
+                totalAmt.push(bTcTotal);
+              });
+              var cTbRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+              var cTbObj;
+              cTbRef.once("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  cTbObj = childSnapshot.val();
+                  var currentSelectedMonth = document.getElementById("monthPicker").value;
+                  //compare month of record with current selected month
+                  var firebaseMonth = cTbObj.transferDate.substr(0, 2);
+                  var firebaseYear = cTbObj.transferDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var cTbAmt = parseFloat(cTbObj.transferAmount);
+                    cTbTotal += cTbAmt;
+                  }
+                });
+                totalAmt.push(cTbTotal);
+                resolve(totalAmt);
+              });
+            });
+          }
+
+          //`delay` returns a promise, 'v' is an array contain both bankToCashTotal and cashToBankTotal
+          delay()
+            .then(function(v) {
+              //remove existing chart before update
+              $("#myChart").remove();
+              $(".chart").append('<canvas id="myChart"></canvas>');
+
+              //integrate chart.js
+              var ctx = $("#myChart");
+              var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                  labels: ["Bank to Cash", "Cash to Bank"],
+                  datasets: [{
+                    label: '# of Votes',
+                    data: [bTcTotal, cTbTotal],
+                    backgroundColor: [
+                        'rgba(0, 0, 139, 0.2)',
+                        'rgba(178, 34, 34, 0.2)'
+                    ],
+                    borderColor: [
+                      'rgba(0, 0, 139, 1)',
+                      'rgba(178, 34, 34, 1)'
+                    ],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    xAxes: [{
+                      ticks: {
+                        display: false,
+                      },
+                      gridLines: {
+                        display: false,
+                        drawBorder: false,
+                      }
+                    }],
+                    yAxes: [{
+                      ticks: {
+                        display: false,
+                      },
+                      gridLines: {
+                        display: false,
+                        drawBorder: false,
+                      }
+                    }]
+                  }
+                }
+              }); 
+            })
+            .catch(function(v) {
+              alert("Chart will not display if income of Bank or Account empty");
+            });
         } 
       });
 
@@ -549,7 +695,155 @@
             });
           });
         }
+
+        //Update the total amount of income from database at navigation item
+        var totalIncomeRef = firebase.database().ref('incomeObj');
+          var totalIncomeObj;
+          var totalIncome = 0;
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          totalIncomeRef.on('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+              totalIncomeObj = childSnapshot.val();
+              //compare month of record with current selected month
+              var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+              var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+                totalIncome += incAmt;
+              }
+            });
+            document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+          });
+
+          //Update the total amount of expense from database at navigation item
+          var totalExpenseRef = firebase.database().ref('expenseObj');
+          var totalExpenseObj;
+          var totalExpense = 0;
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          totalExpenseRef.on('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+              totalExpenseObj = childSnapshot.val();
+              //compare month of record with current selected month
+              var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+              var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+                totalExpense += expAmt;
+              }
+            });
+            document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+          });
+
+          //update total amount for each type of transfer and assign to chart
+          var bTcTotal = 0;
+          var cTbTotal = 0;
+          function delay() {
+            var totalAmt = [];
+            // `delay` returns a promise
+            return new Promise(function(resolve, reject) {
+              // Only `delay` is able to resolve or reject the promise
+              var bTcRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+              var bTcObj;
+              bTcRef.once("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  bTcObj = childSnapshot.val();
+                  var currentSelectedMonth = document.getElementById("monthPicker").value;
+                  //compare month of record with current selected month
+                  var firebaseMonth = bTcObj.transferDate.substr(0, 2);
+                  var firebaseYear = bTcObj.transferDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var bTcAmt = parseFloat(bTcObj.transferAmount);
+                    bTcTotal += bTcAmt;
+                  }
+                });
+                totalAmt.push(bTcTotal);
+              });
+              var cTbRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+              var cTbObj;
+              cTbRef.once("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  cTbObj = childSnapshot.val();
+                  var currentSelectedMonth = document.getElementById("monthPicker").value;
+                  //compare month of record with current selected month
+                  var firebaseMonth = cTbObj.transferDate.substr(0, 2);
+                  var firebaseYear = cTbObj.transferDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var cTbAmt = parseFloat(cTbObj.transferAmount);
+                    cTbTotal += cTbAmt;
+                  }
+                });
+                totalAmt.push(cTbTotal);
+                resolve(totalAmt);
+              });
+            });
+          }
+
+          //`delay` returns a promise, 'v' is an array contain both bankToCashTotal and cashToBankTotal
+          delay()
+            .then(function(v) {
+              //remove existing chart before update
+              $("#myChart").remove();
+              $(".chart").append('<canvas id="myChart"></canvas>');
+
+              //integrate chart.js
+              var ctx = $("#myChart");
+              var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                  labels: ["Bank to Cash", "Cash to Bank"],
+                  datasets: [{
+                    label: '# of Votes',
+                    data: [bTcTotal, cTbTotal],
+                    backgroundColor: [
+                        'rgba(0, 0, 139, 0.2)',
+                        'rgba(178, 34, 34, 0.2)'
+                    ],
+                    borderColor: [
+                      'rgba(0, 0, 139, 1)',
+                      'rgba(178, 34, 34, 1)'
+                    ],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    xAxes: [{
+                      ticks: {
+                        display: false,
+                      },
+                      gridLines: {
+                        display: false,
+                        drawBorder: false,
+                      }
+                    }],
+                    yAxes: [{
+                      ticks: {
+                        display: false,
+                      },
+                      gridLines: {
+                        display: false,
+                        drawBorder: false,
+                      }
+                    }]
+                  }
+                }
+              }); 
+            })
+            .catch(function(v) {
+              alert("Chart will not display if income of Bank or Account empty");
+            });
       });
+      
       $("#nextMonth").click(function(){        
         document.getElementById("monthPicker").stepUp(1);
         var currentSelectedMonth = document.getElementById("monthPicker").value;
@@ -670,6 +964,153 @@
             });
           });
         }
+
+        //Update the total amount of income from database at navigation item
+        var totalIncomeRef = firebase.database().ref('incomeObj');
+          var totalIncomeObj;
+          var totalIncome = 0;
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          totalIncomeRef.on('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+              totalIncomeObj = childSnapshot.val();
+              //compare month of record with current selected month
+              var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+              var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+                totalIncome += incAmt;
+              }
+            });
+            document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+          });
+
+          //Update the total amount of expense from database at navigation item
+          var totalExpenseRef = firebase.database().ref('expenseObj');
+          var totalExpenseObj;
+          var totalExpense = 0;
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          totalExpenseRef.on('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+              totalExpenseObj = childSnapshot.val();
+              //compare month of record with current selected month
+              var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+              var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+                totalExpense += expAmt;
+              }
+            });
+            document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+          });
+
+          //update total amount for each type of transfer and assign to chart
+          var bTcTotal = 0;
+          var cTbTotal = 0;
+          function delay() {
+            var totalAmt = [];
+            // `delay` returns a promise
+            return new Promise(function(resolve, reject) {
+              // Only `delay` is able to resolve or reject the promise
+              var bTcRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+              var bTcObj;
+              bTcRef.once("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  bTcObj = childSnapshot.val();
+                  var currentSelectedMonth = document.getElementById("monthPicker").value;
+                  //compare month of record with current selected month
+                  var firebaseMonth = bTcObj.transferDate.substr(0, 2);
+                  var firebaseYear = bTcObj.transferDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var bTcAmt = parseFloat(bTcObj.transferAmount);
+                    bTcTotal += bTcAmt;
+                  }
+                });
+                totalAmt.push(bTcTotal);
+              });
+              var cTbRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+              var cTbObj;
+              cTbRef.once("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  cTbObj = childSnapshot.val();
+                  var currentSelectedMonth = document.getElementById("monthPicker").value;
+                  //compare month of record with current selected month
+                  var firebaseMonth = cTbObj.transferDate.substr(0, 2);
+                  var firebaseYear = cTbObj.transferDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var cTbAmt = parseFloat(cTbObj.transferAmount);
+                    cTbTotal += cTbAmt;
+                  }
+                });
+                totalAmt.push(cTbTotal);
+                resolve(totalAmt);
+              });
+            });
+          }
+
+          //`delay` returns a promise, 'v' is an array contain both bankToCashTotal and cashToBankTotal
+          delay()
+            .then(function(v) {
+              //remove existing chart before update
+              $("#myChart").remove();
+              $(".chart").append('<canvas id="myChart"></canvas>');
+
+              //integrate chart.js
+              var ctx = $("#myChart");
+              var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                  labels: ["Bank to Cash", "Cash to Bank"],
+                  datasets: [{
+                    label: '# of Votes',
+                    data: [bTcTotal, cTbTotal],
+                    backgroundColor: [
+                        'rgba(0, 0, 139, 0.2)',
+                        'rgba(178, 34, 34, 0.2)'
+                    ],
+                    borderColor: [
+                      'rgba(0, 0, 139, 1)',
+                      'rgba(178, 34, 34, 1)'
+                    ],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    xAxes: [{
+                      ticks: {
+                        display: false,
+                      },
+                      gridLines: {
+                        display: false,
+                        drawBorder: false,
+                      }
+                    }],
+                    yAxes: [{
+                      ticks: {
+                        display: false,
+                      },
+                      gridLines: {
+                        display: false,
+                        drawBorder: false,
+                      }
+                    }]
+                  }
+                }
+              }); 
+            })
+            .catch(function(v) {
+              alert("Chart will not display if income of Bank or Account empty");
+            });
       });
 
       // Initialize Firebase
@@ -892,28 +1333,44 @@
         }
       });
       
-      //Read the total amount of income from database
+      //Read the total amount of income from database at navigation item
       var totalIncomeRef = firebase.database().ref('incomeObj');
       var totalIncomeObj;
       var totalIncome = 0;
+      var currentSelectedMonth = document.getElementById("monthPicker").value;
       totalIncomeRef.on('value', function(snapshot){
         snapshot.forEach(function(childSnapshot){
           totalIncomeObj = childSnapshot.val();
-          var incAmt = parseFloat(totalIncomeObj.incomeAmount);
-          totalIncome += incAmt;
+          //compare month of record with current selected month
+          var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+          var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+          var validMonth = currentSelectedMonth.substr(-2);
+          var validYear = currentSelectedMonth.substr(0, 4);
+          if (firebaseMonth == validMonth && firebaseYear == validYear) {
+            var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+            totalIncome += incAmt;
+          };
         });
         document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
       });
 
-      //Read the total amount of expense from database
+      //Read the total amount of expense from database at navigation item
       var totalExpenseRef = firebase.database().ref('expenseObj');
       var totalExpenseObj;
       var totalExpense = 0;
+      var currentSelectedMonth = document.getElementById("monthPicker").value;
       totalExpenseRef.on('value', function(snapshot){
         snapshot.forEach(function(childSnapshot){
           totalExpenseObj = childSnapshot.val();
-          var expAmt = parseFloat(totalExpenseObj.expenseAmount);
-          totalExpense += expAmt;
+          //compare month of record with current selected month
+          var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+          var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+          var validMonth = currentSelectedMonth.substr(-2);
+          var validYear = currentSelectedMonth.substr(0, 4);
+          if (firebaseMonth == validMonth && firebaseYear == validYear) {
+            var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+            totalExpense += expAmt;
+          }
         });
         document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
       });
@@ -1108,19 +1565,27 @@
                     var trfFrom = transferObj.transferFrom;
                     var trfTo = transferObj.transferTo;
                     var trfAmt = parseFloat(transferObj.transferAmount);
-                    $('#transferList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                        '<div class="card-header">' + trfDate + '</div>' + 
-                        '<div class="card-body">' +
-                          '<div class="card-text">' + 
-                            '<p>' + trfFrom + '</p>' + 
-                            '<p>' + trfTo + '</p>' + 
-                            '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = trfDate.substr(0, 2);
+                    var firebaseYear = trfDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                      $('#transferList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                          '<div class="card-header">' + trfDate + '</div>' + 
+                          '<div class="card-body">' +
+                            '<div class="card-text">' + 
+                              '<p>' + trfFrom + '</p>' + 
+                              '<p>' + trfTo + '</p>' + 
+                              '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                            '</div>' +
                           '</div>' +
                         '</div>' +
-                      '</div>' +
-                    '</li>');
+                      '</li>');
+                    }
                   });
                 });
               }                        
@@ -1162,19 +1627,27 @@
                     var trfFrom = transferObj.transferFrom;
                     var trfTo = transferObj.transferTo;
                     var trfAmt = parseFloat(transferObj.transferAmount);
-                    $('#transferList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                        '<div class="card-header">' + trfDate + '</div>' + 
-                        '<div class="card-body">' +
-                          '<div class="card-text">' + 
-                            '<p>' + trfFrom + '</p>' + 
-                            '<p>' + trfTo + '</p>' + 
-                            '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = trfDate.substr(0, 2);
+                    var firebaseYear = trfDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                      $('#transferList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                          '<div class="card-header">' + trfDate + '</div>' + 
+                          '<div class="card-body">' +
+                            '<div class="card-text">' + 
+                              '<p>' + trfFrom + '</p>' + 
+                              '<p>' + trfTo + '</p>' + 
+                              '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                            '</div>' +
                           '</div>' +
                         '</div>' +
-                      '</div>' +
-                    '</li>');
+                      '</li>');
+                    }
                   });
                 });
               }
@@ -1197,6 +1670,48 @@
         $("#trfFrom-group").show(1000);          
         $("#trfTo-group").show(1000);
 
+        //Update the total amount of income from database at navigation item
+        var totalIncomeRef = firebase.database().ref('incomeObj');
+        var totalIncomeObj;
+        var totalIncome = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalIncomeRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalIncomeObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+            var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+              totalIncome += incAmt;
+            }
+          });
+          document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+        });
+
+        //Update the total amount of expense from database at navigation item
+        var totalExpenseRef = firebase.database().ref('expenseObj');
+        var totalExpenseObj;
+        var totalExpense = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalExpenseRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalExpenseObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+            var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+              totalExpense += expAmt;
+            }
+          });
+          document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+        });
+
         //update total amount for each type of transfer and assign to chart
         var bTcTotal = 0;
         var cTbTotal = 0;
@@ -1210,8 +1725,16 @@
             bTcRef.once("value", function(snapshot) {
               snapshot.forEach(function(childSnapshot){
                 bTcObj = childSnapshot.val();
-                var bTcAmt = parseFloat(bTcObj.transferAmount);
-                bTcTotal += bTcAmt;
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = bTcObj.transferDate.substr(0, 2);
+                var firebaseYear = bTcObj.transferDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var bTcAmt = parseFloat(bTcObj.transferAmount);
+                  bTcTotal += bTcAmt;
+                }
               });
               totalAmt.push(bTcTotal);
             });
@@ -1220,8 +1743,16 @@
             cTbRef.once("value", function(snapshot) {
               snapshot.forEach(function(childSnapshot){
                 cTbObj = childSnapshot.val();
-                var cTbAmt = parseFloat(cTbObj.transferAmount);
-                cTbTotal += cTbAmt;
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = cTbObj.transferDate.substr(0, 2);
+                var firebaseYear = cTbObj.transferDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var cTbAmt = parseFloat(cTbObj.transferAmount);
+                  cTbTotal += cTbAmt;
+                }
               });
               totalAmt.push(cTbTotal);
               resolve(totalAmt);
@@ -1229,8 +1760,13 @@
           });
         }
 
+        //`delay` returns a promise, 'v' is an array contain both bankToCashTotal and cashToBankTotal
         delay()
-          .then(function(v) { // `delay` returns a promise, 'v' is an array contain both bankToCashTotal and cashToBankTotal
+          .then(function(v) {
+            //remove existing chart before update
+            $("#myChart").remove();
+            $(".chart").append('<canvas id="myChart"></canvas>');
+
             //integrate chart.js
             var ctx = $("#myChart");
             var myChart = new Chart(ctx, {
@@ -1282,12 +1818,12 @@
           });
       });
 
-      //read total amount for each type of transfer and assign to chart
+      //Initialise and read total amount for each type of transfer and assign to chart
       var bTcTotal = 0;
       var cTbTotal = 0;
       function delay() {
         var totalAmt = [];
-        // `delay` returns a promise
+        //`delay` returns a promise
         return new Promise(function(resolve, reject) {
           // Only `delay` is able to resolve or reject the promise
           var bTcRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
@@ -1295,8 +1831,16 @@
           bTcRef.once("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){
               bTcObj = childSnapshot.val();
-              var bTcAmt = parseFloat(bTcObj.transferAmount);
-              bTcTotal += bTcAmt;
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = bTcObj.transferDate.substr(0, 2);
+              var firebaseYear = bTcObj.transferDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var bTcAmt = parseFloat(bTcObj.transferAmount);
+                bTcTotal += bTcAmt;
+              }
             });
             totalAmt.push(bTcTotal);
           });
@@ -1305,8 +1849,16 @@
           cTbRef.once("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){
               cTbObj = childSnapshot.val();
-              var cTbAmt = parseFloat(cTbObj.transferAmount);
-              cTbTotal += cTbAmt;
+              var currentSelectedMonth = document.getElementById("monthPicker").value;
+              //compare month of record with current selected month
+              var firebaseMonth = cTbObj.transferDate.substr(0, 2);
+              var firebaseYear = cTbObj.transferDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var cTbAmt = parseFloat(cTbObj.transferAmount);
+                cTbTotal += cTbAmt;
+              }
             });
             totalAmt.push(cTbTotal);
             resolve(totalAmt);
