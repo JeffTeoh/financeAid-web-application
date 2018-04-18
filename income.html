@@ -74,26 +74,26 @@
           <a class="sidebar-toggleright btn text-light float-right"><i class="fa fa-list-ul" style="color:white;"></i>Menu</a>     
         </div>       
           
-          <!-- Header -->
-          <div class="container py-md-2">
-            <div class="row">
-              <div class="col-md-12 text-center">
-                <p style="font-size:3rem; color: green;">Income</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Canva for doughnut chart -->
-          <div class="container py-md-2">
-            <div class="row">
-              <div class="col-md-12 text-center chart">
-                <canvas id="myChart"></canvas>
-              </div>
+        <!-- Header -->
+        <div class="container py-md-2">
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <p style="font-size:3rem; color: green;">Income</p>
             </div>
           </div>
         </div>
 
-        <!-- Content of right side bar -->
+        <!-- Canva for doughnut chart -->
+        <div class="container py-md-2">
+          <div class="row">
+            <div class="col-md-12 text-center chart">
+              <canvas id="myChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content of right side bar -->
       <div class="sidebar-right" id="sidebar-right">
         <div class="summary text-center mt-4 mx-0">
           <div class="btn-group btn-group-toggle" data-toggle="buttons">
@@ -1782,30 +1782,30 @@
               incomeBankObj = childSnapshot.val();
               //compare month of record with current selected month
               var firebaseMonth = incomeBankObj.incomeDate.substr(0, 2);
-                var firebaseYear = incomeBankObj.incomeDate.substr(-4);
-                var validMonth = currentSelectedMonth.substr(-2);
-                var validYear = currentSelectedMonth.substr(0, 4);
-                if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                  var incAmt = parseFloat(incomeBankObj.incomeAmount);
-                  bankTotal += incAmt;
-                }
-              });
-              totalAmt.push(bankTotal);
+              var firebaseYear = incomeBankObj.incomeDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var incAmt = parseFloat(incomeBankObj.incomeAmount);
+                bankTotal += incAmt;
+              }
             });
-            var incomeCashRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
-            var incomeCashObj;
-            incomeCashRef.once("value", function(snapshot) {
-              snapshot.forEach(function(childSnapshot){
-                incomeCashObj = childSnapshot.val();
-                //compare month of record with current selected month
-                var firebaseMonth = incomeCashObj.incomeDate.substr(0, 2);
-                var firebaseYear = incomeCashObj.incomeDate.substr(-4);
-                var validMonth = currentSelectedMonth.substr(-2);
-                var validYear = currentSelectedMonth.substr(0, 4);
-                if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                  var incAmt = parseFloat(incomeCashObj.incomeAmount);
-                  cashTotal += incAmt;
-                }
+            totalAmt.push(bankTotal);
+          });
+          var incomeCashRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+          var incomeCashObj;
+          incomeCashRef.once("value", function(snapshot) {
+            snapshot.forEach(function(childSnapshot){
+              incomeCashObj = childSnapshot.val();
+              //compare month of record with current selected month
+              var firebaseMonth = incomeCashObj.incomeDate.substr(0, 2);
+              var firebaseYear = incomeCashObj.incomeDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var incAmt = parseFloat(incomeCashObj.incomeAmount);
+                cashTotal += incAmt;
+              }
             });
             totalAmt.push(cashTotal);
             resolve(totalAmt);
