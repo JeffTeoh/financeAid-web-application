@@ -1244,6 +1244,7 @@
 
             //clear the input form after success alert
             alert("Your income added successfully!");
+            $('.datepicker').datepicker("setDate", new Date());
             document.getElementById("account").value = '';
             document.getElementById("amount").value = '';
           }
@@ -1275,6 +1276,7 @@
                         
               if (validTrfDiff < 0) {
                 alert("Your Bank account does not have sufficient money");
+                $('.datepicker').datepicker("setDate", new Date());
                 document.getElementById("transferFrom").value = '';
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
@@ -1291,6 +1293,7 @@
 
                 //clear the input form after success alert
                 alert("Your transfer added successfully!");
+                $('.datepicker').datepicker("setDate", new Date());
                 document.getElementById("transferFrom").value = '';
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
@@ -1302,6 +1305,7 @@
                         
               if (validTrfDiff < 0) {
                 alert("Your Cash account does not have sufficient money");
+                $('.datepicker').datepicker("setDate", new Date());
                 document.getElementById("transferFrom").value = '';
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
@@ -1318,6 +1322,7 @@
 
                 //clear the input form after success alert
                 alert("Your transfer added successfully!");
+                $('.datepicker').datepicker("setDate", new Date());
                 document.getElementById("transferFrom").value = '';
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
@@ -1325,6 +1330,48 @@
             }
           }
         }
+
+        //Update the total amount of income from database at navigation item
+        var totalIncomeRef = firebase.database().ref('incomeObj');
+        var totalIncomeObj;
+        var totalIncome = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalIncomeRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalIncomeObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+            var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+              totalIncome += incAmt;
+            }
+          });
+          document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+        });
+
+        //Update the total amount of expense from database at navigation item
+        var totalExpenseRef = firebase.database().ref('expenseObj');
+        var totalExpenseObj;
+        var totalExpense = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalExpenseRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalExpenseObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+            var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+              totalExpense += expAmt;
+            }
+          });
+          document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+        });
 
         //update total amount for categories and assign to chart
         var entTotal = 0;
@@ -1340,8 +1387,16 @@
             entRef.once("value", function(snapshot) {
               snapshot.forEach(function(childSnapshot){
                 entObj = childSnapshot.val();
-                var entAmt = parseFloat(entObj.expenseAmount);
-                entTotal += entAmt;
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = entObj.expenseDate.substr(0, 2);
+                var firebaseYear = entObj.expenseDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var entAmt = parseFloat(entObj.expenseAmount);
+                  entTotal += entAmt;
+                }
               });
               totalAmt.push(entTotal);
             });
@@ -1350,21 +1405,36 @@
             foodRef.once("value", function(snapshot) {
               snapshot.forEach(function(childSnapshot){
                 foodObj = childSnapshot.val();
-                var foodAmt = parseFloat(foodObj.expenseAmount);
-                foodTotal += foodAmt;
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = foodObj.expenseDate.substr(0, 2);
+                var firebaseYear = foodObj.expenseDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var foodAmt = parseFloat(foodObj.expenseAmount);
+                  foodTotal += foodAmt;
+                }
               });
               totalAmt.push(foodTotal);
-            }); 
+            });
             var vehRef = firebase.database().ref('expenseCat/Vehicle').orderByChild('expenseDate');
             var vehObj;
             vehRef.once("value", function(snapshot) {
               snapshot.forEach(function(childSnapshot){
                 vehObj = childSnapshot.val();
-                var vehAmt = parseFloat(vehObj.expenseAmount);
-                vehTotal += vehAmt;
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = vehObj.expenseDate.substr(0, 2);
+                var firebaseYear = vehObj.expenseDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var vehAmt = parseFloat(vehObj.expenseAmount);
+                  vehTotal += vehAmt;
+                }
               });
               totalAmt.push(vehTotal);
-              console.log(totalAmt);
               resolve(totalAmt);
             }); 
           });
@@ -1421,7 +1491,7 @@
             });
           })
           .catch(function(v) {
-            alert("Chart will not display if income of Bank or Account empty");
+            alert("Chart will not display if expense empty");
           }); 
 
         //reset list for records
@@ -1463,7 +1533,7 @@
               if (firebaseMonth == validMonth && firebaseYear == validYear) {
                 var entAmt = parseFloat(entObj.expenseAmount);
                 entTotal += entAmt;
-              }              
+              }
             });
             totalAmt.push(entTotal);
           });
@@ -1481,7 +1551,7 @@
               if (firebaseMonth == validMonth && firebaseYear == validYear) {
                 var foodAmt = parseFloat(foodObj.expenseAmount);
                 foodTotal += foodAmt;
-              }              
+              }
             });
             totalAmt.push(foodTotal);
           });
@@ -1499,7 +1569,7 @@
               if (firebaseMonth == validMonth && firebaseYear == validYear) {
                 var vehAmt = parseFloat(vehObj.expenseAmount);
                 vehTotal += vehAmt;
-              }              
+              }
             });
             totalAmt.push(vehTotal);
             resolve(totalAmt);
@@ -1558,7 +1628,7 @@
           });
         })
         .catch(function(v) {
-          alert("Chart will not display if income of Bank or Account empty");
+          alert("Chart will not display if expense empty");
         });
 
     </script>
