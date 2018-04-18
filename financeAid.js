@@ -33,11 +33,13 @@ $(document).ready(function(){
         $("#monthPicker").on('click', function(){
             $("#sidebar-right").css("display", "none");
         });
+        $("#chartContainer").css("height", "300px");
     }
     else {
         $("#sidebar").removeClass("toggled");
         $("#sidebar-right").css("display", "block");
         $(".middleicon").css("line-height", "1.2");
+        $("#chartContainer").css("height", "450px");
     }    
     
     //hide side bar while resize
@@ -46,7 +48,7 @@ $(document).ready(function(){
             $('.sidebar-toggleright').show();
             $("#sidebar").addClass("toggled");
             $("#sidebar-right").css("display", "none");
-            $(".chart").css("height", "500px");
+            $("#chartContainer").css("height", "300px");
             $(".nav-item").removeClass("float-left");
         }
         else {
@@ -54,6 +56,7 @@ $(document).ready(function(){
             $("#sidebar").removeClass("toggled");
             $("#sidebar-right").css("display", "block");
             $(".nav-item").addClass("float-left");
+            $("#chartContainer").css("height", "450px");
         }
     });
     
