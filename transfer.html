@@ -1123,19 +1123,27 @@
                     var trfFrom = transferObj.transferFrom;
                     var trfTo = transferObj.transferTo;
                     var trfAmt = parseFloat(transferObj.transferAmount);
-                    $('#transferList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                        '<div class="card-header">' + trfDate + '</div>' + 
-                        '<div class="card-body">' +
-                          '<div class="card-text">' + 
-                            '<p>' + trfFrom + '</p>' + 
-                            '<p>' + trfTo + '</p>' + 
-                            '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = trfDate.substr(0, 2);
+                    var firebaseYear = trfDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                      $('#transferList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                          '<div class="card-header">' + trfDate + '</div>' + 
+                          '<div class="card-body">' +
+                            '<div class="card-text">' + 
+                              '<p>' + trfFrom + '</p>' + 
+                              '<p>' + trfTo + '</p>' + 
+                              '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                            '</div>' +
                           '</div>' +
                         '</div>' +
-                      '</div>' +
-                    '</li>');
+                      '</li>');
+                    }
                   });
                 });
               }                        
@@ -1177,19 +1185,27 @@
                     var trfFrom = transferObj.transferFrom;
                     var trfTo = transferObj.transferTo;
                     var trfAmt = parseFloat(transferObj.transferAmount);
-                    $('#transferList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                        '<div class="card-header">' + trfDate + '</div>' + 
-                        '<div class="card-body">' +
-                          '<div class="card-text">' + 
-                            '<p>' + trfFrom + '</p>' + 
-                            '<p>' + trfTo + '</p>' + 
-                            '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = trfDate.substr(0, 2);
+                    var firebaseYear = trfDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                      $('#transferList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                          '<div class="card-header">' + trfDate + '</div>' + 
+                          '<div class="card-body">' +
+                            '<div class="card-text">' + 
+                              '<p>' + trfFrom + '</p>' + 
+                              '<p>' + trfTo + '</p>' + 
+                              '<p>' + "RM" + trfAmt.toFixed(2) + '</p>' +
+                            '</div>' +
                           '</div>' +
                         '</div>' +
-                      '</div>' +
-                    '</li>');
+                      '</li>');
+                    }
                   });
                 });
               }
