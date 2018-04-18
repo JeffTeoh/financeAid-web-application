@@ -48,6 +48,7 @@ $(document).ready(function(){
             $('.sidebar-toggleright').show();
             $("#sidebar").addClass("toggled");
             $("#sidebar-right").css("display", "none");
+            $(".chart").css("height", "500px");
             $("#chartContainer").css("height", "300px");
             $(".nav-item").removeClass("float-left");
         }

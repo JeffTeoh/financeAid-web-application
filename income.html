@@ -422,6 +422,151 @@
               });
             });
           }
+
+          //Update the total amount of income from database at navigation item
+          var totalIncomeRef = firebase.database().ref('incomeObj');
+          var totalIncomeObj;
+          var totalIncome = 0;
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          totalIncomeRef.on('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+              totalIncomeObj = childSnapshot.val();
+              //compare month of record with current selected month
+              var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+              var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+                totalIncome += incAmt;
+              }
+            });
+            document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+          });
+
+          //Update the total amount of expense from database at navigation item
+          var totalExpenseRef = firebase.database().ref('expenseObj');
+          var totalExpenseObj;
+          var totalExpense = 0;
+          var currentSelectedMonth = document.getElementById("monthPicker").value;
+          totalExpenseRef.on('value', function(snapshot){
+            snapshot.forEach(function(childSnapshot){
+              totalExpenseObj = childSnapshot.val();
+              //compare month of record with current selected month
+              var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+              var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+              var validMonth = currentSelectedMonth.substr(-2);
+              var validYear = currentSelectedMonth.substr(0, 4);
+              if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+                totalExpense += expAmt;
+              }
+            });
+            document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+          });
+
+          //update total amount for both Bank and Cash and assign to chart
+          var bankTotal = 0;
+          var cashTotal = 0;
+          function delay() {
+            var totalAmt = [];
+            // `delay` returns a promise
+            return new Promise(function(resolve, reject) {
+              // Only `delay` is able to resolve or reject the promise
+              var incomeBankRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
+              var incomeBankObj;
+              incomeBankRef.once("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  incomeBankObj = childSnapshot.val();
+                  //compare month of record with current selected month
+                  var firebaseMonth = incomeBankObj.incomeDate.substr(0, 2);
+                  var firebaseYear = incomeBankObj.incomeDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var incAmt = parseFloat(incomeBankObj.incomeAmount);
+                    bankTotal += incAmt;
+                  }
+                });
+                totalAmt.push(bankTotal);
+              });
+              var incomeCashRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+              var incomeCashObj;
+              incomeCashRef.once("value", function(snapshot) {
+                snapshot.forEach(function(childSnapshot){
+                  incomeCashObj = childSnapshot.val();
+                  //compare month of record with current selected month
+                  var firebaseMonth = incomeCashObj.incomeDate.substr(0, 2);
+                  var firebaseYear = incomeCashObj.incomeDate.substr(-4);
+                  var validMonth = currentSelectedMonth.substr(-2);
+                  var validYear = currentSelectedMonth.substr(0, 4);
+                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                    var incAmt = parseFloat(incomeCashObj.incomeAmount);
+                    cashTotal += incAmt;
+                  }
+                });
+                totalAmt.push(cashTotal);
+                resolve(totalAmt);
+              });
+            });
+          }
+
+          // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+          delay()
+            .then(function(v) {
+              //remove existing chart before update
+              $("#myChart").remove();
+              $(".chart").append('<canvas id="myChart"></canvas>');
+
+              //integrate chart.js
+              var ctx = $("#myChart");
+              var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                  labels: ["Bank", "Cash"],
+                  datasets: [{
+                    label: '# of Votes',
+                    data: [bankTotal, cashTotal],
+                    backgroundColor: [
+                      'rgba(0, 0, 139, 0.2)',
+                      'rgba(178, 34, 34, 0.2)'
+                    ],
+                    borderColor: [
+                      'rgba(0, 0, 139, 1)',
+                      'rgba(178, 34, 34, 1)'
+                    ],
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  scales: {
+                    xAxes: [{
+                      ticks: {
+                        display: false,
+                      },
+                      gridLines: {
+                        display: false,
+                        drawBorder: false,
+                      }
+                    }],
+                    yAxes: [{
+                      ticks: {
+                        display: false,
+                      },
+                      gridLines: {
+                        display: false,
+                        drawBorder: false,
+                      }
+                    }]
+                  }
+                }
+              });
+            })
+            .catch(function(v) {
+              alert("Chart will not display if income of Bank or Account empty");
+            });
         }
       });
 
@@ -545,7 +690,153 @@
             });
           });
         }
+
+        //Update the total amount of income from database at navigation item
+        var totalIncomeRef = firebase.database().ref('incomeObj');
+        var totalIncomeObj;
+        var totalIncome = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalIncomeRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalIncomeObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+            var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+              totalIncome += incAmt;
+            }
+          });
+          document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+        });
+
+        //Update the total amount of expense from database at navigation item
+        var totalExpenseRef = firebase.database().ref('expenseObj');
+        var totalExpenseObj;
+        var totalExpense = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalExpenseRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalExpenseObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+            var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+              totalExpense += expAmt;
+            }
+          });
+          document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+        });
+
+        //update total amount for both Bank and Cash and assign to chart
+        var bankTotal = 0;
+        var cashTotal = 0;
+        function delay() {
+          var totalAmt = [];
+          // `delay` returns a promise
+          return new Promise(function(resolve, reject) {
+            // Only `delay` is able to resolve or reject the promise
+            var incomeBankRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
+            var incomeBankObj;
+            incomeBankRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeBankObj = childSnapshot.val();
+                //compare month of record with current selected month
+                var firebaseMonth = incomeBankObj.incomeDate.substr(0, 2);
+                var firebaseYear = incomeBankObj.incomeDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var incAmt = parseFloat(incomeBankObj.incomeAmount);
+                  bankTotal += incAmt;
+                }
+              });
+              totalAmt.push(bankTotal);
+            });
+            var incomeCashRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+            var incomeCashObj;
+            incomeCashRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeCashObj = childSnapshot.val();
+                //compare month of record with current selected month
+                var firebaseMonth = incomeCashObj.incomeDate.substr(0, 2);
+                var firebaseYear = incomeCashObj.incomeDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var incAmt = parseFloat(incomeCashObj.incomeAmount);
+                  cashTotal += incAmt;
+                }
+              });
+              totalAmt.push(cashTotal);
+              resolve(totalAmt);
+            });
+          });
+        }
+
+        // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+        delay()
+          .then(function(v) {
+            //remove existing chart before update
+            $("#myChart").remove();
+            $(".chart").append('<canvas id="myChart"></canvas>');
+
+            //integrate chart.js
+            var ctx = $("#myChart");
+            var myChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                labels: ["Bank", "Cash"],
+                datasets: [{
+                  label: '# of Votes',
+                  data: [bankTotal, cashTotal],
+                  backgroundColor: [
+                    'rgba(0, 0, 139, 0.2)',
+                    'rgba(178, 34, 34, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(0, 0, 139, 1)',
+                  'rgba(178, 34, 34, 1)'
+                ],
+                borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                xAxes: [{
+                  ticks: {
+                    display: false,
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    display: false,
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }]
+                }
+              }
+            });
+          })
+          .catch(function(v) {
+            alert("Chart will not display if income of Bank or Account empty");
+          });
       });
+
       $("#nextMonth").click(function(){        
         document.getElementById("monthPicker").stepUp(1);
         var currentSelectedMonth = document.getElementById("monthPicker").value;
@@ -663,6 +954,151 @@
             });
           });
         }
+        
+        //Update the total amount of income from database at navigation item
+        var totalIncomeRef = firebase.database().ref('incomeObj');
+        var totalIncomeObj;
+        var totalIncome = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalIncomeRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalIncomeObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+            var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+              totalIncome += incAmt;
+            }
+          });
+          document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+        });
+
+        //Update the total amount of expense from database at navigation item
+        var totalExpenseRef = firebase.database().ref('expenseObj');
+        var totalExpenseObj;
+        var totalExpense = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalExpenseRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalExpenseObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+            var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+              totalExpense += expAmt;
+            }
+          });
+          document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+        });
+
+        //update total amount for both Bank and Cash and assign to chart
+        var bankTotal = 0;
+        var cashTotal = 0;
+        function delay() {
+          var totalAmt = [];
+          // `delay` returns a promise
+          return new Promise(function(resolve, reject) {
+            // Only `delay` is able to resolve or reject the promise
+            var incomeBankRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
+            var incomeBankObj;
+            incomeBankRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeBankObj = childSnapshot.val();
+                //compare month of record with current selected month
+                var firebaseMonth = incomeBankObj.incomeDate.substr(0, 2);
+                var firebaseYear = incomeBankObj.incomeDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var incAmt = parseFloat(incomeBankObj.incomeAmount);
+                  bankTotal += incAmt;
+                }
+              });
+              totalAmt.push(bankTotal);
+            });
+            var incomeCashRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+            var incomeCashObj;
+            incomeCashRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeCashObj = childSnapshot.val();
+                //compare month of record with current selected month
+                var firebaseMonth = incomeCashObj.incomeDate.substr(0, 2);
+                var firebaseYear = incomeCashObj.incomeDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var incAmt = parseFloat(incomeCashObj.incomeAmount);
+                  cashTotal += incAmt;
+                }
+              });
+              totalAmt.push(cashTotal);
+              resolve(totalAmt);
+            });
+          });
+        }
+
+        // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+        delay()
+          .then(function(v) {
+            //remove existing chart before update
+            $("#myChart").remove();
+            $(".chart").append('<canvas id="myChart"></canvas>');
+
+            //integrate chart.js
+            var ctx = $("#myChart");
+            var myChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                labels: ["Bank", "Cash"],
+                datasets: [{
+                  label: '# of Votes',
+                  data: [bankTotal, cashTotal],
+                  backgroundColor: [
+                    'rgba(0, 0, 139, 0.2)',
+                    'rgba(178, 34, 34, 0.2)'
+                ],
+                borderColor: [
+                  'rgba(0, 0, 139, 1)',
+                  'rgba(178, 34, 34, 1)'
+                ],
+                borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                xAxes: [{
+                  ticks: {
+                    display: false,
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    display: false,
+                  },
+                  gridLines: {
+                    display: false,
+                    drawBorder: false,
+                  }
+                }]
+                }
+              }
+            });
+          })
+          .catch(function(v) {
+            alert("Chart will not display if income of Bank or Account empty");
+          });
       });
       
       //Initialize Firebase
@@ -881,28 +1317,44 @@
         }
       });
 
-      //Read the total amount of income from database
+      //Read the total amount of income from database at navigation item
       var totalIncomeRef = firebase.database().ref('incomeObj');
       var totalIncomeObj;
       var totalIncome = 0;
+      var currentSelectedMonth = document.getElementById("monthPicker").value;
       totalIncomeRef.on('value', function(snapshot){
         snapshot.forEach(function(childSnapshot){
           totalIncomeObj = childSnapshot.val();
-          var incAmt = parseFloat(totalIncomeObj.incomeAmount);
-          totalIncome += incAmt;
+          //compare month of record with current selected month
+          var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+          var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+          var validMonth = currentSelectedMonth.substr(-2);
+          var validYear = currentSelectedMonth.substr(0, 4);
+          if (firebaseMonth == validMonth && firebaseYear == validYear) {
+            var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+            totalIncome += incAmt;
+          }
         });
         document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
       });
 
-      //Read the total amount of expense from database
+      //Read the total amount of expense from database at navigation item
       var totalExpenseRef = firebase.database().ref('expenseObj');
       var totalExpenseObj;
       var totalExpense = 0;
+      var currentSelectedMonth = document.getElementById("monthPicker").value;
       totalExpenseRef.on('value', function(snapshot){
         snapshot.forEach(function(childSnapshot){
           totalExpenseObj = childSnapshot.val();
-          var expAmt = parseFloat(totalExpenseObj.expenseAmount);
-          totalExpense += expAmt;
+          //compare month of record with current selected month
+          var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+          var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+          var validMonth = currentSelectedMonth.substr(-2);
+          var validYear = currentSelectedMonth.substr(0, 4);
+          if (firebaseMonth == validMonth && firebaseYear == validYear) {
+            var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+            totalExpense += expAmt;
+          }
         });
         document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
       });
@@ -1035,6 +1487,7 @@
 
             //clear the input form after success alert
             alert("Your income added successfully!");
+            $('.datepicker').datepicker("setDate", new Date());
             document.getElementById("account").value = '';
             document.getElementById("amount").value = '';            
             $('#incomeList li').remove();
@@ -1043,24 +1496,32 @@
             var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
             var incomeObj;
             incomeRef.on("value", function(snapshot) {
-                snapshot.forEach(function(childSnapshot){
-                    incomeObj = childSnapshot.val();
-                    var incDate = incomeObj.incomeDate;
-                    var incAcc = incomeObj.incomeAccount;
-                    var incAmt = parseFloat(incomeObj.incomeAmount);
-                    $('#incomeList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                        '<div class="card-header">' + incDate + '</div>' + 
-                        '<div class="card-body">' +
-                          '<div class="card-text">' + 
-                            '<p>' + incAcc + '</p>' +
-                            '<p>' + "RM" +  incAmt.toFixed(2) + '</p>' +
-                          '</div>' +
+              snapshot.forEach(function(childSnapshot){
+                incomeObj = childSnapshot.val();
+                var incDate = incomeObj.incomeDate;
+                var incAcc = incomeObj.incomeAccount;
+                var incAmt = parseFloat(incomeObj.incomeAmount);
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = incDate.substr(0, 2);
+                var firebaseYear = incDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  $('#incomeList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + incDate + '</div>' + 
+                      '<div class="card-body">' +
+                        '<div class="card-text">' + 
+                          '<p>' + incAcc + '</p>' +
+                          '<p>' + "RM" +  incAmt.toFixed(2) + '</p>' +
                         '</div>' +
                       '</div>' +
-                    '</li>');
-                });
+                    '</div>' +
+                  '</li>');
+                }
+              });
             });
           }
         } else if (currentSelectedFeature == "trf") {
@@ -1106,7 +1567,8 @@
                 firebase.database().ref().child('currentCashAmt').update(currentCashObj);
 
                 //clear the input form after success alert
-                alert("Your transfer added successfully!");
+                alert("Your transfer added successfully!");                
+                $('.datepicker').datepicker("setDate", new Date());
                 document.getElementById("transferFrom").value = '';
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
@@ -1133,7 +1595,8 @@
                 firebase.database().ref().child('currentCashAmt').update(currentCashObj);
 
                 //clear the input form after success alert
-                alert("Your transfer added successfully!");
+                alert("Your transfer added successfully!");                
+                $('.datepicker').datepicker("setDate", new Date());
                 document.getElementById("transferFrom").value = '';
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
@@ -1142,96 +1605,158 @@
           }
         }
 
-      //update total amount for both Bank and Cash and assign to chart
-      var bankTotal = 0;
-      var cashTotal = 0;
-      function delay() {
-        var totalAmt = [];
-        // `delay` returns a promise
-        return new Promise(function(resolve, reject) {
-          // Only `delay` is able to resolve or reject the promise
-          var incomeBankRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
-          var incomeBankObj;
-          incomeBankRef.once("value", function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              incomeBankObj = childSnapshot.val();
-              var incAmt = parseFloat(incomeBankObj.incomeAmount);
-              bankTotal += incAmt;
-            });
-            totalAmt.push(bankTotal);
-          });
-          var incomeCashRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
-          var incomeCashObj;
-          incomeCashRef.once("value", function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              incomeCashObj = childSnapshot.val();
-              var incAmt = parseFloat(incomeCashObj.incomeAmount);
-              cashTotal += incAmt;
-            });
-            totalAmt.push(cashTotal);
-            resolve(totalAmt);
-          });
-        });
-      }
-
-      delay()
-        .then(function(v) { // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
-          //integrate chart.js
-          var ctx = $("#myChart");
-          var myChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-              labels: ["Bank", "Cash"],
-              datasets: [{
-                label: '# of Votes',
-                data: [bankTotal, cashTotal],
-                backgroundColor: [
-                    'rgba(0, 0, 139, 0.2)',
-                    'rgba(178, 34, 34, 0.2)'
-                ],
-                borderColor: [
-                  'rgba(0, 0, 139, 1)',
-                  'rgba(178, 34, 34, 1)'
-                ],
-                borderWidth: 1
-              }]
-            },
-            options: {
-              responsive: true,
-              maintainAspectRatio: false,
-              scales: {
-                xAxes: [{
-                  ticks: {
-                    display: false,
-                  },
-                  gridLines: {
-                    display: false,
-                    drawBorder: false,
-                  }
-                }],
-                yAxes: [{
-                  ticks: {
-                    display: false,
-                  },
-                  gridLines: {
-                    display: false,
-                    drawBorder: false,
-                  }
-                }]
-              }
+        //Update the total amount of income from database at navigation item
+        var totalIncomeRef = firebase.database().ref('incomeObj');
+        var totalIncomeObj;
+        var totalIncome = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalIncomeRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalIncomeObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+            var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+              totalIncome += incAmt;
             }
           });
-        })
-        .catch(function(v) {
-          alert("Chart will not display if income of Bank or Account empty");
+          document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
         });
+
+        //Update the total amount of expense from database at navigation item
+        var totalExpenseRef = firebase.database().ref('expenseObj');
+        var totalExpenseObj;
+        var totalExpense = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalExpenseRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalExpenseObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalExpenseObj.expenseDate.substr(0, 2);
+            var firebaseYear = totalExpenseObj.expenseDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var expAmt = parseFloat(totalExpenseObj.expenseAmount);
+              totalExpense += expAmt;
+            }
+          });
+          document.getElementById("totalExpense").innerHTML = "RM" + totalExpense.toFixed(2);
+        });
+
+        //update total amount for both Bank and Cash and assign to chart
+        var bankTotal = 0;
+        var cashTotal = 0;
+        function delay() {
+          var totalAmt = [];
+          // `delay` returns a promise
+          return new Promise(function(resolve, reject) {
+            // Only `delay` is able to resolve or reject the promise
+            var incomeBankRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
+            var incomeBankObj;
+            incomeBankRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeBankObj = childSnapshot.val();
+                //compare month of record with current selected month
+                var firebaseMonth = incomeBankObj.incomeDate.substr(0, 2);
+                var firebaseYear = incomeBankObj.incomeDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var incAmt = parseFloat(incomeBankObj.incomeAmount);
+                  bankTotal += incAmt;
+                }
+              });
+              totalAmt.push(bankTotal);
+            });
+            var incomeCashRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+            var incomeCashObj;
+            incomeCashRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeCashObj = childSnapshot.val();
+                //compare month of record with current selected month
+                var firebaseMonth = incomeCashObj.incomeDate.substr(0, 2);
+                var firebaseYear = incomeCashObj.incomeDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var incAmt = parseFloat(incomeCashObj.incomeAmount);
+                  cashTotal += incAmt;
+                }
+              });
+              totalAmt.push(cashTotal);
+              resolve(totalAmt);
+            });
+          });
+        }
+
+        // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+        delay()
+          .then(function(v) {
+            //remove existing chart before update
+            $("#myChart").remove();
+            $(".chart").append('<canvas id="myChart"></canvas>');
+
+            //integrate chart.js
+            var ctx = $("#myChart");
+            var myChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                labels: ["Bank", "Cash"],
+                datasets: [{
+                  label: '# of Votes',
+                  data: [bankTotal, cashTotal],
+                  backgroundColor: [
+                      'rgba(0, 0, 139, 0.2)',
+                      'rgba(178, 34, 34, 0.2)'
+                  ],
+                  borderColor: [
+                    'rgba(0, 0, 139, 1)',
+                    'rgba(178, 34, 34, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                  xAxes: [{
+                    ticks: {
+                      display: false,
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false,
+                    }
+                  }],
+                  yAxes: [{
+                    ticks: {
+                      display: false,
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false,
+                    }
+                  }]
+                }
+              }
+            });
+          })
+          .catch(function(v) {
+            alert("Chart will not display if income of Bank or Account empty");
+          });
 
         //reset list for records
         $("#sumByDate").addClass('active');
         $("#sumByCat").removeClass('active');
 
         //reset modal dialog input area
-        $("#selectFeature").prop('selectedIndex', 1);
+        $("#selectFeature").prop('selectedIndex', 1);        
+        $('.datepicker').datepicker("setDate", new Date());
         document.getElementById("amount").value = '';
         document.getElementById("account").value = '';
         document.getElementById("category").value = '';
@@ -1242,7 +1767,7 @@
         $("#trfTo-group").hide(1000);
       });
 
-      //read total amount for both Bank and Cash and assign to chart
+      //initalise and read total amount for both Bank and Cash and assign to chart
       var bankTotal = 0;
       var cashTotal = 0;
       function delay() {
@@ -1255,18 +1780,32 @@
           incomeBankRef.once("value", function(snapshot) {
             snapshot.forEach(function(childSnapshot){
               incomeBankObj = childSnapshot.val();
-              var incAmt = parseFloat(incomeBankObj.incomeAmount);
-              bankTotal += incAmt;
+              //compare month of record with current selected month
+              var firebaseMonth = incomeBankObj.incomeDate.substr(0, 2);
+                var firebaseYear = incomeBankObj.incomeDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var incAmt = parseFloat(incomeBankObj.incomeAmount);
+                  bankTotal += incAmt;
+                }
+              });
+              totalAmt.push(bankTotal);
             });
-            totalAmt.push(bankTotal);
-          });
-          var incomeCashRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
-          var incomeCashObj;
-          incomeCashRef.once("value", function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              incomeCashObj = childSnapshot.val();
-              var incAmt = parseFloat(incomeCashObj.incomeAmount);
-              cashTotal += incAmt;
+            var incomeCashRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+            var incomeCashObj;
+            incomeCashRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeCashObj = childSnapshot.val();
+                //compare month of record with current selected month
+                var firebaseMonth = incomeCashObj.incomeDate.substr(0, 2);
+                var firebaseYear = incomeCashObj.incomeDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var incAmt = parseFloat(incomeCashObj.incomeAmount);
+                  cashTotal += incAmt;
+                }
             });
             totalAmt.push(cashTotal);
             resolve(totalAmt);
