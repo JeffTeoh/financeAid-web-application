@@ -1415,29 +1415,57 @@
           var validMonth = currentSelectedMonth.substr(-2);
           var validYear = currentSelectedMonth.substr(0, 4);
           if (firebaseMonth == validMonth && firebaseYear == validYear) {
+            //fetch day of date for position in array
+            var position = moment(expDate).format("MMM DD");
+            //check if no empty array and records with same date, add into array and then object
+            if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
+              dayArray = [];
+              dayArray.push(expenseObj);
+              cardObj[position] = dayArray;
+            }
+            //initialise and add to card object if any single records in one day
+            else {
+              dayArray.push(expenseObj);
+              cardObj[position] = dayArray;
+            }
+          }
+        });
+        //print out object for card items
+        for (var key in cardObj) {
+          if (cardObj.hasOwnProperty(key)) {
+            var cardHeaderDate = key;
+            var recordList = cardObj[key];
+            var cardText = '';
+            var x; //counter
+
+            for (x = 0; x < recordList.length; x++){
+              var cardTextAmt = parseFloat(recordList[x].expenseAmount);
+              cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
+                          '<p>' + recordList[x].expenseCategory + '</p>' + 
+                          '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+            }
+            console.log(cardText);
+
             $('#expenseList').append(
             '<li class="list-group-item nopadding">' + 
               '<div class="card">' + 
                 '<div class="card-header">' + 
-                  '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block">' + 
-                    expDate + 
+                  '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                    cardHeaderDate + 
                   '</a>' + 
                 '</div>' + 
                 '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
                   '<div class="card-body">' +
                     '<div class="card-text">' + 
-                      '<p>' + expAcc + '</p>' + 
-                      '<p>' + expCat + '</p>' + 
-                      '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                      cardText +
                     '</div>' +
                   '</div>' +
                 '</div>' + 
               '</div>' +
             '</li>');
-
             i += 1;
           }
-        });
+        }
       });
 
       //display expense records with filter
