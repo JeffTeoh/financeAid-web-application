@@ -410,8 +410,8 @@
             $('#expenseList li').remove();
             var expenseRef = firebase.database().ref('expenseCat/Entertainment').orderByChild('expenseDate');
             var expenseObj;
-            var cardObj = {};
-            var dayArray = [];
+            var cardEntObj = {};
+            var dayEntArray = [];
             //index for each card item
             var i = 1;
             expenseRef.on("value", function(snapshot) {
@@ -430,23 +430,23 @@
                   //fetch category for position in array
                   var position = expCat;
                   //check if no empty array and records with same date, add into array and then object
-                  if (dayArray.length != 0 && dayArray[0].expenseCategory != expenseObj.expenseCategory) {
-                    dayArray = [];
-                    dayArray.push(expenseObj);
-                    cardObj[position] = dayArray;
+                  if (dayEntArray.length != 0 && dayEntArray[0].expenseCategory != expenseObj.expenseCategory) {
+                    dayEntArray = [];
+                    dayEntArray.push(expenseObj);
+                    cardEntObj[position] = dayEntArray;
                   }
                   //initialise and add to card object if any single records in one day
                   else {
-                    dayArray.push(expenseObj);
-                    cardObj[position] = dayArray;
+                    dayEntArray.push(expenseObj);
+                    cardEntObj[position] = dayEntArray;
                   }
                 }
               });
               //print out object for card items
-              for (var key in cardObj) {
-                if (cardObj.hasOwnProperty(key)) {
+              for (var key in cardEntObj) {
+                if (cardEntObj.hasOwnProperty(key)) {
                   var cardHeaderCat = key;
-                  var recordList = cardObj[key];
+                  var recordList = cardEntObj[key];
                   var cardText = '';
                   var x; //counter
 
@@ -479,8 +479,8 @@
             });
             var expenseRef = firebase.database().ref('expenseCat/Foods and Drinks').orderByChild('expenseDate');
             var expenseObj;
-            var cardObj = {};
-            var dayArray = [];
+            var cardFoodObj = {};
+            var dayFoodArray = [];
             //index for each card item
             var i = 2;
             expenseRef.on("value", function(snapshot) {
@@ -499,23 +499,23 @@
                   //fetch category for position in array
                   var position = expCat;
                   //check if no empty array and records with same date, add into array and then object
-                  if (dayArray.length != 0 && dayArray[0].expenseCategory != expenseObj.expenseCategory) {
-                    dayArray = [];
-                    dayArray.push(expenseObj);
-                    cardObj[position] = dayArray;
+                  if (dayFoodArray.length != 0 && dayFoodArray[0].expenseCategory != expenseObj.expenseCategory) {
+                    dayFoodArray = [];
+                    dayFoodArray.push(expenseObj);
+                    cardFoodObj[position] = dayFoodArray;
                   }
                   //initialise and add to card object if any single records in one day
                   else {
-                    dayArray.push(expenseObj);
-                    cardObj[position] = dayArray;
+                    dayFoodArray.push(expenseObj);
+                    cardFoodObj[position] = dayFoodArray;
                   }
                 }
               });
               //print out object for card items
-              for (var key in cardObj) {
-                if (cardObj.hasOwnProperty(key)) {
+              for (var key in cardFoodObj) {
+                if (cardFoodObj.hasOwnProperty(key)) {
                   var cardHeaderCat = key;
-                  var recordList = cardObj[key];
+                  var recordList = cardFoodObj[key];
                   var cardText = '';
                   var x; //counter
 
@@ -548,8 +548,8 @@
             });
             var expenseRef = firebase.database().ref('expenseCat/Vehicle').orderByChild('expenseDate');
             var expenseObj;
-            var cardObj = {};
-            var dayArray = [];
+            var cardVehObj = {};
+            var dayVehArray = [];
             //index for each card item
             var i = 3;
             expenseRef.on("value", function(snapshot) {
@@ -568,23 +568,23 @@
                   //fetch category for position in array
                   var position = expCat;
                   //check if no empty array and records with same date, add into array and then object
-                  if (dayArray.length != 0 && dayArray[0].expenseCategory != expenseObj.expenseCategory) {
-                    dayArray = [];
-                    dayArray.push(expenseObj);
-                    cardObj[position] = dayArray;
+                  if (dayVehArray.length != 0 && dayVehArray[0].expenseCategory != expenseObj.expenseCategory) {
+                    dayVehArray = [];
+                    dayVehArray.push(expenseObj);
+                    cardVehObj[position] = dayVehArray;
                   }
                   //initialise and add to card object if any single records in one day
                   else {
-                    dayArray.push(expenseObj);
-                    cardObj[position] = dayArray;
+                    dayVehArray.push(expenseObj);
+                    cardVehObj[position] = dayVehArray;
                   }
                 }
               });
               //print out object for card items
-              for (var key in cardObj) {
-                if (cardObj.hasOwnProperty(key)) {
+              for (var key in cardVehObj) {
+                if (cardVehObj.hasOwnProperty(key)) {
                   var cardHeaderCat = key;
-                  var recordList = cardObj[key];
+                  var recordList = cardVehObj[key];
                   var cardText = '';
                   var x; //counter
 
