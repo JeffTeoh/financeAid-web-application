@@ -1397,6 +1397,10 @@
       //output list of data when loading the page and only appear if there are available data
       var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
       var expenseObj;
+      var cardObj = {};
+      var dayArray = [];
+      //index for each card item
+      var i = 1;
       expenseRef.on("value", function(snapshot) {
         snapshot.forEach(function(childSnapshot){
           expenseObj = childSnapshot.val();
@@ -1414,16 +1418,24 @@
             $('#expenseList').append(
             '<li class="list-group-item nopadding">' + 
               '<div class="card">' + 
-                '<div class="card-header">' + expDate + '</div>' + 
-                '<div class="card-body">' +
-                  '<div class="card-text">' + 
-                    '<p>' + expAcc + '</p>' + 
-                    '<p>' + expCat + '</p>' + 
-                    '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                '<div class="card-header">' + 
+                  '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block">' + 
+                    expDate + 
+                  '</a>' + 
+                '</div>' + 
+                '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                  '<div class="card-body">' +
+                    '<div class="card-text">' + 
+                      '<p>' + expAcc + '</p>' + 
+                      '<p>' + expCat + '</p>' + 
+                      '<p>' + "RM" + expAmt.toFixed(2) + '</p>' +
+                    '</div>' +
                   '</div>' +
-                '</div>' +
+                '</div>' + 
               '</div>' +
             '</li>');
+
+            i += 1;
           }
         });
       });
