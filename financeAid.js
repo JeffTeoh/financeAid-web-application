@@ -60,5 +60,9 @@ $(document).ready(function(){
             $("#chartContainer").css("height", "450px");
         }
     });
+
+    $("#filter").on('click', function(){
+        $("#filter-menu").slideToggle('fast');
+    });
     
 });

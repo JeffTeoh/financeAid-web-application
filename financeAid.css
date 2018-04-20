@@ -20,6 +20,7 @@
     }
 
     .sidebar-right {
+        width: 100vw;
         position: absolute;
         top: 6rem;
         right: 0;
@@ -27,7 +28,7 @@
     }
 
     .scroll-area {
-        height: 86%;        
+        height: 80%;        
         overflow: scroll;
     }
 
@@ -45,14 +46,16 @@
     }
 
     .sidebar-right {
+        width: 50vw;
         position: absolute;
+        overflow: auto;
         top: 6rem;
         right: 0;
         bottom: 6rem;
     }
 
     .scroll-area {
-        height: 86%;        
+        height: 80%;        
         overflow: scroll;
     }
 
@@ -88,7 +91,7 @@
     }
 
     .scroll-area {
-        height: 86%;
+        height: 80%;
         overflow: scroll;
         overflow-x: hidden;
     }
@@ -109,6 +112,7 @@
 
 body {
     background: #f2f1e6;
+    width: 100%;
 }
 
 /*basic UI*/
@@ -338,4 +342,26 @@ select {
 
 .chart {
     height: 500px;
+}
+
+#filter-bar {
+    position: relative;
+}
+
+#filter:hover {
+    background: #d3d3d3;
+}
+
+#filter-menu {
+    height: 94.3vh;
+    width: 100%;
+    display: block;
+    position: absolute;
+    background: #e6e5da;
+    z-index: 5;
+}
+
+.header-link {
+    text-decoration: none;
+    color: #4c4c4c;
 }

@@ -102,6 +102,42 @@
 
       <!-- Content of right side bar -->
       <div class="sidebar-right" id="sidebar-right">
+        <div id="filter-bar">
+          <div class="d-flex px-2 justify-content-center">
+            <a href="#" id="filter" class="text-center py-2" style="color: #4c4c4c; text-decoration: none; width: 70%">
+              <i class="fa fa-filter"></i>
+              <span>Filter</span>
+            </a>
+          </div>
+          <div id="filter-menu">
+            <p class="d-block text-center mb-3" style="color: #918f8f;">Filter the data to display in lists</p>
+            <div class="card mx-3">
+              <div class="card-header">
+                <a data-toggle="collapse" href="#collapse-account" aria-expanded="true" aria-controls="collapse-account" id="heading-account" class="d-block header-link">
+                  Expense Account
+                </a>
+              </div>
+              <div id="collapse-account" class="collapse show" aria-labelledby="heading-account">
+                <div class="card-body">
+                  
+                </div>
+              </div>
+            </div>
+            <div class="card mx-3">
+              <div class="card-header">
+                <a data-toggle="collapse" href="#collapse-category" aria-expanded="true" aria-controls="collapse-category" id="heading-category" class="d-block header-link">
+                  Expense Category
+                </a>
+              </div>
+              <div id="collapse-category" class="collapse show" aria-labelledby="heading-category">
+                <div class="card-body">
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
         <div class="scroll-area">
           <div class="summary mt-4 mx-0">
             <div class="btn-group btn-group-toggle" data-toggle="buttons">
