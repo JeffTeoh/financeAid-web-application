@@ -24,6 +24,10 @@
         top: 6rem;
         right: 0;
         bottom: 6rem;
+    }
+
+    .scroll-area {
+        height: 86%;        
         overflow: scroll;
     }
 
@@ -45,6 +49,10 @@
         top: 6rem;
         right: 0;
         bottom: 6rem;
+    }
+
+    .scroll-area {
+        height: 86%;        
         overflow: scroll;
     }
 
@@ -77,7 +85,12 @@
     .sidebar-right {
         width: 51rem;
         height: 100vh;
+    }
+
+    .scroll-area {
+        height: 86%;
         overflow: scroll;
+        overflow-x: hidden;
     }
 
     #addRecordBtn {

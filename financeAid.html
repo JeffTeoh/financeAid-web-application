@@ -102,24 +102,26 @@
 
       <!-- Content of right side bar -->
       <div class="sidebar-right" id="sidebar-right">
-        <div class="summary mt-4 mx-0">
-          <div class="btn-group btn-group-toggle" data-toggle="buttons">
-            <button class="btn btn-secondary active" id="sumByDate">
-              <input type="radio" name="options" id="option1" autocomplete="off" checked>
-                <i class="fa fa-calendar-alt"></i>
-                <span>By date</span>                
-            </button>
-            <button class="btn btn-secondary" id="sumByCat">
-              <input type="radio" name="options" id="option2" autocomplete="off">
-                <i class="fa fa-tag"></i>
-                <span>By category</span>                
-            </button>
+        <div class="scroll-area">
+          <div class="summary mt-4 mx-0">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <button class="btn btn-secondary active" id="sumByDate">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked>
+                  <i class="fa fa-calendar-alt"></i>
+                  <span>By date</span>                
+              </button>
+              <button class="btn btn-secondary" id="sumByCat">
+                <input type="radio" name="options" id="option2" autocomplete="off">
+                  <i class="fa fa-tag"></i>
+                  <span>By category</span>                
+              </button>
+            </div>
           </div>
-        </div>
 
-        <ul class="list-group" id="expenseList">
-          <!--Insert from database-->                           
-        </ul>
+          <ul class="list-group" id="expenseList">
+            <!--Insert from database-->                           
+          </ul>
+        </div>
       </div>
       
 
