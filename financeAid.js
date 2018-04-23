@@ -34,6 +34,7 @@ $(document).ready(function(){
             $("#sidebar-right").css("display", "none");
         });
         $("#chartContainer").css("height", "300px");
+        $("#categories-btn-group").css("overflow", "scroll");
     }
     else {
         $("#sidebar").removeClass("toggled");
@@ -51,6 +52,7 @@ $(document).ready(function(){
             $(".chart").css("height", "500px");
             $("#chartContainer").css("height", "300px");
             $(".nav-item").removeClass("float-left");
+            $("#categories-btn-group").css("overflow", "scroll");
         }
         else {
             $('.sidebar-toggleright').hide();
@@ -66,6 +68,8 @@ $(document).ready(function(){
             if($("#filter-menu").is(":hidden")) {
                 $("#filter").css("color", "#4c4c4c");
                 $("#filter").css("background", "transparent");
+
+                //perform filter function
             }
             else {
                 $("#filter").css("color", "white");
@@ -76,17 +80,108 @@ $(document).ready(function(){
 
     $("#allCat").on('click', function(){
         $("#selectClass").css('display', 'none');
-        $("#excludeClass").css('display', 'none');
+        $("#filterEnt").remove(":contains('Entertainment')");
+        $("#filterFood").remove(":contains('Foods and Drinks')");
+        $("#filterVeh").remove(":contains('Vehicle')");
+        $("#filter-condition").append("<span id='default-filter'>Filter</span>");
+
+        //reset filter div
+        $("#selectedEnt").remove(":contains('Entertainment')");
+        $("#selectedFood").remove(":contains('Foods and Drinks')");
+        $("#selectedVeh").remove(":contains('Vehicle')");     
     });
 
     $("#selectCat").on('click', function(){
         $("#selectClass").css('display', 'block');
-        $("#excludeClass").css('display', 'none');
     });
     
-    $("#excludeCat").on('click', function(){
-        $("#selectClass").css('display', 'none');
-        $("#excludeClass").css('display', 'block');
+    $("#selectEnt").on('click', function(){
+        if ($("#selectedCategory").is(":contains('Entertainment')")) {
+            $("#selectedEnt").remove(":contains('Entertainment')");
+            $("#filterEnt").remove(":contains('Entertainment')");
+            if($("#filter-condition").is(":empty")) {
+                $("#filter-condition").append("<span id='default-filter'>Filter</span>");
+            }
+            else {
+                $("#filter-condition span").first().html(function(i, old){
+                    return old.replace(', ', '');
+                });
+            }
+        }
+        else {
+            if ($("#filter-condition > span").length > 1) {
+                alert ("Please select All category");
+            }
+            else {
+                $("#selectedCategory").append('<div id="selectedEnt" class="d-inline-block p-1 mr-1" style="background: #2d991f; color: white;">Entertainment</div>');
+                if ($("#filter-condition").is(":contains('Filter')")) {
+                    $("#default-filter").remove(":contains('Filter')");
+                    $("#filter-condition").append("<span id='filterEnt'>Entertainment</span>");
+                }
+                else {
+                    $("#filter-condition").append("<span id='filterEnt'>, Entertainment</span>");
+                }
+            }            
+        }
     });
     
+    $("#selectFood").on('click', function(){
+        if ($("#selectedCategory").is(":contains('Foods and Drinks')")) {
+            $("#selectedFood").remove(":contains('Foods and Drinks')");
+            $("#filterFood").remove(":contains('Foods and Drinks')");
+            if($("#filter-condition").is(":empty")) {
+                $("#filter-condition").append("<span id='default-filter'>Filter</span>");
+            }
+            else {
+                $("#filter-condition span").first().html(function(i, old){
+                    return old.replace(', ', '');
+                });
+            }
+        }
+        else {
+            if ($("#filter-condition > span").length > 1) {
+                alert ("Please select All category");
+            }
+            else {
+                $("#selectedCategory").append('<div id="selectedFood" class="d-inline-block p-1 mr-1" style="background: #2d991f; color: white;">Foods and Drinks</div>');
+                if ($("#filter-condition").is(":contains('Filter')")) {
+                    $("#default-filter").remove(":contains('Filter')");
+                    $("#filter-condition").append("<span id='filterFood'>Foods and Drinks</span>");
+                }
+                else {
+                    $("#filter-condition").append("<span id='filterFood'>, Foods and Drinks</span>");
+                }
+            }
+        }
+    });
+    
+    $("#selectVeh").on('click', function(){
+        if ($("#selectedCategory").is(":contains('Vehicle')")) {
+            $("#selectedVeh").remove(":contains('Vehicle')");
+            $("#filterVeh").remove(":contains('Vehicle')");
+            if($("#filter-condition").is(":empty")) {
+                $("#filter-condition").append("<span id='default-filter'>Filter</span>");
+            }
+            else {
+                $("#filter-condition span").first().html(function(i, old){
+                    return old.replace(', ', '');
+                });
+            }
+        }
+        else {
+            if ($("#filter-condition > span").length > 1) {
+                alert ("Please select All category");
+            }
+            else {
+                $("#selectedCategory").append('<div id="selectedVeh" class="d-inline-block p-1 mr-1" style="background: #2d991f; color: white;">Vehicle</div>');
+                if ($("#filter-condition").is(":contains('Filter')")) {
+                    $("#default-filter").remove(":contains('Filter')");
+                    $("#filter-condition").append("<span id='filterVeh'>Vehicle</span>");
+                }
+                else {
+                    $("#filter-condition").append("<span id='filterVeh'>, Vehicle</span>");
+                }
+            }
+        }
+    });
 });

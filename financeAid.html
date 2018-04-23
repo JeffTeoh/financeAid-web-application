@@ -106,7 +106,7 @@
           <div class="d-flex px-2 justify-content-center">
             <a href="#" id="filter" class="text-center py-2" style="color: #4c4c4c; text-decoration: none; width: 70%">
               <i class="fa fa-filter"></i>
-              <span id="">Filter</span>
+              <div id="filter-condition" class="d-inline" style="overflow: hidden"><span id="default-filter">Filter</span></div>
             </a>
           </div>
           <div id="filter-menu">
@@ -151,27 +151,15 @@
                     </button>
                     <button class="btn btn-secondary px-1 w-100" id="selectCat">
                       <input type="radio" name="options" autocomplete="off">
-                        <span style="white-space: pre-wrap;">Select Categories</span>
-                    </button>
-                    <button class="btn btn-secondary px-1 w-100" id="excludeCat">
-                      <input type="radio" name="options" autocomplete="off">
-                        <span style="white-space: pre-wrap;">Exclude Categories</span>
+                        <span>Select Categories</span>
                     </button>
                   </div>
                   <div id="selectClass" class="mt-2" style="display: none;">
-                    <input class="w-100" readonly>
-                    <div class="d-flex mt-1 m-0">
-                      <button type="button" class="btn rounded-0 w-100 mr-1" style="background: #2d991f; color: white;">Entertainment</button>
-                      <button type="button" class="btn rounded-0 w-100 mr-1" style="background: #2d991f; color: white;">Foods and Drinks</button>
-                      <button type="button" class="btn rounded-0 w-100" style="background: #2d991f; color: white;">Vehicle</button>
-                    </div>
-                  </div>
-                  <div id="excludeClass" class="mt-2" style="display: none;">
-                    <input class="w-100" readonly>
-                    <div class="d-flex mt-1 m-0">
-                      <button type="button" class="btn rounded-0 w-100 mr-1" style="background: #991f52; color: white;">Entertainment</button>
-                      <button type="button" class="btn rounded-0 w-100 mr-1" style="background: #991f52; color: white;">Foods and Drinks</button>
-                      <button type="button" class="btn rounded-0 w-100" style="background: #991f52; color: white;">Vehicle</button>
+                    <div class="w-100 border border-dark" id="selectedCategory" style="height: 2.1rem"></div>
+                    <div class="d-flex mt-1 m-0" id="categories-btn-group">
+                      <button type="button" id="selectEnt" class="btn rounded-0 w-100 mr-1" style="background: #2d991f; color: white;">Entertainment</button>
+                      <button type="button" id="selectFood" class="btn rounded-0 w-100 mr-1" style="background: #2d991f; color: white;">Foods and Drinks</button>
+                      <button type="button" id="selectVeh" class="btn rounded-0 w-100" style="background: #2d991f; color: white;">Vehicle</button>
                     </div>
                   </div>
                 </div>
