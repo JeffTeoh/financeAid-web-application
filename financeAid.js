@@ -69,6 +69,15 @@ $(document).ready(function(){
                 $("#filter").css("color", "#4c4c4c");
                 $("#filter").css("background", "transparent");
 
+                if ($("#filter-condition").is(":contains('Filter')")) {
+                    $("#defaultView").css("display", "block");
+                    $("#filterApplied").attr("style", "display: none !important;");
+                }
+                else {
+                    $("#defaultView").css("display", "none");
+                    $("#filterApplied").css("display", "block");
+                }
+
                 //perform filter function
             }
             else {
@@ -83,6 +92,7 @@ $(document).ready(function(){
         $("#filterEnt").remove(":contains('Entertainment')");
         $("#filterFood").remove(":contains('Foods and Drinks')");
         $("#filterVeh").remove(":contains('Vehicle')");
+        $("#filter-condition span").remove();
         $("#filter-condition").append("<span id='default-filter'>Filter</span>");
 
         //reset filter div

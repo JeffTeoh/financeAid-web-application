@@ -74,28 +74,36 @@
           <a class="sidebar-toggleright btn text-light float-right"><i class="fa fa-list-ul" style="color:white;"></i>Menu</a>     
         </div>
 
-        <!-- Header that include balance and setting of starting amount for accounts -->
-        <div class="container">
-          <div class="row mt-1">
-              <div class="col-md-12 text-left mt-1">
-              <h4><mark id="dispCurrentBank"></mark> ARE LEFT TO SPENT IN BANK ACCOUNT</h4>
-              <h5><mark id="avgBank"></mark> ARE LEFT PER DAY</h5>
-            </div>  
+        <div id="defaultView">
+          <!-- Header that include balance and setting of starting amount for accounts -->
+          <div class="container">
+            <div class="row mt-1">
+                <div class="col-md-12 text-left mt-1">
+                <h4><mark id="dispCurrentBank"></mark> ARE LEFT TO SPENT IN BANK ACCOUNT</h4>
+                <h5><mark id="avgBank"></mark> ARE LEFT PER DAY</h5>
+              </div>  
+            </div>
+            <div class="row mt-1">
+              <div class="col-md-12 text-left">
+                <h4><mark id="dispCurrentCash"></mark> ARE LEFT TO SPENT IN CASH ACCOUNT</h4>              
+                <h5><mark id="avgCash"></mark> ARE LEFT PER DAY</h5>
+              </div>
+            </div>
           </div>
-          <div class="row mt-1">
-            <div class="col-md-12 text-left">
-              <h4><mark id="dispCurrentCash"></mark> ARE LEFT TO SPENT IN CASH ACCOUNT</h4>              
-              <h5><mark id="avgCash"></mark> ARE LEFT PER DAY</h5>
+
+          <!-- Canva for bar chart -->
+          <div class="container py-md-2">
+            <div class="row">
+              <div class="col-md-12 text-center" id="chartContainer">
+                <canvas id="myChart"></canvas>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Canva for bar chart -->
-        <div class="container py-md-2">
-          <div class="row">
-            <div class="col-md-12 text-center" id="chartContainer">
-              <canvas id="myChart"></canvas>
-            </div>
+        <div id="filterApplied" class="d-flex justify-content-center" style="display: none !important">
+          <div class="p-5">
+            <h1>This graph cannot be displayed while filtering by accounts or categories is enabled.</h1>
           </div>
         </div>
       </div>
