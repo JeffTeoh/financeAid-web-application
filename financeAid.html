@@ -106,7 +106,7 @@
           <div class="d-flex px-2 justify-content-center">
             <a href="#" id="filter" class="text-center py-2" style="color: #4c4c4c; text-decoration: none; width: 70%">
               <i class="fa fa-filter"></i>
-              <span>Filter</span>
+              <span id="">Filter</span>
             </a>
           </div>
           <div id="filter-menu">
@@ -119,7 +119,20 @@
               </div>
               <div id="collapse-account" class="collapse show" aria-labelledby="heading-account">
                 <div class="card-body">
-                  
+                  <div class="d-flex justify-content-between">
+                    <span>BANK</span>
+                    <label class="switch mt-1">
+                      <input type="checkbox">
+                      <span class="slider"></span>
+                    </label>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span>CASH</span>
+                    <label class="switch mt-1">
+                      <input type="checkbox">
+                      <span class="slider"></span>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -130,8 +143,37 @@
                 </a>
               </div>
               <div id="collapse-category" class="collapse show" aria-labelledby="heading-category">
-                <div class="card-body">
-                  
+                <div class="card-body filter-btn-group">
+                  <div class="btn-group btn-group-toggle d-flex m-0" data-toggle="buttons">
+                    <button class="btn btn-secondary px-1 w-100 active" id="allCat">
+                      <input type="radio" name="options" autocomplete="off" checked>
+                        <span>All category</span>                
+                    </button>
+                    <button class="btn btn-secondary px-1 w-100" id="selectCat">
+                      <input type="radio" name="options" autocomplete="off">
+                        <span style="white-space: pre-wrap;">Select Categories</span>
+                    </button>
+                    <button class="btn btn-secondary px-1 w-100" id="excludeCat">
+                      <input type="radio" name="options" autocomplete="off">
+                        <span style="white-space: pre-wrap;">Exclude Categories</span>
+                    </button>
+                  </div>
+                  <div id="selectClass" class="mt-2" style="display: none;">
+                    <input class="w-100" readonly>
+                    <div class="d-flex mt-1 m-0">
+                      <button type="button" class="btn rounded-0 w-100 mr-1" style="background: #2d991f; color: white;">Entertainment</button>
+                      <button type="button" class="btn rounded-0 w-100 mr-1" style="background: #2d991f; color: white;">Foods and Drinks</button>
+                      <button type="button" class="btn rounded-0 w-100" style="background: #2d991f; color: white;">Vehicle</button>
+                    </div>
+                  </div>
+                  <div id="excludeClass" class="mt-2" style="display: none;">
+                    <input class="w-100" readonly>
+                    <div class="d-flex mt-1 m-0">
+                      <button type="button" class="btn rounded-0 w-100 mr-1" style="background: #991f52; color: white;">Entertainment</button>
+                      <button type="button" class="btn rounded-0 w-100 mr-1" style="background: #991f52; color: white;">Foods and Drinks</button>
+                      <button type="button" class="btn rounded-0 w-100" style="background: #991f52; color: white;">Vehicle</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -140,13 +182,13 @@
         
         <div class="scroll-area">
           <div class="summary mt-4 mx-0">
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <button class="btn btn-secondary active" id="sumByDate">
+            <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
+              <button class="btn btn-secondary w-100 active" id="sumByDate">
                 <input type="radio" name="options" id="option1" autocomplete="off" checked>
                   <i class="fa fa-calendar-alt"></i>
                   <span>By date</span>                
               </button>
-              <button class="btn btn-secondary" id="sumByCat">
+              <button class="btn btn-secondary w-100" id="sumByCat">
                 <input type="radio" name="options" id="option2" autocomplete="off">
                   <i class="fa fa-tag"></i>
                   <span>By category</span>                
@@ -503,7 +545,7 @@
                           cardHeaderCat + 
                         '</a>' + 
                       '</div>' + 
-                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                      '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                         '<div class="card-body">' +
                           '<div class="card-text">' + 
                             cardText +
@@ -572,7 +614,7 @@
                           cardHeaderCat + 
                         '</a>' + 
                       '</div>' + 
-                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                      '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                         '<div class="card-body">' +
                           '<div class="card-text">' + 
                             cardText +
@@ -641,7 +683,7 @@
                           cardHeaderCat + 
                         '</a>' + 
                       '</div>' + 
-                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                      '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                         '<div class="card-body">' +
                           '<div class="card-text">' + 
                             cardText +
@@ -991,7 +1033,7 @@
                         cardHeaderCat + 
                       '</a>' + 
                     '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                    '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                       '<div class="card-body">' +
                         '<div class="card-text">' + 
                           cardText +
@@ -1060,7 +1102,7 @@
                         cardHeaderCat + 
                       '</a>' + 
                     '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                    '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                       '<div class="card-body">' +
                         '<div class="card-text">' + 
                           cardText +
@@ -1129,7 +1171,7 @@
                         cardHeaderCat + 
                       '</a>' + 
                     '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                    '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                       '<div class="card-body">' +
                         '<div class="card-text">' + 
                           cardText +
@@ -1475,7 +1517,7 @@
                         cardHeaderCat + 
                       '</a>' + 
                     '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                    '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                       '<div class="card-body">' +
                         '<div class="card-text">' + 
                           cardText +
@@ -1544,7 +1586,7 @@
                         cardHeaderCat + 
                       '</a>' + 
                     '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                    '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                       '<div class="card-body">' +
                         '<div class="card-text">' + 
                           cardText +
@@ -1613,7 +1655,7 @@
                         cardHeaderCat + 
                       '</a>' + 
                     '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                    '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                       '<div class="card-body">' +
                         '<div class="card-text">' + 
                           cardText +
@@ -2099,7 +2141,7 @@
                       cardHeaderCat + 
                     '</a>' + 
                   '</div>' + 
-                  '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                  '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                     '<div class="card-body">' +
                       '<div class="card-text">' + 
                         cardText +
@@ -2169,7 +2211,7 @@
                       cardHeaderCat + 
                     '</a>' + 
                   '</div>' + 
-                  '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                  '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                     '<div class="card-body">' +
                       '<div class="card-text">' + 
                         cardText +
@@ -2239,7 +2281,7 @@
                       cardHeaderCat + 
                     '</a>' + 
                   '</div>' + 
-                  '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                  '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
                     '<div class="card-body">' +
                       '<div class="card-text">' + 
                         cardText +

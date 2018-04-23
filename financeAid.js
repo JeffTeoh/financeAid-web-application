@@ -62,7 +62,31 @@ $(document).ready(function(){
     });
 
     $("#filter").on('click', function(){
-        $("#filter-menu").slideToggle('fast');
+        $("#filter-menu").slideToggle('fast', function(){
+            if($("#filter-menu").is(":hidden")) {
+                $("#filter").css("color", "#4c4c4c");
+                $("#filter").css("background", "transparent");
+            }
+            else {
+                $("#filter").css("color", "white");
+                $("#filter").css("background", "#4c4c4c");
+            }
+        });
+    });
+
+    $("#allCat").on('click', function(){
+        $("#selectClass").css('display', 'none');
+        $("#excludeClass").css('display', 'none');
+    });
+
+    $("#selectCat").on('click', function(){
+        $("#selectClass").css('display', 'block');
+        $("#excludeClass").css('display', 'none');
+    });
+    
+    $("#excludeCat").on('click', function(){
+        $("#selectClass").css('display', 'none');
+        $("#excludeClass").css('display', 'block');
     });
     
 });
