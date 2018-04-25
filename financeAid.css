@@ -96,6 +96,10 @@
         overflow-x: hidden;
     }
 
+    .scroll-area::-webkit-scrollbar {
+        width: 0 !important;
+    }
+
     #addRecordBtn {
         bottom: 0;
         right: 0;
