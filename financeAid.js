@@ -91,7 +91,7 @@ $(document).ready(function(){
                 $("#filter").css("background", "transparent");
 
                 //perform filter function
-                var bankChecked = $("#bankFilter").attr('checked');                
+                var bankChecked = $("#bankFilter").attr('checked');
                 var cashChecked = $("#cashFilter").attr('checked');
 
                 if ($("#filter-condition").is(":contains('Filter')") && (bankChecked != "checked" && cashChecked != "checked")) {
