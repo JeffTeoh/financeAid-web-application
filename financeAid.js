@@ -162,7 +162,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -236,7 +236,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -306,7 +306,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -376,7 +376,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -453,7 +453,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -527,7 +527,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -597,7 +597,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -673,7 +673,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -747,7 +747,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -817,7 +817,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -893,7 +893,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -967,7 +967,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -1037,7 +1037,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -1113,7 +1113,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -1187,7 +1187,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -1263,7 +1263,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -1337,7 +1337,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -1413,7 +1413,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -1487,7 +1487,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -1566,7 +1566,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -1643,7 +1643,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -1716,7 +1716,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -1794,7 +1794,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -1871,7 +1871,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -1943,7 +1943,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -2021,7 +2021,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -2097,7 +2097,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -2169,7 +2169,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -2247,7 +2247,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -2323,7 +2323,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -2401,7 +2401,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -2477,7 +2477,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -2555,7 +2555,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -2631,7 +2631,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -2710,7 +2710,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -2787,7 +2787,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -2860,7 +2860,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -2938,7 +2938,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -3015,7 +3015,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -3087,7 +3087,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -3165,7 +3165,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -3241,7 +3241,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -3313,7 +3313,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -3391,7 +3391,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -3467,7 +3467,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -3545,7 +3545,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -3621,7 +3621,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -3699,7 +3699,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -3775,7 +3775,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -3854,7 +3854,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -3930,7 +3930,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -4002,7 +4002,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -4074,7 +4074,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -4152,7 +4152,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderDate + 
+                                                    '<b>' + cardHeaderDate + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
@@ -4228,7 +4228,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -4300,7 +4300,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
@@ -4372,7 +4372,7 @@ $(document).ready(function(){
                                         '<div class="card">' + 
                                             '<div class="card-header">' + 
                                                 '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                                                    cardHeaderCat + 
+                                                    '<b>' + cardHeaderCat + '</b>' + 
                                                 '</a>' + 
                                             '</div>' + 
                                             '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
