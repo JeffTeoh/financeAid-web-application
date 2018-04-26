@@ -63,6 +63,33 @@ $(document).ready(function(){
         }
     });
 
+    //sort the record list
+    $.fn.animateRotate = function(angle, duration, easing, complete) {
+        return this.each(function() {
+            var $elem = $(this);
+
+            $({deg: 0}).animate({deg: angle}, {
+            duration: duration,
+            easing: easing,
+            step: function(now) {
+                $elem.css({
+                transform: 'rotate(' + now + 'deg)'
+                });
+            },
+            complete: complete || $.noop
+            });
+        });
+    };
+
+    $("#sorting").on('click', function(){
+        $("#sorting > i").animateRotate(270);
+        var list = $("ul#expenseList li").get().reverse();
+        $("ul#expenseList").empty();
+        $.each(list, function(i){
+            $("ul#expenseList").append('<li class="list-group-item nopadding">'+list[i].innerHTML+'</li>');
+        });
+    });
+
     //return value for toggle switch
     $("#bankFilter").on('click', function(){
         $("#cashFilter").removeAttr("checked");

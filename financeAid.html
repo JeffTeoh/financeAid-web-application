@@ -177,7 +177,7 @@
         </div>
         
         <div class="scroll-area">
-          <div class="summary mt-4 mx-0">
+          <div class="summary mt-2 mx-0">
             <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
               <button class="btn btn-secondary w-100 active" id="sumByDate">
                 <input type="radio" name="options" id="option1" autocomplete="off" checked>
@@ -189,6 +189,12 @@
                   <i class="fa fa-tag"></i>
                   <span>By category</span>                
               </button>
+            </div>
+            <div class="d-flex justify-content-end m-4">
+              <a id="sorting" href="#" style="text-decoration: none; color: #4c4c4c;">
+                <i class="fa fa-exchange-alt" style="transform: rotate(90deg);"></i>
+                SORT
+              </a>
             </div>
           </div>
 
@@ -2018,9 +2024,9 @@
             for (x = 0; x < recordList.length; x++){
               var cardTextAmt = parseFloat(recordList[x].expenseAmount);
               dailyTotalHeader += cardTextAmt;
-              cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                          '<p>' + recordList[x].expenseCategory + '</p>' + 
-                          '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+              cardText += '<p>' + recordList[x].expenseAccount + ' </p>' + 
+                          '<p>' + recordList[x].expenseCategory + ' </p>' + 
+                          '<p>' + 'RM' + cardTextAmt.toFixed(2) + ' </p>' + '<br>';
             }
 
             $('#expenseList').append(
