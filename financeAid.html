@@ -110,6 +110,34 @@
 
       <!-- Content of right side bar -->
       <div class="sidebar-right" id="sidebar-right">
+        <div id="recordDetail">
+          <div class="header-bar d-flex">
+            <button id="exitRecord" class="btn px-2 py-1" style="background: #918f8f">
+              <i class="fa fa-chevron-left" style="font-size: 30px"></i>
+            </button>
+            <span class="m-auto">Expense Detail</span>
+          </div>
+
+          <div class="dispExpenseAmount d-flex flex-column">
+            <span class="mx-auto mt-5" id="recordDetailAmt" style="font-size: 50px">RM400.00</span>
+            <p class="mx-auto mt-5" style="font-size: 20px">
+              <span class="mr-4">
+                <i class="fa fa-tag"></i>
+                <span id="recordDetailCat">Category</span>
+              </span>
+              <span class="ml-4">
+                <i class="fa fa-dollar-sign"></i>
+                <span id="recordDetailAcc">Account</span>
+              </span>
+            </p>
+            <p class="mx-auto mt-5" style="font-size: 20px">
+              <span>
+                <i class="fa fa-calendar-alt"></i>
+                <span id="recordDetailDate">Date</span>
+              </span>
+            </p>
+          </div>
+        </div>
         <div id="filter-bar">
           <div class="d-flex px-2 justify-content-center">
             <a href="#" id="filter" class="text-center py-2" style="color: #4c4c4c; text-decoration: none; width: 70%">
@@ -175,7 +203,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="scroll-area">
           <div class="summary mt-2 mx-0">
             <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
@@ -190,7 +218,7 @@
                   <span>By category</span>                
               </button>
             </div>
-            <div class="d-flex justify-content-end m-4">
+            <div class="d-flex justify-content-end mx-4 my-2">
               <a id="sorting" href="#" style="text-decoration: none; color: #4c4c4c;">
                 <i class="fa fa-exchange-alt" style="transform: rotate(90deg);"></i>
                 SORT
@@ -198,8 +226,8 @@
             </div>
           </div>
 
-          <ul class="list-group" id="expenseList">
-            <!--Insert from database-->                           
+          <ul class="list-group" id="expenseList">            
+            <!--Insert from database-->
           </ul>
         </div>
       </div>
@@ -478,10 +506,8 @@
                         '</a>' + 
                       '</div>' + 
                       '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                        '<div class="card-body">' +
-                          '<div class="card-text">' + 
-                            cardText +
-                          '</div>' +
+                        '<div class="card-body">' + 
+                          cardText +
                         '</div>' +
                       '</div>' + 
                     '</div>' +
@@ -554,10 +580,8 @@
                         '</a>' + 
                       '</div>' + 
                       '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                        '<div class="card-body">' +
-                          '<div class="card-text">' + 
-                            cardText +
-                          '</div>' +
+                        '<div class="card-body">' + 
+                          cardText +
                         '</div>' +
                       '</div>' + 
                     '</div>' +
@@ -626,10 +650,8 @@
                         '</a>' + 
                       '</div>' + 
                       '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                        '<div class="card-body">' +
-                          '<div class="card-text">' + 
-                            cardText +
-                          '</div>' +
+                        '<div class="card-body">' + 
+                          cardText +
                         '</div>' +
                       '</div>' + 
                     '</div>' +
@@ -698,10 +720,8 @@
                         '</a>' + 
                       '</div>' + 
                       '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                        '<div class="card-body">' +
-                          '<div class="card-text">' + 
-                            cardText +
-                          '</div>' +
+                        '<div class="card-body">' + 
+                          cardText +
                         '</div>' +
                       '</div>' + 
                     '</div>' +
@@ -979,10 +999,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -1055,10 +1073,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -1127,10 +1143,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -1199,10 +1213,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -1476,10 +1488,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -1552,10 +1562,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -1624,10 +1632,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -1696,10 +1702,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -2024,9 +2028,13 @@
             for (x = 0; x < recordList.length; x++){
               var cardTextAmt = parseFloat(recordList[x].expenseAmount);
               dailyTotalHeader += cardTextAmt;
-              cardText += '<p>' + recordList[x].expenseAccount + ' </p>' + 
-                          '<p>' + recordList[x].expenseCategory + ' </p>' + 
-                          '<p>' + 'RM' + cardTextAmt.toFixed(2) + ' </p>' + '<br>';
+              cardText += '<a href="#" class="d-block mb-2 records">' +
+                            '<div class="d-flex justify-content-between">' + 
+                              '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                              '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                              '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' +       
+                            '</div>' +
+                          '</a>';
             }
 
             $('#expenseList').append(
@@ -2034,15 +2042,13 @@
               '<div class="card">' + 
                 '<div class="card-header">' + 
                   '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                    '<b>' + cardHeaderDate + '</b>' + 
+                    '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                     '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                   '</a>' + 
                 '</div>' + 
                 '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                  '<div class="card-body">' +
-                    '<div class="card-text">' + 
-                      cardText +
-                    '</div>' +
+                  '<div class="card-body">' + 
+                    cardText +
                   '</div>' +
                 '</div>' + 
               '</div>' +
@@ -2124,10 +2130,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -2204,10 +2208,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -2283,10 +2285,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -2362,10 +2362,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -2441,10 +2439,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -2520,10 +2516,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -2599,10 +2593,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -2681,10 +2673,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -2762,10 +2752,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -2843,10 +2831,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -2924,10 +2910,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3005,10 +2989,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3086,10 +3068,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3168,10 +3148,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3249,10 +3227,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3330,10 +3306,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3411,10 +3385,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3492,10 +3464,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3573,10 +3543,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3655,10 +3623,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3736,10 +3702,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3820,10 +3784,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3893,10 +3855,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -3966,10 +3926,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4044,10 +4002,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4117,10 +4073,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4194,10 +4148,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4267,10 +4219,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4344,10 +4294,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4417,10 +4365,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4494,10 +4440,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4571,10 +4515,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4648,10 +4590,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4729,10 +4669,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4805,10 +4743,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4885,10 +4821,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -4960,10 +4894,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5039,10 +4971,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5114,10 +5044,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5193,10 +5121,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5272,10 +5198,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5351,10 +5275,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5431,10 +5353,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5506,10 +5426,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5586,10 +5504,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5661,10 +5577,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5740,10 +5654,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5815,10 +5727,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5894,10 +5804,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -5973,10 +5881,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -6052,10 +5958,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -6132,10 +6036,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -6207,10 +6109,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -6282,10 +6182,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -6361,10 +6259,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -6436,10 +6332,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -6511,10 +6405,8 @@
                       '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        '<div class="card-text">' + 
-                          cardText +
-                        '</div>' +
+                      '<div class="card-body">' + 
+                        cardText +
                       '</div>' +
                     '</div>' + 
                   '</div>' +
@@ -6706,10 +6598,8 @@
                             '</a>' + 
                           '</div>' + 
                           '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                            '<div class="card-body">' +
-                              '<div class="card-text">' + 
-                                cardText +
-                              '</div>' +
+                            '<div class="card-body">' + 
+                              cardText +
                             '</div>' +
                           '</div>' + 
                         '</div>' +
@@ -6808,10 +6698,8 @@
                             '</a>' + 
                           '</div>' + 
                           '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                            '<div class="card-body">' +
-                              '<div class="card-text">' + 
-                                cardText +
-                              '</div>' +
+                            '<div class="card-body">' + 
+                              cardText +
                             '</div>' +
                           '</div>' + 
                         '</div>' +

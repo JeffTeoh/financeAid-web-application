@@ -90,6 +90,21 @@ $(document).ready(function(){
         });
     });
 
+    //delete records
+    $("#expenseList").on('click', '.records', function(){    
+        $("#recordDetail").toggle('slide', {direction: "right"}, 100);
+
+        //read from records
+        $("#recordDetailAmt").text($(this).find('.recordAmt').text());
+        $("#recordDetailCat").text($(this).find('.recordCat').text());
+        $("#recordDetailAcc").text($(this).find('.recordAcc').text());
+        $("#recordDetailDate").text($(this).parent().parent().siblings().find('.recordDate').text());
+    });
+
+    $("#exitRecord").on('click', function(){
+        $("#recordDetail").toggle('slide', {direction: "right"}, 100);
+    });
+
     //return value for toggle switch
     $("#bankFilter").on('click', function(){
         $("#cashFilter").removeAttr("checked");
