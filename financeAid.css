@@ -439,3 +439,12 @@ select {
     -ms-transform: translateX(13px);
     transform: translateX(13px);
   }
+
+  #recordDetail {
+    background: #e6e5da; 
+    height: inherit;
+    width: 30.95vw;
+    z-index: 10; 
+    display: none;
+    position: absolute;
+  }
