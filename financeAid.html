@@ -136,6 +136,17 @@
                 <span id="recordDetailDate">Date</span>
               </span>
             </p>
+            <p class="mx-auto mt-5 d-none" style="font-size: 20px">
+              <span>
+                <span id="recordDetailKey">Key</span>
+              </span>
+            </p>
+          </div>
+
+          <div class="d-flex mt-5">
+            <button type="button" class="btn btn-danger rounded-0 mx-auto px-5" data-toggle="modal" data-target="#deleteConfirm">
+              Delete
+            </button>
           </div>
         </div>
         <div id="filter-bar">
@@ -232,6 +243,27 @@
         </div>
       </div>
       
+      <!-- Modal -->
+      <div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Delete</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Expense will be permanently deleted.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" id="deleteBtn">Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!--Button for adding records-->
       <button class="btn bg-dark mt-2" type="button" data-toggle="modal" data-target="#addRecord" id="addRecordBtn">
         <i class="fa fa-plus p-3" style="color: white; font-size: 50px;"></i>
@@ -426,7 +458,8 @@
           var tempMonth = currentSelectedMonth.substr(-2);
           if (tempMonth.substr(0, 1) == 0) {
             monthObj.currentMonth = parseInt(tempMonth.substr(-1));
-          } else {
+          } 
+          else {
             monthObj.currentMonth = parseInt(tempMonth);
           }   
           monthObj.currentYear = parseInt(currentSelectedMonth.substr(0, 4));
@@ -491,9 +524,14 @@
                   for (x = 0; x < recordList.length; x++){
                     var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                     dailyTotalHeader += cardTextAmt;
-                    cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                                '<p>' + recordList[x].expenseCategory + '</p>' + 
-                                '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                    cardText += '<a href="#" class="d-block mb-2 records">' +
+                                  '<div class="d-flex justify-content-between">' + 
+                                    '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                    '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                  '</div>' +
+                                '</a>';
                   }
 
                   $('#expenseList').append(
@@ -501,7 +539,7 @@
                     '<div class="card">' + 
                       '<div class="card-header">' + 
                         '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                          '<b>' + cardHeaderDate + '</b>' + 
+                          '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                           '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                         '</a>' + 
                       '</div>' + 
@@ -565,9 +603,14 @@
                   for (x = 0; x < recordList.length; x++){
                     var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                     dailyTotalHeader += cardTextAmt;
-                    cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                                '<p>' + recordList[x].expenseAccount + '</p>' + 
-                                '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                    cardText += '<a href="#" class="d-block mb-2 records">' +
+                                  '<div class="d-flex justify-content-between">' + 
+                                    '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                    '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                  '</div>' +
+                                '</a>';
                   }
 
                   $('#expenseList').append(
@@ -575,7 +618,7 @@
                     '<div class="card">' + 
                       '<div class="card-header">' + 
                         '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                          '<b>' + cardHeaderCat + '</b>' + 
+                          '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                           '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                         '</a>' + 
                       '</div>' + 
@@ -635,9 +678,14 @@
                   for (x = 0; x < recordList.length; x++){
                     var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                     dailyTotalHeader += cardTextAmt;
-                    cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                                '<p>' + recordList[x].expenseAccount + '</p>' + 
-                                '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                    cardText += '<a href="#" class="d-block mb-2 records">' +
+                                  '<div class="d-flex justify-content-between">' + 
+                                    '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                    '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                  '</div>' +
+                                '</a>';
                   }
 
                   $('#expenseList').append(
@@ -645,7 +693,7 @@
                     '<div class="card">' + 
                       '<div class="card-header">' + 
                         '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                          '<b>' + cardHeaderCat + '</b>' + 
+                          '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                           '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                         '</a>' + 
                       '</div>' + 
@@ -705,9 +753,14 @@
                   for (x = 0; x < recordList.length; x++){
                     var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                     dailyTotalHeader += cardTextAmt;
-                    cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                                '<p>' + recordList[x].expenseAccount + '</p>' + 
-                                '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                    cardText += '<a href="#" class="d-block mb-2 records">' +
+                                  '<div class="d-flex justify-content-between">' + 
+                                    '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                    '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                  '</div>' +
+                                '</a>';
                   }
 
                   $('#expenseList').append(
@@ -715,7 +768,7 @@
                     '<div class="card">' + 
                       '<div class="card-header">' + 
                         '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                          '<b>' + cardHeaderCat + '</b>' + 
+                          '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                           '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                         '</a>' + 
                       '</div>' + 
@@ -920,7 +973,8 @@
         var tempMonth = currentSelectedMonth.substr(-2);
         if (tempMonth.substr(0, 1) == 0) {
           monthObj.currentMonth = parseInt(tempMonth.substr(-1));
-        } else {
+        } 
+        else {
           monthObj.currentMonth = parseInt(tempMonth);
         }   
         monthObj.currentYear = parseInt(currentSelectedMonth.substr(0, 4));
@@ -930,7 +984,8 @@
         //if not current year & month, enable next button
         if (monthObj.currentMonth == constCurrentMonth && monthObj.currentYear == constCurrentYear) {
           return true;
-        } else {
+        } 
+        else {
           $("#nextMonth").removeClass("disabled");
         }
 
@@ -984,9 +1039,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -994,7 +1054,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -1058,9 +1118,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -1068,7 +1133,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -1128,9 +1193,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -1138,7 +1208,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -1198,9 +1268,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -1208,7 +1283,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -1411,7 +1486,8 @@
         var tempMonth = currentSelectedMonth.substr(-2);
         if (tempMonth.substr(0, 1) == 0) {
           monthObj.currentMonth = parseInt(tempMonth.substr(-1));
-        } else {
+        } 
+        else {
           monthObj.currentMonth = parseInt(tempMonth);
         }   
         monthObj.currentYear = parseInt(currentSelectedMonth.substr(0, 4));
@@ -1473,9 +1549,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -1483,7 +1564,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -1547,9 +1628,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -1557,7 +1643,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -1617,9 +1703,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -1627,7 +1718,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -1687,9 +1778,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -1697,7 +1793,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2032,7 +2128,8 @@
                             '<div class="d-flex justify-content-between">' + 
                               '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
                               '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
-                              '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' +       
+                              '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' + 
                             '</div>' +
                           '</a>';
             }
@@ -2115,9 +2212,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM'  + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2125,7 +2227,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2193,9 +2295,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2203,7 +2310,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2270,9 +2377,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2280,7 +2392,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2347,9 +2459,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2357,7 +2474,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2424,9 +2541,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2434,7 +2556,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2501,9 +2623,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2511,7 +2638,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2578,9 +2705,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2588,7 +2720,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2658,9 +2790,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2668,7 +2805,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2737,9 +2874,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2747,7 +2889,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2816,9 +2958,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2826,7 +2973,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2895,9 +3042,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2905,7 +3057,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -2974,9 +3126,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -2984,7 +3141,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3053,9 +3210,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3063,7 +3225,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3133,9 +3295,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3143,7 +3310,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3212,9 +3379,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3222,7 +3394,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3291,9 +3463,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3301,7 +3478,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3370,9 +3547,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3380,7 +3562,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3449,9 +3631,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3459,7 +3646,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3528,9 +3715,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3538,7 +3730,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3608,9 +3800,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3618,7 +3815,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3687,9 +3884,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + recordList[x].expenseCategory + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                  '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3697,7 +3899,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderDate + '</b>' + 
+                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3769,9 +3971,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3779,7 +3986,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3840,9 +4047,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3850,7 +4062,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3911,9 +4123,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3921,7 +4138,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -3987,9 +4204,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -3997,7 +4219,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4058,9 +4280,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4068,7 +4295,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4133,9 +4360,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4143,7 +4375,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4204,9 +4436,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4214,7 +4451,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4279,9 +4516,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4289,7 +4531,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4350,9 +4592,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4360,7 +4607,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4425,9 +4672,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4435,7 +4687,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4500,9 +4752,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4510,7 +4767,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4575,9 +4832,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4585,7 +4847,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4654,9 +4916,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4664,7 +4931,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4728,9 +4995,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4738,7 +5010,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4806,9 +5078,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4816,7 +5093,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4879,9 +5156,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4889,7 +5171,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -4956,9 +5238,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -4966,7 +5253,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5029,9 +5316,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5039,7 +5331,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5106,9 +5398,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5116,7 +5413,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5183,9 +5480,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5193,7 +5495,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5260,9 +5562,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5270,7 +5577,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5338,9 +5645,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5348,7 +5660,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5411,9 +5723,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5421,7 +5738,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5489,9 +5806,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5499,7 +5821,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5562,9 +5884,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5572,7 +5899,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5639,9 +5966,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5649,7 +5981,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5712,9 +6044,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5722,7 +6059,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5789,9 +6126,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5799,7 +6141,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5866,9 +6208,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5876,7 +6223,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -5943,9 +6290,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -5953,7 +6305,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -6021,9 +6373,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -6031,7 +6388,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -6094,9 +6451,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -6104,7 +6466,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -6167,9 +6529,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -6177,7 +6544,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -6244,9 +6611,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -6254,7 +6626,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -6317,9 +6689,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -6327,7 +6704,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -6390,9 +6767,14 @@
                 for (x = 0; x < recordList.length; x++){
                   var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                   dailyTotalHeader += cardTextAmt;
-                  cardText += '<p>' + recordList[x].expenseDate + '</p>' + 
-                              '<p>' + recordList[x].expenseAccount + '</p>' + 
-                              '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                  cardText += '<a href="#" class="d-block mb-2 records">' +
+                                '<div class="d-flex justify-content-between">' + 
+                                  '<span><p class="recordDate">' + recordList[x].expenseDate + '</p>' + 
+                                  '<p class="recordAcc">' + recordList[x].expenseAccount + '</p></span>' + 
+                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                '</div>' +
+                              '</a>';
                 }
 
                 $('#expenseList').append(
@@ -6400,7 +6782,7 @@
                   '<div class="card">' + 
                     '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b>' + cardHeaderCat + '</b>' + 
+                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                       '</a>' + 
                     '</div>' + 
@@ -6434,7 +6816,8 @@
         var amountInput = document.getElementById('amount');
         if (amountInput.checkValidity()) {
           saveButton.disabled = false;
-        } else {
+        } 
+        else {
           saveButton.disabled = true;
         }
       }
@@ -6462,7 +6845,8 @@
             document.getElementById("transferTo").value = "Cash";
           } else if (document.getElementById("transferFrom").value == "Cash"){
             document.getElementById("transferTo").value = "Bank";
-          } else {
+          } 
+          else {
             document.getElementById("transferTo").value = "";
           }
         });
@@ -6523,9 +6907,9 @@
             //write records into list to firebase db
             var expenseObj = {};
             var expenseObjKey = expenseObjKey ? expenseObjKey : firebase.database().ref().child('expenseObj').push().key;
-            expenseObj[expenseObjKey] = {expenseDate: expDate, expenseAccount: expAcc, expenseCategory: expCat, expenseAmount: expAmt};
+            expenseObj[expenseObjKey] = {expenseDate: expDate, expenseAccount: expAcc, expenseCategory: expCat, expenseAmount: expAmt, key: expenseObjKey};
             firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
-
+            
             //calculate and update current amount based on expense
             var selectedAccount = expAcc;
             var currentexpenseAmt = parseFloat(expenseObj[expenseObjKey].expenseAmount);
@@ -6538,9 +6922,30 @@
                 document.getElementById("account").value = '';
                 document.getElementById("category").value = '';
                 document.getElementById("amount").value = '';
-              } else {
-                firebase.database().ref().child('expenseObj').update(expenseObj);
+              } 
+              else {
+                expenseRef = firebase.database().ref().child('expenseObj').update(expenseObj);
                 currentBankAmt -= currentexpenseAmt;
+                
+                //upload the current amount to firebase db
+                currentBankObj.currentBank = currentBankAmt;
+                firebase.database().ref().child('currentBankAmt').update(currentBankObj);
+                        
+                //clear the input form after success alert
+                alert("Your expense added successfully!");
+                $('.datepicker').datepicker("setDate", new Date());
+                document.getElementById("account").value = '';
+                document.getElementById("category").value = '';
+                document.getElementById("amount").value = '';
+                $('#expenseList li').remove();
+
+                //output list of data when loading the page and only appear if there are available data
+                var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+                var expenseObj;
+                var cardObj = {};
+                var dayArray = [];
+                //index for each card item
+                var i = 1;
                 expenseRef.on("value", function(snapshot) {
                   snapshot.forEach(function(childSnapshot){
                     expenseObj = childSnapshot.val();
@@ -6583,9 +6988,14 @@
                       for (x = 0; x < recordList.length; x++){
                         var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                         dailyTotalHeader += cardTextAmt;
-                        cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                                    '<p>' + recordList[x].expenseCategory + '</p>' + 
-                                    '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                        cardText += '<a href="#" class="d-block mb-2 records">' +
+                                      '<div class="d-flex justify-content-between">' + 
+                                        '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                        '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                        '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                        '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                      '</div>' +
+                                    '</a>';
                       }
 
                       $('#expenseList').append(
@@ -6593,7 +7003,7 @@
                         '<div class="card">' + 
                           '<div class="card-header">' + 
                             '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                              '<b>' + cardHeaderDate + '</b>' + 
+                              '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                               '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                             '</a>' + 
                           '</div>' + 
@@ -6619,7 +7029,8 @@
                 document.getElementById("account").value = '';
                 document.getElementById("category").value = '';
                 document.getElementById("amount").value = '';
-              } else {
+              } 
+              else {
                 firebase.database().ref().child('expenseObj').update(expenseObj);
                 currentCashAmt -= currentexpenseAmt;
 
@@ -6650,6 +7061,7 @@
                     var expAcc = expenseObj.expenseAccount;
                     var expCat = expenseObj.expenseCategory;
                     var expAmt = parseFloat(expenseObj.expenseAmount);
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
                     //compare month of record with current selected month
                     var firebaseMonth = expDate.substr(0, 2);
                     var firebaseYear = expDate.substr(-4);
@@ -6683,9 +7095,14 @@
                       for (x = 0; x < recordList.length; x++){
                         var cardTextAmt = parseFloat(recordList[x].expenseAmount);
                         dailyTotalHeader += cardTextAmt;
-                        cardText += '<p>' + recordList[x].expenseAccount + '</p>' + 
-                                    '<p>' + recordList[x].expenseCategory + '</p>' + 
-                                    '<p>' + 'RM' + cardTextAmt.toFixed(2) + '</p>' + '<br>';
+                        cardText += '<a href="#" class="d-block mb-2 records">' +
+                                      '<div class="d-flex justify-content-between">' + 
+                                        '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
+                                        '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
+                                        '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                        '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                      '</div>' +
+                                    '</a>';
                       }
 
                       $('#expenseList').append(
@@ -6693,7 +7110,7 @@
                         '<div class="card">' + 
                           '<div class="card-header">' + 
                             '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                              '<b>' + cardHeaderDate + '</b>' + 
+                              '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                               '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                             '</a>' + 
                           '</div>' + 
@@ -6710,7 +7127,8 @@
                 });
               }                
             }
-          } else {
+          } 
+          else {
             alert("Please ensure either Account or Category has been selected");
           }        
         } else if (currentSelectedFeature == "inc") {
@@ -6725,7 +7143,7 @@
             //write records into list to firebase db
             var incomeObj = {}; //(if without var, override on same object, never update)
             var incomeObjKey = incomeObjKey ? incomeObjKey : firebase.database().ref().child('incomeObj').push().key;
-            incomeObj[incomeObjKey] = {incomeDate: incDate,incomeAccount: incAcc, incomeAmount: incAmt};            
+            incomeObj[incomeObjKey] = {incomeDate: incDate,incomeAccount: incAcc, incomeAmount: incAmt, key: incomeObjKey};            
             firebase.database().ref().child('incomeObj').update(incomeObj);
             firebase.database().ref('incomeAcc').child(incAcc).update(incomeObj);
             
@@ -6767,7 +7185,7 @@
             //write records into list to firebase db
             var transferObj = {}; //(override on same object, never update)
             var transferObjKey = transferObjKey ? transferObjKey : firebase.database().ref().child('transferObj').push().key;
-            transferObj[transferObjKey] = {transferDate: trfDate, transferFrom: trfFrom, transferTo: trfTo, transferAmount: trfAmt};
+            transferObj[transferObjKey] = {transferDate: trfDate, transferFrom: trfFrom, transferTo: trfTo, transferAmount: trfAmt, key: transferObjKey};
             firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
 
             //calculate and update current amount based on transfer
@@ -6785,7 +7203,8 @@
                 document.getElementById("transferFrom").value = '';
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
-              } else {
+              } 
+              else {
                 firebase.database().ref().child('transferObj').update(transferObj);
                 currentBankAmt -= currentTransferAmt;
                 currentCashAmt += currentTransferAmt;
@@ -6812,7 +7231,8 @@
                 document.getElementById("transferFrom").value = '';
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
-              } else {
+              } 
+              else {
                 firebase.database().ref().child('transferObj').update(transferObj);
                 currentBankAmt += currentTransferAmt;
                 currentCashAmt -= currentTransferAmt;
