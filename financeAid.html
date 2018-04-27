@@ -243,7 +243,7 @@
         </div>
       </div>
       
-      <!-- Modal -->
+      <!-- Modal for record details -->
       <div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
@@ -2129,7 +2129,7 @@
                               '<span><p class="recordAcc">' + recordList[x].expenseAccount + '</p>' + 
                               '<p class="recordCat">' + recordList[x].expenseCategory + '</p></span>' + 
                               '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' + 
+                              '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' + 
                             '</div>' +
                           '</a>';
             }
@@ -6908,7 +6908,6 @@
             var expenseObj = {};
             var expenseObjKey = expenseObjKey ? expenseObjKey : firebase.database().ref().child('expenseObj').push().key;
             expenseObj[expenseObjKey] = {expenseDate: expDate, expenseAccount: expAcc, expenseCategory: expCat, expenseAmount: expAmt, key: expenseObjKey};
-            firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
             
             //calculate and update current amount based on expense
             var selectedAccount = expAcc;
@@ -6924,7 +6923,8 @@
                 document.getElementById("amount").value = '';
               } 
               else {
-                expenseRef = firebase.database().ref().child('expenseObj').update(expenseObj);
+                firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
+                firebase.database().ref().child('expenseObj').update(expenseObj);
                 currentBankAmt -= currentexpenseAmt;
                 
                 //upload the current amount to firebase db

@@ -218,7 +218,7 @@ $(document).ready(function(){
             });
         }
   
-          // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+        // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
         delay()
         .then(function(v) {
             //remove existing chart before update
@@ -5015,6 +5015,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -5026,7 +5027,7 @@ $(document).ready(function(){
                                 var validYear = currentSelectedMonth.substr(0, 4);
                                 if (firebaseMonth == validMonth && firebaseYear == validYear) {
                                     //fetch day of date for position in array
-                                    var position = moment(expDate).format("MMM DD");
+                                    var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                     //check if no empty array and records with same date, add into array and then object
                                     if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                         dayArray = [];
@@ -5330,6 +5331,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -5341,7 +5343,7 @@ $(document).ready(function(){
                                 var validYear = currentSelectedMonth.substr(0, 4);
                                 if ((firebaseMonth == validMonth && firebaseYear == validYear) && (expCat == "Entertainment" || expCat == "Foods and Drinks")) {
                                     //fetch day of date for position in array
-                                    var position = moment(expDate).format("MMM DD");
+                                    var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                     //check if no empty array and records with same date, add into array and then object
                                     if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                         dayArray = [];
@@ -5568,6 +5570,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -5579,7 +5582,7 @@ $(document).ready(function(){
                                 var validYear = currentSelectedMonth.substr(0, 4);
                                 if ((firebaseMonth == validMonth && firebaseYear == validYear) && (expCat == "Entertainment" || expCat == "Vehicle")) {
                                     //fetch day of date for position in array
-                                    var position = moment(expDate).format("MMM DD");
+                                    var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                     //check if no empty array and records with same date, add into array and then object
                                     if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                         dayArray = [];
@@ -5806,6 +5809,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -5817,7 +5821,7 @@ $(document).ready(function(){
                                 var validYear = currentSelectedMonth.substr(0, 4);
                                 if ((firebaseMonth == validMonth && firebaseYear == validYear) && (expCat == "Foods and Drinks" || expCat == "Vehicle")) {
                                     //fetch day of date for position in array
-                                    var position = moment(expDate).format("MMM DD");
+                                    var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                     //check if no empty array and records with same date, add into array and then object
                                     if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                         dayArray = [];
@@ -6044,6 +6048,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -6055,7 +6060,7 @@ $(document).ready(function(){
                                 var validYear = currentSelectedMonth.substr(0, 4);
                                 if ((firebaseMonth == validMonth && firebaseYear == validYear) && expCat == "Entertainment") {
                                     //fetch day of date for position in array
-                                    var position = moment(expDate).format("MMM DD");
+                                    var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                     //check if no empty array and records with same date, add into array and then object
                                     if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                         dayArray = [];
@@ -6206,6 +6211,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -6217,7 +6223,7 @@ $(document).ready(function(){
                                 var validYear = currentSelectedMonth.substr(0, 4);
                                 if ((firebaseMonth == validMonth && firebaseYear == validYear) && expCat == "Foods and Drinks") {
                                     //fetch day of date for position in array
-                                    var position = moment(expDate).format("MMM DD");
+                                    var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                     //check if no empty array and records with same date, add into array and then object
                                     if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                         dayArray = [];
@@ -6368,6 +6374,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -6379,7 +6386,7 @@ $(document).ready(function(){
                                 var validYear = currentSelectedMonth.substr(0, 4);
                                 if ((firebaseMonth == validMonth && firebaseYear == validYear) && expCat == "Vehicle") {
                                     //fetch day of date for position in array
-                                    var position = moment(expDate).format("MMM DD");
+                                    var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                     //check if no empty array and records with same date, add into array and then object
                                     if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                         dayArray = [];
@@ -6531,6 +6538,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -6543,7 +6551,7 @@ $(document).ready(function(){
                                 if ((firebaseMonth == validMonth && firebaseYear == validYear) && (expCat == "Entertainment" || expCat == "Foods and Drinks")) {
                                     if (expAcc == "Bank") {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -6777,6 +6785,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -6789,7 +6798,7 @@ $(document).ready(function(){
                                 if (expAcc == "Bank") {
                                     if ((firebaseMonth == validMonth && firebaseYear == validYear) && (expCat == "Entertainment" || expCat == "Vehicle")) {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -7022,6 +7031,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -7034,7 +7044,7 @@ $(document).ready(function(){
                                 if (expAcc == "Bank") {
                                     if ((firebaseMonth == validMonth && firebaseYear == validYear) && (expCat == "Foods and Drinks" || expCat == "Vehicle")) {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -7266,6 +7276,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -7278,7 +7289,7 @@ $(document).ready(function(){
                                 if (expAcc == "Bank") {
                                     if ((firebaseMonth == validMonth && firebaseYear == validYear) && expCat == "Entertainment") {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -7432,6 +7443,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -7444,7 +7456,7 @@ $(document).ready(function(){
                                 if (expAcc == "Bank") {
                                     if ((firebaseMonth == validMonth && firebaseYear == validYear) && expCat == "Foods and Drinks") {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -7598,6 +7610,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -7610,7 +7623,7 @@ $(document).ready(function(){
                                 if (expAcc == "Bank") {
                                     if ((firebaseMonth == validMonth && firebaseYear == validYear) && expCat == "Vehicle") {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -7765,6 +7778,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -7777,7 +7791,7 @@ $(document).ready(function(){
                                 if ((firebaseMonth == validMonth && firebaseYear == validYear) && (expCat == "Entertainment" || expCat == "Foods and Drinks")) {
                                     if (expAcc == "Cash") {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -8011,6 +8025,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -8023,7 +8038,7 @@ $(document).ready(function(){
                                 if (expAcc == "Cash") {
                                     if ((firebaseMonth == validMonth && firebaseYear == validYear) && (expCat == "Entertainment" || expCat == "Vehicle")) {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -8256,6 +8271,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -8268,7 +8284,7 @@ $(document).ready(function(){
                                 if (expAcc == "Cash") {
                                     if ((firebaseMonth == validMonth && firebaseYear == validYear) && (expCat == "Foods and Drinks" || expCat == "Vehicle")) {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -8500,6 +8516,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -8512,7 +8529,7 @@ $(document).ready(function(){
                                 if (expAcc == "Cash") {
                                     if ((firebaseMonth == validMonth && firebaseYear == validYear) && expCat == "Entertainment") {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -8666,6 +8683,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -8678,7 +8696,7 @@ $(document).ready(function(){
                                 if (expAcc == "Cash") {
                                     if ((firebaseMonth == validMonth && firebaseYear == validYear) && expCat == "Foods and Drinks") {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -8832,6 +8850,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -8844,7 +8863,7 @@ $(document).ready(function(){
                                 if (expAcc == "Cash") {
                                     if ((firebaseMonth == validMonth && firebaseYear == validYear) && expCat == "Vehicle") {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -8999,6 +9018,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -9011,7 +9031,7 @@ $(document).ready(function(){
                                 if (expAcc == "Bank") {
                                     if (firebaseMonth == validMonth && firebaseYear == validYear) {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
@@ -9321,6 +9341,7 @@ $(document).ready(function(){
                             snapshot.forEach(function(childSnapshot){
                                 expenseObj = childSnapshot.val();
                                 var expDate = expenseObj.expenseDate;
+                                var expDayinWeek = moment(expDate).format('ddd');
                                 var expAcc = expenseObj.expenseAccount;
                                 var expCat = expenseObj.expenseCategory;
                                 var expAmt = parseFloat(expenseObj.expenseAmount);
@@ -9333,7 +9354,7 @@ $(document).ready(function(){
                                 if (expAcc == "Cash") {
                                     if (firebaseMonth == validMonth && firebaseYear == validYear) {
                                         //fetch day of date for position in array
-                                        var position = moment(expDate).format("MMM DD");
+                                        var position = expDayinWeek.concat(", " + moment(expDate).format("MMM DD"));
                                         //check if no empty array and records with same date, add into array and then object
                                         if (dayArray.length != 0 && dayArray[0].expenseDate != expenseObj.expenseDate) {
                                             dayArray = [];
