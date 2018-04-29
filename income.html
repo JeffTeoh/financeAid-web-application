@@ -114,11 +114,7 @@
           <div class="dispIncomeAmount d-flex flex-column">
             <span class="mx-auto mt-5" id="recordDetailAmt" style="font-size: 50px">RM0.00</span>
             <p class="mx-auto mt-5" style="font-size: 20px">
-              <span class="mr-4">
-                <i class="fa fa-tag"></i>
-                <span id="recordDetailCat">Category</span>
-              </span>
-              <span class="ml-4">
+              <span>
                 <i class="fa fa-dollar-sign"></i>
                 <span id="recordDetailAcc">Account</span>
               </span>
@@ -204,6 +200,27 @@
           <ul class="list-group" id="incomeList">
             <!--Insert from database-->                           
           </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for record details -->
+    <div class="modal fade" id="deleteConfirm" tabindex="-1" role="dialog" aria-labelledby="deleteConfirmation" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Delete</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Expense will be permanently deleted.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="deleteIncBtn">Delete</button>
+          </div>
         </div>
       </div>
     </div>
@@ -2996,581 +3013,1319 @@
           alert("Chart will not display if income of Bank or Account empty");
         });
 
-    $("#filterInc").on('click', function(){
-      $("#filter-menu").slideToggle('fast', function(){
-        if($("#filter-menu").is(":hidden")) {
-          $("#filter").css("color", "#4c4c4c");
-          $("#filter").css("background", "transparent");
+      $("#filterInc").on('click', function(){
+        $("#filter-menu").slideToggle('fast', function(){
+          if($("#filter-menu").is(":hidden")) {
+            $("#filter").css("color", "#4c4c4c");
+            $("#filter").css("background", "transparent");
 
-          //perform filter function
-          var bankChecked = $("#bankFilter").attr('checked');
-          var cashChecked = $("#cashFilter").attr('checked');
+            //perform filter function
+            var bankChecked = $("#bankFilter").attr('checked');
+            var cashChecked = $("#cashFilter").attr('checked');
 
-          if ($("#filter-condition").is(":contains('Filter')") && (bankChecked != "checked" && cashChecked != "checked")) {
-            $("#defaultView").css("display", "block");
-            $("#filterApplied").attr("style", "display: none !important;");
+            if ($("#filter-condition").is(":contains('Filter')") && (bankChecked != "checked" && cashChecked != "checked")) {
+              $("#defaultView").css("display", "block");
+              $("#filterApplied").attr("style", "display: none !important;");
+            }
+            else {
+              $("#defaultView").css("display", "none");
+              $("#filterApplied").css("display", "block");
+            }
+
+            /*default list*/
+            if ((bankChecked != "checked" && cashChecked != "checked") && $("#filter-condition").is(":contains('Filter')")) {
+              if ($("#sumByDate").hasClass('active')) {
+                $('#incomeList li').remove();
+                var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
+                var incomeObj;
+                var cardObj = {};
+                var dayArray = [];
+                //index for each card item
+                var i = 1;
+                incomeRef.on("value", function(snapshot) {
+                  snapshot.forEach(function(childSnapshot){
+                    incomeObj = childSnapshot.val();
+                    var incDate = incomeObj.incomeDate;
+                    var incDayinWeek = moment(incDate).format('ddd');
+                    var incAcc = incomeObj.incomeAccount;
+                    var incAmt = parseFloat(incomeObj.incomeAmount);
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = incDate.substr(0, 2);
+                    var firebaseYear = incDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                      //fetch day of date for position in array
+                      var position = incDayinWeek.concat(", " + moment(incDate).format("MMM DD"));
+                      //check if no empty array and records with same date, add into array and then object
+                      if (dayArray.length != 0 && dayArray[0].incomeDate != incomeObj.incomeDate) {
+                        dayArray = [];
+                        dayArray.push(incomeObj);
+                        cardObj[position] = dayArray;
+                      }
+                      //initialise and add to card object if any single records in one day
+                      else {
+                        dayArray.push(incomeObj);
+                        cardObj[position] = dayArray;
+                      }
+                    }
+                  });
+                  //print out object for card items
+                  for (var key in cardObj) {
+                    if (cardObj.hasOwnProperty(key)) {
+                      var cardHeaderDate = key;
+                      var recordList = cardObj[key];
+                      var cardText = '';
+                      var x; //counter
+
+                      var dailyTotalHeader = 0;
+                      for (x = 0; x < recordList.length; x++){
+                        var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                        dailyTotalHeader += cardTextAmt;
+                        cardText += '<a href="#" class="d-block mb-2 records">' +
+                                      '<div class="d-flex justify-content-between">' + 
+                                        '<span class="recordAcc">' + recordList[x].incomeAccount + '</span>' + 
+                                        '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                        '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                      '</div>' +
+                                    '</a>';
+                      }
+                      $('#incomeList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                            '<div class="card-header">' + 
+                            '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                              '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                              '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                            '</a>' + 
+                          '</div>' + 
+                          '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                            '<div class="card-body">' +
+                              cardText +
+                            '</div>' +
+                          '</div>' + 
+                        '</div>' +
+                      '</li>');
+                      i += 1;
+                    }
+                  }
+                });
+              }
+              else if ($("#sumByCat").hasClass('active')) {
+                $('#incomeList li').remove();
+                var incomeRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
+                var incomeObj;
+                var cardBankObj = {};
+                var dayBankArray = [];
+                //index for each card item
+                var i = 1;
+                incomeRef.on("value", function(snapshot) {
+                  snapshot.forEach(function(childSnapshot){
+                    incomeObj = childSnapshot.val();
+                    var incDate = incomeObj.incomeDate;
+                    var incAcc = incomeObj.incomeAccount;
+                    var incAmt = parseFloat(incomeObj.incomeAmount);
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = incDate.substr(0, 2);
+                    var firebaseYear = incDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                      //fetch category for position in array
+                      var position = incAcc;
+                      //check if no empty array and records with same date, add into array and then object
+                      if (dayBankArray.length != 0 && dayBankArray[0].incomeAccount != incomeObj.incomeAccount) {
+                        dayBankArray = [];
+                        dayBankArray.push(incomeObj);
+                        cardBankObj[position] = dayBankArray;
+                      }
+                      //initialise and add to card object if any single records in one day
+                      else {
+                        dayBankArray.push(incomeObj);
+                        cardBankObj[position] = dayBankArray;
+                      }
+                    }
+                  });
+                  //print out object for card items
+                  for (var key in cardBankObj) {
+                    if (cardBankObj.hasOwnProperty(key)) {
+                      var cardHeaderCat = key;
+                      var recordList = cardBankObj[key];
+                      var cardText = '';
+                      var x; //counter
+
+                      var dailyTotalHeader = 0;
+                      for (x = 0; x < recordList.length; x++){
+                        var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                        dailyTotalHeader += cardTextAmt;
+                        cardText += '<a href="#" class="d-block mb-2 records">' +
+                                      '<div class="d-flex justify-content-between">' + 
+                                        '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
+                                        '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                        '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                      '</div>' +
+                                    '</a>';
+                      }
+
+                      $('#incomeList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                          '<div class="card-header">' + 
+                            '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                              '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                              '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                            '</a>' + 
+                          '</div>' + 
+                          '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                            '<div class="card-body">' +
+                              cardText +
+                            '</div>' +
+                          '</div>' + 
+                        '</div>' +
+                      '</li>');
+                    }
+                  }
+                });
+                var incomeRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+                var incomeObj;
+                var cardCashObj = {};
+                var dayCashArray = [];
+                //index for each card item
+                var i = 2;
+                incomeRef.on("value", function(snapshot) {
+                  snapshot.forEach(function(childSnapshot){
+                    incomeObj = childSnapshot.val();
+                    var incDate = incomeObj.incomeDate;
+                    var incAcc = incomeObj.incomeAccount;
+                    var incAmt = parseFloat(incomeObj.incomeAmount);
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = incDate.substr(0, 2);
+                    var firebaseYear = incDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                      //fetch category for position in array
+                      var position = incAcc;
+                      //check if no empty array and records with same date, add into array and then object
+                      if (dayCashArray.length != 0 && dayCashArray[0].incomeAccount != incomeObj.incomeAccount) {
+                        dayCashArray = [];
+                        dayCashArray.push(incomeObj);
+                        cardCashObj[position] = dayCashArray;
+                      }
+                      //initialise and add to card object if any single records in one day
+                      else {
+                        dayCashArray.push(incomeObj);
+                        cardCashObj[position] = dayCashArray;
+                      }
+                    }
+                  });
+                  //print out object for card items
+                  for (var key in cardCashObj) {
+                    if (cardCashObj.hasOwnProperty(key)) {
+                      var cardHeaderCat = key;
+                      var recordList = cardCashObj[key];
+                      var cardText = '';
+                      var x; //counter
+
+                      var dailyTotalHeader = 0;
+                      for (x = 0; x < recordList.length; x++){
+                        var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                        dailyTotalHeader += cardTextAmt;
+                        cardText += '<a href="#" class="d-block mb-2 records">' +
+                                      '<div class="d-flex justify-content-between">' + 
+                                        '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
+                                        '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                        '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                      '</div>' +
+                                    '</a>';
+                      }
+
+                      $('#incomeList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                          '<div class="card-header">' + 
+                            '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                              '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                              '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                            '</a>' + 
+                          '</div>' + 
+                          '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                            '<div class="card-body">' +
+                              cardText +
+                            '</div>' +
+                          '</div>' + 
+                        '</div>' +
+                      '</li>');
+                    }
+                  }
+                });
+              }
+            }
+            /*Only account or categories been selected*/
+            //only Bank
+            else if (bankChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+              if ($("#sumByDate").hasClass('active')) {
+                $('#incomeList li').remove();
+                var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
+                var incomeObj;
+                var cardObj = {};
+                var dayArray = [];
+                //index for each card item
+                var i = 1;
+                incomeRef.on("value", function(snapshot) {
+                  snapshot.forEach(function(childSnapshot){
+                    incomeObj = childSnapshot.val();
+                    var incDate = incomeObj.incomeDate;
+                    var incDayinWeek = moment(incDate).format('ddd');
+                    var incAcc = incomeObj.incomeAccount;
+                    var incAmt = parseFloat(incomeObj.incomeAmount);
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = incDate.substr(0, 2);
+                    var firebaseYear = incDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if ((firebaseMonth == validMonth && firebaseYear == validYear) && incAcc == "Bank") {
+                      //fetch day of date for position in array
+                      var position = incDayinWeek.concat(", " + moment(incDate).format("MMM DD"));
+                      //check if no empty array and records with same date, add into array and then object
+                      if (dayArray.length != 0 && dayArray[0].incomeDate != incomeObj.incomeDate) {
+                        dayArray = [];
+                        dayArray.push(incomeObj);
+                        cardObj[position] = dayArray;
+                      }
+                      //initialise and add to card object if any single records in one day
+                      else {
+                        dayArray.push(incomeObj);
+                        cardObj[position] = dayArray;
+                      }
+                    }
+                  });
+                  //print out object for card items
+                  for (var key in cardObj) {
+                    if (cardObj.hasOwnProperty(key)) {
+                      var cardHeaderDate = key;
+                      var recordList = cardObj[key];
+                      var cardText = '';
+                      var x; //counter
+
+                      var dailyTotalHeader = 0;
+                      for (x = 0; x < recordList.length; x++){
+                        var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                        dailyTotalHeader += cardTextAmt;
+                        cardText += '<a href="#" class="d-block mb-2 records">' +
+                                      '<div class="d-flex justify-content-between">' + 
+                                        '<span class="recordAcc">' + recordList[x].incomeAccount + '</span>' + 
+                                        '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                        '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                      '</div>' +
+                                    '</a>';
+                      }
+                      $('#incomeList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                            '<div class="card-header">' + 
+                            '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                              '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                              '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                            '</a>' + 
+                          '</div>' + 
+                          '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                            '<div class="card-body">' +
+                              cardText +
+                            '</div>' +
+                          '</div>' + 
+                        '</div>' +
+                      '</li>');
+                      i += 1;
+                    }
+                  }
+                });
+              }
+              else if ($("#sumByCat").hasClass('active')) {
+                $('#incomeList li').remove();
+                var incomeRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
+                var incomeObj;
+                var cardBankObj = {};
+                var dayBankArray = [];
+                //index for each card item
+                var i = 1;
+                incomeRef.on("value", function(snapshot) {
+                  snapshot.forEach(function(childSnapshot){
+                    incomeObj = childSnapshot.val();
+                    var incDate = incomeObj.incomeDate;
+                    var incAcc = incomeObj.incomeAccount;
+                    var incAmt = parseFloat(incomeObj.incomeAmount);
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = incDate.substr(0, 2);
+                    var firebaseYear = incDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                      //fetch category for position in array
+                      var position = incAcc;
+                      //check if no empty array and records with same date, add into array and then object
+                      if (dayBankArray.length != 0 && dayBankArray[0].incomeAccount != incomeObj.incomeAccount) {
+                        dayBankArray = [];
+                        dayBankArray.push(incomeObj);
+                        cardBankObj[position] = dayBankArray;
+                      }
+                      //initialise and add to card object if any single records in one day
+                      else {
+                        dayBankArray.push(incomeObj);
+                        cardBankObj[position] = dayBankArray;
+                      }
+                    }
+                  });
+                  //print out object for card items
+                  for (var key in cardBankObj) {
+                    if (cardBankObj.hasOwnProperty(key)) {
+                      var cardHeaderCat = key;
+                      var recordList = cardBankObj[key];
+                      var cardText = '';
+                      var x; //counter
+
+                      var dailyTotalHeader = 0;
+                      for (x = 0; x < recordList.length; x++){
+                        var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                        dailyTotalHeader += cardTextAmt;
+                        cardText += '<a href="#" class="d-block mb-2 records">' +
+                                      '<div class="d-flex justify-content-between">' + 
+                                        '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
+                                        '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                        '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                      '</div>' +
+                                    '</a>';
+                      }
+
+                      $('#incomeList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                          '<div class="card-header">' + 
+                            '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                              '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                              '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                            '</a>' + 
+                          '</div>' + 
+                          '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                            '<div class="card-body">' +
+                              cardText +
+                            '</div>' +
+                          '</div>' + 
+                        '</div>' +
+                      '</li>');
+                    }
+                  }
+                });
+              }
+            }
+            //only Cash
+            else if (cashChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+              if ($("#sumByDate").hasClass('active')) {
+                $('#incomeList li').remove();
+                var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
+                var incomeObj;
+                var cardObj = {};
+                var dayArray = [];
+                //index for each card item
+                var i = 1;
+                incomeRef.on("value", function(snapshot) {
+                  snapshot.forEach(function(childSnapshot){
+                    incomeObj = childSnapshot.val();
+                    var incDate = incomeObj.incomeDate;
+                    var incDayinWeek = moment(incDate).format('ddd');
+                    var incAcc = incomeObj.incomeAccount;
+                    var incAmt = parseFloat(incomeObj.incomeAmount);
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = incDate.substr(0, 2);
+                    var firebaseYear = incDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if ((firebaseMonth == validMonth && firebaseYear == validYear) && incAcc == "Cash") {
+                      //fetch day of date for position in array
+                      var position = incDayinWeek.concat(", " + moment(incDate).format("MMM DD"));
+                      //check if no empty array and records with same date, add into array and then object
+                      if (dayArray.length != 0 && dayArray[0].incomeDate != incomeObj.incomeDate) {
+                        dayArray = [];
+                        dayArray.push(incomeObj);
+                        cardObj[position] = dayArray;
+                      }
+                      //initialise and add to card object if any single records in one day
+                      else {
+                        dayArray.push(incomeObj);
+                        cardObj[position] = dayArray;
+                      }
+                    }
+                  });
+                  //print out object for card items
+                  for (var key in cardObj) {
+                    if (cardObj.hasOwnProperty(key)) {
+                      var cardHeaderDate = key;
+                      var recordList = cardObj[key];
+                      var cardText = '';
+                      var x; //counter
+
+                      var dailyTotalHeader = 0;
+                      for (x = 0; x < recordList.length; x++){
+                        var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                        dailyTotalHeader += cardTextAmt;
+                        cardText += '<a href="#" class="d-block mb-2 records">' +
+                                      '<div class="d-flex justify-content-between">' + 
+                                        '<span class="recordAcc">' + recordList[x].incomeAccount + '</span>' + 
+                                        '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                        '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                      '</div>' +
+                                    '</a>';
+                      }
+                      $('#incomeList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                            '<div class="card-header">' + 
+                            '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                              '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                              '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                            '</a>' + 
+                          '</div>' + 
+                          '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                            '<div class="card-body">' +
+                              cardText +
+                            '</div>' +
+                          '</div>' + 
+                        '</div>' +
+                      '</li>');
+                      i += 1;
+                    }
+                  }
+                });
+              }
+              else if ($("#sumByCat").hasClass('active')) {
+                $('#incomeList li').remove();
+                var incomeRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+                var incomeObj;
+                var cardCashObj = {};
+                var dayCashArray = [];
+                //index for each card item
+                var i = 2;
+                incomeRef.on("value", function(snapshot) {
+                  snapshot.forEach(function(childSnapshot){
+                    incomeObj = childSnapshot.val();
+                    var incDate = incomeObj.incomeDate;
+                    var incAcc = incomeObj.incomeAccount;
+                    var incAmt = parseFloat(incomeObj.incomeAmount);
+                    var currentSelectedMonth = document.getElementById("monthPicker").value;
+                    //compare month of record with current selected month
+                    var firebaseMonth = incDate.substr(0, 2);
+                    var firebaseYear = incDate.substr(-4);
+                    var validMonth = currentSelectedMonth.substr(-2);
+                    var validYear = currentSelectedMonth.substr(0, 4);
+                    if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                      //fetch category for position in array
+                      var position = incAcc;
+                      //check if no empty array and records with same date, add into array and then object
+                      if (dayCashArray.length != 0 && dayCashArray[0].incomeAccount != incomeObj.incomeAccount) {
+                        dayCashArray = [];
+                        dayCashArray.push(incomeObj);
+                        cardCashObj[position] = dayCashArray;
+                      }
+                      //initialise and add to card object if any single records in one day
+                      else {
+                        dayCashArray.push(incomeObj);
+                        cardCashObj[position] = dayCashArray;
+                      }
+                    }
+                  });
+                  //print out object for card items
+                  for (var key in cardCashObj) {
+                    if (cardCashObj.hasOwnProperty(key)) {
+                      var cardHeaderCat = key;
+                      var recordList = cardCashObj[key];
+                      var cardText = '';
+                      var x; //counter
+
+                      var dailyTotalHeader = 0;
+                      for (x = 0; x < recordList.length; x++){
+                        var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                        dailyTotalHeader += cardTextAmt;
+                        cardText += '<a href="#" class="d-block mb-2 records">' +
+                                      '<div class="d-flex justify-content-between">' + 
+                                        '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
+                                        '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                        '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                      '</div>' +
+                                    '</a>';
+                      }
+
+                      $('#incomeList').append(
+                      '<li class="list-group-item nopadding">' + 
+                        '<div class="card">' + 
+                          '<div class="card-header">' + 
+                            '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                              '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                              '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                            '</a>' + 
+                          '</div>' + 
+                          '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                            '<div class="card-body">' +
+                              cardText +
+                            '</div>' +
+                          '</div>' + 
+                        '</div>' +
+                      '</li>');
+                    }
+                  }
+                });
+              }
+            }
           }
           else {
-            $("#defaultView").css("display", "none");
-            $("#filterApplied").css("display", "block");
+            $("#filter").css("color", "white");
+            $("#filter").css("background", "#4c4c4c");
           }
+        });
+      });
 
+      $("#deleteIncBtn").on('click', function(){
+        $("#recordDetail").toggle('slide', {direction: "right"}, 100);
+
+        //update current amount of bank of cash
+        var recordDltAcc = $("#recordDetailAcc").text();
+        var updateAcc = "current" + recordDltAcc + "Amt";
+        if (recordDltAcc == "Bank") {
+            var currentBankObj = {};
+            var currentBankAmtRef = firebase.database().ref('currentBankAmt');
+            currentBankAmtRef.on('value', function(snapshot){
+                var childData = snapshot.val();
+                currentBankObj.currentBank = parseFloat(childData.currentBank);
+            });
+            var currentBankAmt = parseFloat(currentBankObj.currentBank);
+            var currentRecordAmt = $("#recordDetailAmt").text().substr(2);
+            currentBankAmt += parseFloat(currentRecordAmt);
+
+            //upload the current amount to firebase db
+            currentBankObj.currentBank = currentBankAmt;
+            firebase.database().ref().child('currentBankAmt').update(currentBankObj);
+        }
+        else {
+            var currentCashObj = {};
+            var currentCashAmtRef = firebase.database().ref('currentCashAmt');
+            currentCashAmtRef.on('value', function(snapshot){
+                var childData = snapshot.val();
+                currentCashObj.currentCash = parseFloat(childData.currentCash);
+            });
+            var currentCashAmt = parseFloat(currentCashObj.currentCash);
+            var currentRecordAmt = $("#recordDetailAmt").text().substr(2);
+            currentCashAmt += parseFloat(currentRecordAmt);
+
+            //upload the current amount to firebase db
+            currentCashObj.currentCash = currentCashAmt;
+            firebase.database().ref().child('currentCashAmt').update(currentCashObj);
+        }
+        
+        var deleteKey = $("#recordDetailKey").text();
+        //delete category obj records
+        var deleteAcc = $("#recordDetailAcc").text();
+        var deleteAccRef = firebase.database().ref('incomeAcc').child(deleteAcc);
+        deleteAccRef.child(deleteKey).remove();
+        //delete obj records
+        var deleteRef = firebase.database().ref('incomeObj');
+        deleteRef.child(deleteKey).remove();
+
+        //Update the total amount of Income from database at navigation item
+        var totalIncomeRef = firebase.database().ref('incomeObj');
+        var totalIncomeObj;
+        var totalIncome = 0;
+        var currentSelectedMonth = document.getElementById("monthPicker").value;
+        totalIncomeRef.on('value', function(snapshot){
+          snapshot.forEach(function(childSnapshot){
+            totalIncomeObj = childSnapshot.val();
+            //compare month of record with current selected month
+            var firebaseMonth = totalIncomeObj.incomeDate.substr(0, 2);
+            var firebaseYear = totalIncomeObj.incomeDate.substr(-4);
+            var validMonth = currentSelectedMonth.substr(-2);
+            var validYear = currentSelectedMonth.substr(0, 4);
+            if (firebaseMonth == validMonth && firebaseYear == validYear) {
+              var incAmt = parseFloat(totalIncomeObj.incomeAmount);
+              totalIncome += incAmt;
+            }
+          });
+          document.getElementById("totalIncome").innerHTML = "RM" + totalIncome.toFixed(2);
+        });
+
+        //update total amount for both Bank and Cash and assign to chart
+        var bankTotal = 0;
+        var cashTotal = 0;
+        function delay() {
+          var totalAmt = [];
+          // `delay` returns a promise
+          return new Promise(function(resolve, reject) {
+            // Only `delay` is able to resolve or reject the promise
+            var incomeBankRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
+            var incomeBankObj;
+            incomeBankRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeBankObj = childSnapshot.val();
+                //compare month of record with current selected month
+                var firebaseMonth = incomeBankObj.incomeDate.substr(0, 2);
+                var firebaseYear = incomeBankObj.incomeDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var incAmt = parseFloat(incomeBankObj.incomeAmount);
+                  bankTotal += incAmt;
+                }
+              });
+              totalAmt.push(bankTotal);
+            });
+            var incomeCashRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+            var incomeCashObj;
+            incomeCashRef.once("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeCashObj = childSnapshot.val();
+                //compare month of record with current selected month
+                var firebaseMonth = incomeCashObj.incomeDate.substr(0, 2);
+                var firebaseYear = incomeCashObj.incomeDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  var incAmt = parseFloat(incomeCashObj.incomeAmount);
+                  cashTotal += incAmt;
+                }
+              });
+              totalAmt.push(cashTotal);
+              resolve(totalAmt);
+            });
+          });
+        }
+
+        // `delay` returns a promise, 'v' is an array contain both bankTotal and cashTotal
+        delay()
+          .then(function(v) {
+            //remove existing chart before update
+            $("#myChart").remove();
+            $(".chart").append('<canvas id="myChart"></canvas>');
+
+            //integrate chart.js
+            var ctx = $("#myChart");
+            var myChart = new Chart(ctx, {
+              type: 'doughnut',
+              data: {
+                labels: ["Bank", "Cash"],
+                datasets: [{
+                  label: '# of Votes',
+                  data: [bankTotal, cashTotal],
+                  backgroundColor: [
+                      'rgba(0, 0, 139, 0.2)',
+                      'rgba(178, 34, 34, 0.2)'
+                  ],
+                  borderColor: [
+                    'rgba(0, 0, 139, 1)',
+                    'rgba(178, 34, 34, 1)'
+                  ],
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: {
+                  center: {
+                    text: "RM" + parseFloat(bankTotal + cashTotal).toFixed(2),
+                    color: '#36A2EB', //Default black
+                    fontStyle: 'Helvetica', //Default Arial
+                    sidePadding: 15 //Default 20 (as a percentage)
+                  }
+                },
+                scales: {
+                  xAxes: [{
+                    ticks: {
+                      display: false,
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false,
+                    }
+                  }],
+                  yAxes: [{
+                    ticks: {
+                      display: false,
+                    },
+                    gridLines: {
+                      display: false,
+                      drawBorder: false,
+                    }
+                  }]
+                }
+              }
+            });
+          })
+          .catch(function(v) {
+            alert("Chart will not display if income of Bank or Account empty");
+          });
+
+
+        //output list of data when loading the page and only appear if there are available data
+        $("#incomeList li").remove();
+        //check filter before list out records
+        var bankChecked = $("#bankFilter").attr('checked');
+        var cashChecked = $("#cashFilter").attr('checked');
+
+        if ($("#sumByDate").hasClass('active')) {
           /*default list*/
           if ((bankChecked != "checked" && cashChecked != "checked") && $("#filter-condition").is(":contains('Filter')")) {
-            if ($("#sumByDate").hasClass('active')) {
-              $('#incomeList li').remove();
-              var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
-              var incomeObj;
-              var cardObj = {};
-              var dayArray = [];
-              //index for each card item
-              var i = 1;
-              incomeRef.on("value", function(snapshot) {
-                snapshot.forEach(function(childSnapshot){
-                  incomeObj = childSnapshot.val();
-                  var incDate = incomeObj.incomeDate;
-                  var incDayinWeek = moment(incDate).format('ddd');
-                  var incAcc = incomeObj.incomeAccount;
-                  var incAmt = parseFloat(incomeObj.incomeAmount);
-                  var currentSelectedMonth = document.getElementById("monthPicker").value;
-                  //compare month of record with current selected month
-                  var firebaseMonth = incDate.substr(0, 2);
-                  var firebaseYear = incDate.substr(-4);
-                  var validMonth = currentSelectedMonth.substr(-2);
-                  var validYear = currentSelectedMonth.substr(0, 4);
-                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                    //fetch day of date for position in array
-                    var position = incDayinWeek.concat(", " + moment(incDate).format("MMM DD"));
-                    //check if no empty array and records with same date, add into array and then object
-                    if (dayArray.length != 0 && dayArray[0].incomeDate != incomeObj.incomeDate) {
-                      dayArray = [];
-                      dayArray.push(incomeObj);
-                      cardObj[position] = dayArray;
-                    }
-                    //initialise and add to card object if any single records in one day
-                    else {
-                      dayArray.push(incomeObj);
-                      cardObj[position] = dayArray;
-                    }
+            $('#incomeList li').remove();
+            var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
+            var incomeObj;
+            var cardObj = {};
+            var dayArray = [];
+            //index for each card item
+            var i = 1;
+            incomeRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeObj = childSnapshot.val();
+                var incDate = incomeObj.incomeDate;
+                var incDayinWeek = moment(incDate).format('ddd');
+                var incAcc = incomeObj.incomeAccount;
+                var incAmt = parseFloat(incomeObj.incomeAmount);
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = incDate.substr(0, 2);
+                var firebaseYear = incDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  //fetch day of date for position in array
+                  var position = incDayinWeek.concat(", " + moment(incDate).format("MMM DD"));
+                  //check if no empty array and records with same date, add into array and then object
+                  if (dayArray.length != 0 && dayArray[0].incomeDate != incomeObj.incomeDate) {
+                    dayArray = [];
+                    dayArray.push(incomeObj);
+                    cardObj[position] = dayArray;
                   }
-                });
-                //print out object for card items
-                for (var key in cardObj) {
-                  if (cardObj.hasOwnProperty(key)) {
-                    var cardHeaderDate = key;
-                    var recordList = cardObj[key];
-                    var cardText = '';
-                    var x; //counter
-
-                    var dailyTotalHeader = 0;
-                    for (x = 0; x < recordList.length; x++){
-                      var cardTextAmt = parseFloat(recordList[x].incomeAmount);
-                      dailyTotalHeader += cardTextAmt;
-                      cardText += '<a href="#" class="d-block mb-2 records">' +
-                                    '<div class="d-flex justify-content-between">' + 
-                                      '<span class="recordAcc">' + recordList[x].incomeAccount + '</span>' + 
-                                      '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                      '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
-                                    '</div>' +
-                                  '</a>';
-                    }
-                    $('#incomeList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                          '<div class="card-header">' + 
-                          '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                            '<b class="recordDate">' + cardHeaderDate + '</b>' + 
-                            '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                          '</a>' + 
-                        '</div>' + 
-                        '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                          '<div class="card-body">' +
-                            cardText +
-                          '</div>' +
-                        '</div>' + 
-                      '</div>' +
-                    '</li>');
-                    i += 1;
+                  //initialise and add to card object if any single records in one day
+                  else {
+                    dayArray.push(incomeObj);
+                    cardObj[position] = dayArray;
                   }
                 }
               });
-            }
-            else if ($("#sumByCat").hasClass('active')) {
-              $('#incomeList li').remove();
-              var incomeRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
-              var incomeObj;
-              var cardBankObj = {};
-              var dayBankArray = [];
-              //index for each card item
-              var i = 1;
-              incomeRef.on("value", function(snapshot) {
-                snapshot.forEach(function(childSnapshot){
-                  incomeObj = childSnapshot.val();
-                  var incDate = incomeObj.incomeDate;
-                  var incAcc = incomeObj.incomeAccount;
-                  var incAmt = parseFloat(incomeObj.incomeAmount);
-                  var currentSelectedMonth = document.getElementById("monthPicker").value;
-                  //compare month of record with current selected month
-                  var firebaseMonth = incDate.substr(0, 2);
-                  var firebaseYear = incDate.substr(-4);
-                  var validMonth = currentSelectedMonth.substr(-2);
-                  var validYear = currentSelectedMonth.substr(0, 4);
-                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                    //fetch category for position in array
-                    var position = incAcc;
-                    //check if no empty array and records with same date, add into array and then object
-                    if (dayBankArray.length != 0 && dayBankArray[0].incomeAccount != incomeObj.incomeAccount) {
-                      dayBankArray = [];
-                      dayBankArray.push(incomeObj);
-                      cardBankObj[position] = dayBankArray;
-                    }
-                    //initialise and add to card object if any single records in one day
-                    else {
-                      dayBankArray.push(incomeObj);
-                      cardBankObj[position] = dayBankArray;
-                    }
+              //print out object for card items
+              for (var key in cardObj) {
+                if (cardObj.hasOwnProperty(key)) {
+                  var cardHeaderDate = key;
+                  var recordList = cardObj[key];
+                  var cardText = '';
+                  var x; //counter
+
+                  var dailyTotalHeader = 0;
+                  for (x = 0; x < recordList.length; x++){
+                    var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                    dailyTotalHeader += cardTextAmt;
+                    cardText += '<a href="#" class="d-block mb-2 records">' +
+                                  '<div class="d-flex justify-content-between">' + 
+                                    '<span class="recordAcc">' + recordList[x].incomeAccount + '</span>' + 
+                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                  '</div>' +
+                                '</a>';
                   }
-                });
-                //print out object for card items
-                for (var key in cardBankObj) {
-                  if (cardBankObj.hasOwnProperty(key)) {
-                    var cardHeaderCat = key;
-                    var recordList = cardBankObj[key];
-                    var cardText = '';
-                    var x; //counter
-
-                    var dailyTotalHeader = 0;
-                    for (x = 0; x < recordList.length; x++){
-                      var cardTextAmt = parseFloat(recordList[x].incomeAmount);
-                      dailyTotalHeader += cardTextAmt;
-                      cardText += '<a href="#" class="d-block mb-2 records">' +
-                                    '<div class="d-flex justify-content-between">' + 
-                                      '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
-                                      '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                      '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
-                                    '</div>' +
-                                  '</a>';
-                    }
-
-                    $('#incomeList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                        '<div class="card-header">' + 
-                          '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                            '<b class="recordCat">' + cardHeaderCat + '</b>' + 
-                            '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                  $('#incomeList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + 
+                        '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                          '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                          '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
                           '</a>' + 
-                        '</div>' + 
-                        '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                          '<div class="card-body">' +
-                            cardText +
-                          '</div>' +
-                        '</div>' + 
-                      '</div>' +
-                    '</li>');
-                  }
+                      '</div>' + 
+                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                        '<div class="card-body">' +
+                          cardText +
+                        '</div>' +
+                      '</div>' + 
+                    '</div>' +
+                  '</li>');
+                  i += 1;
                 }
-              });
-              var incomeRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
-              var incomeObj;
-              var cardCashObj = {};
-              var dayCashArray = [];
-              //index for each card item
-              var i = 2;
-              incomeRef.on("value", function(snapshot) {
-                snapshot.forEach(function(childSnapshot){
-                  incomeObj = childSnapshot.val();
-                  var incDate = incomeObj.incomeDate;
-                  var incAcc = incomeObj.incomeAccount;
-                  var incAmt = parseFloat(incomeObj.incomeAmount);
-                  var currentSelectedMonth = document.getElementById("monthPicker").value;
-                  //compare month of record with current selected month
-                  var firebaseMonth = incDate.substr(0, 2);
-                  var firebaseYear = incDate.substr(-4);
-                  var validMonth = currentSelectedMonth.substr(-2);
-                  var validYear = currentSelectedMonth.substr(0, 4);
-                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                    //fetch category for position in array
-                    var position = incAcc;
-                    //check if no empty array and records with same date, add into array and then object
-                    if (dayCashArray.length != 0 && dayCashArray[0].incomeAccount != incomeObj.incomeAccount) {
-                      dayCashArray = [];
-                      dayCashArray.push(incomeObj);
-                      cardCashObj[position] = dayCashArray;
-                    }
-                    //initialise and add to card object if any single records in one day
-                    else {
-                      dayCashArray.push(incomeObj);
-                      cardCashObj[position] = dayCashArray;
-                    }
-                  }
-                });
-                //print out object for card items
-                for (var key in cardCashObj) {
-                  if (cardCashObj.hasOwnProperty(key)) {
-                    var cardHeaderCat = key;
-                    var recordList = cardCashObj[key];
-                    var cardText = '';
-                    var x; //counter
-
-                    var dailyTotalHeader = 0;
-                    for (x = 0; x < recordList.length; x++){
-                      var cardTextAmt = parseFloat(recordList[x].incomeAmount);
-                      dailyTotalHeader += cardTextAmt;
-                      cardText += '<a href="#" class="d-block mb-2 records">' +
-                                    '<div class="d-flex justify-content-between">' + 
-                                      '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
-                                      '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                      '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
-                                    '</div>' +
-                                  '</a>';
-                    }
-
-                    $('#incomeList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                        '<div class="card-header">' + 
-                          '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                            '<b class="recordCat">' + cardHeaderCat + '</b>' + 
-                            '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                          '</a>' + 
-                        '</div>' + 
-                        '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                          '<div class="card-body">' +
-                            cardText +
-                          '</div>' +
-                        '</div>' + 
-                      '</div>' +
-                    '</li>');
-                  }
-                }
-              });
-            }
+              }
+            });
           }
           /*Only account or categories been selected*/
           //only Bank
           else if (bankChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
-            if ($("#sumByDate").hasClass('active')) {
-              $('#incomeList li').remove();
-              var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
-              var incomeObj;
-              var cardObj = {};
-              var dayArray = [];
-              //index for each card item
-              var i = 1;
-              incomeRef.on("value", function(snapshot) {
-                snapshot.forEach(function(childSnapshot){
-                  incomeObj = childSnapshot.val();
-                  var incDate = incomeObj.incomeDate;
-                  var incDayinWeek = moment(incDate).format('ddd');
-                  var incAcc = incomeObj.incomeAccount;
-                  var incAmt = parseFloat(incomeObj.incomeAmount);
-                  var currentSelectedMonth = document.getElementById("monthPicker").value;
-                  //compare month of record with current selected month
-                  var firebaseMonth = incDate.substr(0, 2);
-                  var firebaseYear = incDate.substr(-4);
-                  var validMonth = currentSelectedMonth.substr(-2);
-                  var validYear = currentSelectedMonth.substr(0, 4);
-                  if ((firebaseMonth == validMonth && firebaseYear == validYear) && incAcc == "Bank") {
-                    //fetch day of date for position in array
-                    var position = incDayinWeek.concat(", " + moment(incDate).format("MMM DD"));
-                    //check if no empty array and records with same date, add into array and then object
-                    if (dayArray.length != 0 && dayArray[0].incomeDate != incomeObj.incomeDate) {
-                      dayArray = [];
-                      dayArray.push(incomeObj);
-                      cardObj[position] = dayArray;
-                    }
-                    //initialise and add to card object if any single records in one day
-                    else {
-                      dayArray.push(incomeObj);
-                      cardObj[position] = dayArray;
-                    }
+            $('#incomeList li').remove();
+            var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
+            var incomeObj;
+            var cardObj = {};
+            var dayArray = [];
+            //index for each card item
+            var i = 1;
+            incomeRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeObj = childSnapshot.val();
+                var incDate = incomeObj.incomeDate;
+                var incDayinWeek = moment(incDate).format('ddd');
+                var incAcc = incomeObj.incomeAccount;
+                var incAmt = parseFloat(incomeObj.incomeAmount);
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = incDate.substr(0, 2);
+                var firebaseYear = incDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if ((firebaseMonth == validMonth && firebaseYear == validYear) && incAcc == "Bank") {
+                  //fetch day of date for position in array
+                  var position = incDayinWeek.concat(", " + moment(incDate).format("MMM DD"));
+                  //check if no empty array and records with same date, add into array and then object
+                  if (dayArray.length != 0 && dayArray[0].incomeDate != incomeObj.incomeDate) {
+                    dayArray = [];
+                    dayArray.push(incomeObj);
+                    cardObj[position] = dayArray;
                   }
-                });
-                //print out object for card items
-                for (var key in cardObj) {
-                  if (cardObj.hasOwnProperty(key)) {
-                    var cardHeaderDate = key;
-                    var recordList = cardObj[key];
-                    var cardText = '';
-                    var x; //counter
-
-                    var dailyTotalHeader = 0;
-                    for (x = 0; x < recordList.length; x++){
-                      var cardTextAmt = parseFloat(recordList[x].incomeAmount);
-                      dailyTotalHeader += cardTextAmt;
-                      cardText += '<a href="#" class="d-block mb-2 records">' +
-                                    '<div class="d-flex justify-content-between">' + 
-                                      '<span class="recordAcc">' + recordList[x].incomeAccount + '</span>' + 
-                                      '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                      '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
-                                    '</div>' +
-                                  '</a>';
-                    }
-                    $('#incomeList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                          '<div class="card-header">' + 
-                          '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                            '<b class="recordDate">' + cardHeaderDate + '</b>' + 
-                            '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                          '</a>' + 
-                        '</div>' + 
-                        '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                          '<div class="card-body">' +
-                            cardText +
-                          '</div>' +
-                        '</div>' + 
-                      '</div>' +
-                    '</li>');
-                    i += 1;
+                  //initialise and add to card object if any single records in one day
+                  else {
+                    dayArray.push(incomeObj);
+                    cardObj[position] = dayArray;
                   }
                 }
               });
-            }
-            else if ($("#sumByCat").hasClass('active')) {
-              $('#incomeList li').remove();
-              var incomeRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
-              var incomeObj;
-              var cardBankObj = {};
-              var dayBankArray = [];
-              //index for each card item
-              var i = 1;
-              incomeRef.on("value", function(snapshot) {
-                snapshot.forEach(function(childSnapshot){
-                  incomeObj = childSnapshot.val();
-                  var incDate = incomeObj.incomeDate;
-                  var incAcc = incomeObj.incomeAccount;
-                  var incAmt = parseFloat(incomeObj.incomeAmount);
-                  var currentSelectedMonth = document.getElementById("monthPicker").value;
-                  //compare month of record with current selected month
-                  var firebaseMonth = incDate.substr(0, 2);
-                  var firebaseYear = incDate.substr(-4);
-                  var validMonth = currentSelectedMonth.substr(-2);
-                  var validYear = currentSelectedMonth.substr(0, 4);
-                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                    //fetch category for position in array
-                    var position = incAcc;
-                    //check if no empty array and records with same date, add into array and then object
-                    if (dayBankArray.length != 0 && dayBankArray[0].incomeAccount != incomeObj.incomeAccount) {
-                      dayBankArray = [];
-                      dayBankArray.push(incomeObj);
-                      cardBankObj[position] = dayBankArray;
-                    }
-                    //initialise and add to card object if any single records in one day
-                    else {
-                      dayBankArray.push(incomeObj);
-                      cardBankObj[position] = dayBankArray;
-                    }
-                  }
-                });
-                //print out object for card items
-                for (var key in cardBankObj) {
-                  if (cardBankObj.hasOwnProperty(key)) {
-                    var cardHeaderCat = key;
-                    var recordList = cardBankObj[key];
-                    var cardText = '';
-                    var x; //counter
+              //print out object for card items
+              for (var key in cardObj) {
+                if (cardObj.hasOwnProperty(key)) {
+                  var cardHeaderDate = key;
+                  var recordList = cardObj[key];
+                  var cardText = '';
+                  var x; //counter
 
-                    var dailyTotalHeader = 0;
-                    for (x = 0; x < recordList.length; x++){
-                      var cardTextAmt = parseFloat(recordList[x].incomeAmount);
-                      dailyTotalHeader += cardTextAmt;
-                      cardText += '<a href="#" class="d-block mb-2 records">' +
-                                    '<div class="d-flex justify-content-between">' + 
-                                      '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
-                                      '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                      '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
-                                    '</div>' +
-                                  '</a>';
-                    }
-
-                    $('#incomeList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                        '<div class="card-header">' + 
-                          '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                            '<b class="recordCat">' + cardHeaderCat + '</b>' + 
-                            '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                          '</a>' + 
-                        '</div>' + 
-                        '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                          '<div class="card-body">' +
-                            cardText +
-                          '</div>' +
-                        '</div>' + 
-                      '</div>' +
-                    '</li>');
+                  var dailyTotalHeader = 0;
+                  for (x = 0; x < recordList.length; x++){
+                    var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                    dailyTotalHeader += cardTextAmt;
+                    cardText += '<a href="#" class="d-block mb-2 records">' +
+                                  '<div class="d-flex justify-content-between">' + 
+                                    '<span class="recordAcc">' + recordList[x].incomeAccount + '</span>' + 
+                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                  '</div>' +
+                                '</a>';
                   }
+                  $('#incomeList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + 
+                        '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                          '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                          '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                        '</a>' + 
+                      '</div>' + 
+                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                        '<div class="card-body">' +
+                          cardText +
+                        '</div>' +
+                      '</div>' + 
+                    '</div>' +
+                  '</li>');
+                  i += 1;
                 }
-              });
-            }
+              }
+            });
           }
           //only Cash
           else if (cashChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
-            if ($("#sumByDate").hasClass('active')) {
-              $('#incomeList li').remove();
-              var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
-              var incomeObj;
-              var cardObj = {};
-              var dayArray = [];
-              //index for each card item
-              var i = 1;
-              incomeRef.on("value", function(snapshot) {
-                snapshot.forEach(function(childSnapshot){
-                  incomeObj = childSnapshot.val();
-                  var incDate = incomeObj.incomeDate;
-                  var incDayinWeek = moment(incDate).format('ddd');
-                  var incAcc = incomeObj.incomeAccount;
-                  var incAmt = parseFloat(incomeObj.incomeAmount);
-                  var currentSelectedMonth = document.getElementById("monthPicker").value;
-                  //compare month of record with current selected month
-                  var firebaseMonth = incDate.substr(0, 2);
-                  var firebaseYear = incDate.substr(-4);
-                  var validMonth = currentSelectedMonth.substr(-2);
-                  var validYear = currentSelectedMonth.substr(0, 4);
-                  if ((firebaseMonth == validMonth && firebaseYear == validYear) && incAcc == "Cash") {
-                    //fetch day of date for position in array
-                    var position = incDayinWeek.concat(", " + moment(incDate).format("MMM DD"));
-                    //check if no empty array and records with same date, add into array and then object
-                    if (dayArray.length != 0 && dayArray[0].incomeDate != incomeObj.incomeDate) {
-                      dayArray = [];
-                      dayArray.push(incomeObj);
-                      cardObj[position] = dayArray;
-                    }
-                    //initialise and add to card object if any single records in one day
-                    else {
-                      dayArray.push(incomeObj);
-                      cardObj[position] = dayArray;
-                    }
+            $('#incomeList li').remove();
+            var incomeRef = firebase.database().ref('incomeObj').orderByChild('incomeDate');
+            var incomeObj;
+            var cardObj = {};
+            var dayArray = [];
+            //index for each card item
+            var i = 1;
+            incomeRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeObj = childSnapshot.val();
+                var incDate = incomeObj.incomeDate;
+                var incDayinWeek = moment(incDate).format('ddd');
+                var incAcc = incomeObj.incomeAccount;
+                var incAmt = parseFloat(incomeObj.incomeAmount);
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = incDate.substr(0, 2);
+                var firebaseYear = incDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if ((firebaseMonth == validMonth && firebaseYear == validYear) && incAcc == "Cash") {
+                  //fetch day of date for position in array
+                  var position = incDayinWeek.concat(", " + moment(incDate).format("MMM DD"));
+                  //check if no empty array and records with same date, add into array and then object
+                  if (dayArray.length != 0 && dayArray[0].incomeDate != incomeObj.incomeDate) {
+                    dayArray = [];
+                    dayArray.push(incomeObj);
+                    cardObj[position] = dayArray;
                   }
-                });
-                //print out object for card items
-                for (var key in cardObj) {
-                  if (cardObj.hasOwnProperty(key)) {
-                    var cardHeaderDate = key;
-                    var recordList = cardObj[key];
-                    var cardText = '';
-                    var x; //counter
-
-                    var dailyTotalHeader = 0;
-                    for (x = 0; x < recordList.length; x++){
-                      var cardTextAmt = parseFloat(recordList[x].incomeAmount);
-                      dailyTotalHeader += cardTextAmt;
-                      cardText += '<a href="#" class="d-block mb-2 records">' +
-                                    '<div class="d-flex justify-content-between">' + 
-                                      '<span class="recordAcc">' + recordList[x].incomeAccount + '</span>' + 
-                                      '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                      '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
-                                    '</div>' +
-                                  '</a>';
-                    }
-                    $('#incomeList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                          '<div class="card-header">' + 
-                          '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                            '<b class="recordDate">' + cardHeaderDate + '</b>' + 
-                            '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                          '</a>' + 
-                        '</div>' + 
-                        '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                          '<div class="card-body">' +
-                            cardText +
-                          '</div>' +
-                        '</div>' + 
-                      '</div>' +
-                    '</li>');
-                    i += 1;
+                  //initialise and add to card object if any single records in one day
+                  else {
+                    dayArray.push(incomeObj);
+                    cardObj[position] = dayArray;
                   }
                 }
               });
-            }
-            else if ($("#sumByCat").hasClass('active')) {
-              $('#incomeList li').remove();
-              var incomeRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
-              var incomeObj;
-              var cardCashObj = {};
-              var dayCashArray = [];
-              //index for each card item
-              var i = 2;
-              incomeRef.on("value", function(snapshot) {
-                snapshot.forEach(function(childSnapshot){
-                  incomeObj = childSnapshot.val();
-                  var incDate = incomeObj.incomeDate;
-                  var incAcc = incomeObj.incomeAccount;
-                  var incAmt = parseFloat(incomeObj.incomeAmount);
-                  var currentSelectedMonth = document.getElementById("monthPicker").value;
-                  //compare month of record with current selected month
-                  var firebaseMonth = incDate.substr(0, 2);
-                  var firebaseYear = incDate.substr(-4);
-                  var validMonth = currentSelectedMonth.substr(-2);
-                  var validYear = currentSelectedMonth.substr(0, 4);
-                  if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                    //fetch category for position in array
-                    var position = incAcc;
-                    //check if no empty array and records with same date, add into array and then object
-                    if (dayCashArray.length != 0 && dayCashArray[0].incomeAccount != incomeObj.incomeAccount) {
-                      dayCashArray = [];
-                      dayCashArray.push(incomeObj);
-                      cardCashObj[position] = dayCashArray;
-                    }
-                    //initialise and add to card object if any single records in one day
-                    else {
-                      dayCashArray.push(incomeObj);
-                      cardCashObj[position] = dayCashArray;
-                    }
+              //print out object for card items
+              for (var key in cardObj) {
+                if (cardObj.hasOwnProperty(key)) {
+                  var cardHeaderDate = key;
+                  var recordList = cardObj[key];
+                  var cardText = '';
+                  var x; //counter
+
+                  var dailyTotalHeader = 0;
+                  for (x = 0; x < recordList.length; x++){
+                    var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                    dailyTotalHeader += cardTextAmt;
+                    cardText += '<a href="#" class="d-block mb-2 records">' +
+                                  '<div class="d-flex justify-content-between">' + 
+                                    '<span class="recordAcc">' + recordList[x].incomeAccount + '</span>' + 
+                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                  '</div>' +
+                                '</a>';
                   }
-                });
-                //print out object for card items
-                for (var key in cardCashObj) {
-                  if (cardCashObj.hasOwnProperty(key)) {
-                    var cardHeaderCat = key;
-                    var recordList = cardCashObj[key];
-                    var cardText = '';
-                    var x; //counter
-
-                    var dailyTotalHeader = 0;
-                    for (x = 0; x < recordList.length; x++){
-                      var cardTextAmt = parseFloat(recordList[x].incomeAmount);
-                      dailyTotalHeader += cardTextAmt;
-                      cardText += '<a href="#" class="d-block mb-2 records">' +
-                                    '<div class="d-flex justify-content-between">' + 
-                                      '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
-                                      '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                      '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
-                                    '</div>' +
-                                  '</a>';
-                    }
-
-                    $('#incomeList').append(
+                  $('#incomeList').append(
                     '<li class="list-group-item nopadding">' + 
                       '<div class="card">' + 
                         '<div class="card-header">' + 
-                          '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                            '<b class="recordCat">' + cardHeaderCat + '</b>' + 
-                            '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                          '</a>' + 
-                        '</div>' + 
-                        '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                          '<div class="card-body">' +
-                            cardText +
-                          '</div>' +
-                        '</div>' + 
-                      '</div>' +
-                    '</li>');
-                  }
+                        '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                          '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                          '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                        '</a>' + 
+                      '</div>' + 
+                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                        '<div class="card-body">' +
+                          cardText +
+                        '</div>' +
+                      '</div>' + 
+                    '</div>' +
+                  '</li>');
+                  i += 1;
                 }
-              });
-            }
+              }
+            });
           }
         }
         else {
-          $("#filter").css("color", "white");
-          $("#filter").css("background", "#4c4c4c");
+          /*default list*/
+          if ((bankChecked != "checked" && cashChecked != "checked") && $("#filter-condition").is(":contains('Filter')")) {
+            $('#incomeList li').remove();
+            var incomeRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
+            var incomeObj;
+            var cardBankObj = {};
+            var dayBankArray = [];
+            //index for each card item
+            var i = 1;
+            incomeRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeObj = childSnapshot.val();
+                var incDate = incomeObj.incomeDate;
+                var incAcc = incomeObj.incomeAccount;
+                var incAmt = parseFloat(incomeObj.incomeAmount);
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = incDate.substr(0, 2);
+                var firebaseYear = incDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  //fetch category for position in array
+                  var position = incAcc;
+                  //check if no empty array and records with same date, add into array and then object
+                  if (dayBankArray.length != 0 && dayBankArray[0].incomeAccount != incomeObj.incomeAccount) {
+                    dayBankArray = [];
+                    dayBankArray.push(incomeObj);
+                    cardBankObj[position] = dayBankArray;
+                  }
+                  //initialise and add to card object if any single records in one day
+                  else {
+                    dayBankArray.push(incomeObj);
+                    cardBankObj[position] = dayBankArray;
+                  }
+                }
+              });
+              //print out object for card items
+              for (var key in cardBankObj) {
+                if (cardBankObj.hasOwnProperty(key)) {
+                  var cardHeaderCat = key;
+                  var recordList = cardBankObj[key];
+                  var cardText = '';
+                  var x; //counter
+
+                  var dailyTotalHeader = 0;
+                  for (x = 0; x < recordList.length; x++){
+                    var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                    dailyTotalHeader += cardTextAmt;
+                    cardText += '<a href="#" class="d-block mb-2 records">' +
+                                  '<div class="d-flex justify-content-between">' + 
+                                    '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
+                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                  '</div>' +
+                                '</a>';
+                  }
+
+                  $('#incomeList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + 
+                        '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                          '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                          '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                        '</a>' + 
+                      '</div>' + 
+                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                        '<div class="card-body">' +
+                          cardText +
+                        '</div>' +
+                      '</div>' + 
+                    '</div>' +
+                  '</li>');
+                }
+              }
+            });
+            var incomeRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+            var incomeObj;
+            var cardCashObj = {};
+            var dayCashArray = [];
+            //index for each card item
+            var i = 2;
+            incomeRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeObj = childSnapshot.val();
+                var incDate = incomeObj.incomeDate;
+                var incAcc = incomeObj.incomeAccount;
+                var incAmt = parseFloat(incomeObj.incomeAmount);
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = incDate.substr(0, 2);
+                var firebaseYear = incDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  //fetch category for position in array
+                  var position = incAcc;
+                  //check if no empty array and records with same date, add into array and then object
+                  if (dayCashArray.length != 0 && dayCashArray[0].incomeAccount != incomeObj.incomeAccount) {
+                    dayCashArray = [];
+                    dayCashArray.push(incomeObj);
+                    cardCashObj[position] = dayCashArray;
+                  }
+                  //initialise and add to card object if any single records in one day
+                  else {
+                    dayCashArray.push(incomeObj);
+                    cardCashObj[position] = dayCashArray;
+                  }
+                }
+              });
+              //print out object for card items
+              for (var key in cardCashObj) {
+                if (cardCashObj.hasOwnProperty(key)) {
+                  var cardHeaderCat = key;
+                  var recordList = cardCashObj[key];
+                  var cardText = '';
+                  var x; //counter
+
+                  var dailyTotalHeader = 0;
+                  for (x = 0; x < recordList.length; x++){
+                    var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                    dailyTotalHeader += cardTextAmt;
+                    cardText += '<a href="#" class="d-block mb-2 records">' +
+                                  '<div class="d-flex justify-content-between">' + 
+                                    '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
+                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                  '</div>' +
+                                '</a>';
+                  }
+
+                  $('#incomeList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + 
+                        '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                          '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                          '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                        '</a>' + 
+                      '</div>' + 
+                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                        '<div class="card-body">' +
+                          cardText +
+                        '</div>' +
+                      '</div>' + 
+                    '</div>' +
+                  '</li>');
+                }
+              }
+            });
+          }
+          /*Only account or categories been selected*/
+          //only Bank
+          else if (bankChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+            $('#incomeList li').remove();
+            var incomeRef = firebase.database().ref('incomeAcc/Bank').orderByChild('incomeDate');
+            var incomeObj;
+            var cardBankObj = {};
+            var dayBankArray = [];
+            //index for each card item
+            var i = 1;
+            incomeRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeObj = childSnapshot.val();
+                var incDate = incomeObj.incomeDate;
+                var incAcc = incomeObj.incomeAccount;
+                var incAmt = parseFloat(incomeObj.incomeAmount);
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = incDate.substr(0, 2);
+                var firebaseYear = incDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  //fetch category for position in array
+                  var position = incAcc;
+                  //check if no empty array and records with same date, add into array and then object
+                  if (dayBankArray.length != 0 && dayBankArray[0].incomeAccount != incomeObj.incomeAccount) {
+                    dayBankArray = [];
+                    dayBankArray.push(incomeObj);
+                    cardBankObj[position] = dayBankArray;
+                  }
+                  //initialise and add to card object if any single records in one day
+                  else {
+                    dayBankArray.push(incomeObj);
+                    cardBankObj[position] = dayBankArray;
+                  }
+                }
+              });
+              //print out object for card items
+              for (var key in cardBankObj) {
+                if (cardBankObj.hasOwnProperty(key)) {
+                  var cardHeaderCat = key;
+                  var recordList = cardBankObj[key];
+                  var cardText = '';
+                  var x; //counter
+
+                  var dailyTotalHeader = 0;
+                  for (x = 0; x < recordList.length; x++){
+                    var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                    dailyTotalHeader += cardTextAmt;
+                    cardText += '<a href="#" class="d-block mb-2 records">' +
+                                  '<div class="d-flex justify-content-between">' + 
+                                    '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
+                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                  '</div>' +
+                                '</a>';
+                  }
+
+                  $('#incomeList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + 
+                        '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                          '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                          '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                        '</a>' + 
+                      '</div>' + 
+                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                        '<div class="card-body">' +
+                          cardText +
+                        '</div>' +
+                      '</div>' + 
+                    '</div>' +
+                  '</li>');
+                }
+              }
+            });            
+          }
+          //only Cash
+          else if (cashChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+            $('#incomeList li').remove();
+            var incomeRef = firebase.database().ref('incomeAcc/Cash').orderByChild('incomeDate');
+            var incomeObj;
+            var cardCashObj = {};
+            var dayCashArray = [];
+            //index for each card item
+            var i = 2;
+            incomeRef.on("value", function(snapshot) {
+              snapshot.forEach(function(childSnapshot){
+                incomeObj = childSnapshot.val();
+                var incDate = incomeObj.incomeDate;
+                var incAcc = incomeObj.incomeAccount;
+                var incAmt = parseFloat(incomeObj.incomeAmount);
+                var currentSelectedMonth = document.getElementById("monthPicker").value;
+                //compare month of record with current selected month
+                var firebaseMonth = incDate.substr(0, 2);
+                var firebaseYear = incDate.substr(-4);
+                var validMonth = currentSelectedMonth.substr(-2);
+                var validYear = currentSelectedMonth.substr(0, 4);
+                if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                  //fetch category for position in array
+                  var position = incAcc;
+                  //check if no empty array and records with same date, add into array and then object
+                  if (dayCashArray.length != 0 && dayCashArray[0].incomeAccount != incomeObj.incomeAccount) {
+                    dayCashArray = [];
+                    dayCashArray.push(incomeObj);
+                    cardCashObj[position] = dayCashArray;
+                  }
+                  //initialise and add to card object if any single records in one day
+                  else {
+                    dayCashArray.push(incomeObj);
+                    cardCashObj[position] = dayCashArray;
+                  }
+                }
+              });
+              //print out object for card items
+              for (var key in cardCashObj) {
+                if (cardCashObj.hasOwnProperty(key)) {
+                  var cardHeaderCat = key;
+                  var recordList = cardCashObj[key];
+                  var cardText = '';
+                  var x; //counter
+
+                  var dailyTotalHeader = 0;
+                  for (x = 0; x < recordList.length; x++){
+                    var cardTextAmt = parseFloat(recordList[x].incomeAmount);
+                    dailyTotalHeader += cardTextAmt;
+                    cardText += '<a href="#" class="d-block mb-2 records">' +
+                                  '<div class="d-flex justify-content-between">' + 
+                                    '<span class="recordDate">' + recordList[x].incomeDate + '</span>' + 
+                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                  '</div>' +
+                                '</a>';
+                  }
+
+                  $('#incomeList').append(
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + 
+                        '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                          '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                          '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                        '</a>' + 
+                      '</div>' + 
+                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                        '<div class="card-body">' +
+                          cardText +
+                        '</div>' +
+                      '</div>' + 
+                    '</div>' +
+                  '</li>');
+                }
+              }
+            });
+          }
         }
       });
-    });
         
     </script>
   </body>
