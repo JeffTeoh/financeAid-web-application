@@ -431,240 +431,571 @@
             $("#nextMonth").removeClass("disabled");
           }
 
-          //check whether sumByDate or sumByCat is selected
+          //check filter before list out records
+          var bankChecked = $("#bankFilter").attr('checked');
+          var cashChecked = $("#cashFilter").attr('checked');
+
           if ($("#sumByDate").hasClass('active')) {
-            $('#transferList li').remove();
-            var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
-            var transferObj;
-            var cardObj = {};
-            var dayArray = [];
-            //index for each card item
-            var i = 1;
-            transferRef.on("value", function(snapshot) {
-              snapshot.forEach(function(childSnapshot){
-                transferObj = childSnapshot.val();
-                var trfDate = transferObj.transferDate;
-                var trfFrom = transferObj.transferFrom;
-                var trfTo = transferObj.transferTo;
-                var trfAmt = parseFloat(transferObj.transferAmount);
-                var currentSelectedMonth = document.getElementById("monthPicker").value;
-                //compare month of record with current selected month
-                var firebaseMonth = trfDate.substr(0, 2);
-                var firebaseYear = trfDate.substr(-4);
-                var validMonth = currentSelectedMonth.substr(-2);
-                var validYear = currentSelectedMonth.substr(0, 4);
-                if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                  //fetch day of date for position in array
-                  var position = moment(trfDate).format("MMM DD");
-                  //check if no empty array and records with same date, add into array and then object
-                  if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
-                    dayArray = [];
-                    dayArray.push(transferObj);
-                    cardObj[position] = dayArray;
-                  }
-                  //initialise and add to card object if any single records in one day
-                  else {
-                    dayArray.push(transferObj);
-                    cardObj[position] = dayArray;
-                  }
-                }
-              });
-              //print out object for card items
-              for (var key in cardObj) {
-                if (cardObj.hasOwnProperty(key)) {
-                  var cardHeaderDate = key;
-                  var recordList = cardObj[key];
-                  var cardText = '';
-                  var x; //counter
+            /*default list*/
+            if ((bankChecked != "checked" && cashChecked != "checked") && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+                    var transferObj;
+                    var cardObj = {};
+                    var dayArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch day of date for position in array
+                          var position = moment(trfDate).format("MMM DD");
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
+                            dayArray = [];
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardObj) {
+                        if (cardObj.hasOwnProperty(key)) {
+                          var cardHeaderDate = key;
+                          var recordList = cardObj[key];
+                          var cardText = '';
+                          var x; //counter
 
-                  var dailyTotalHeader = 0;
-                  for (x = 0; x < recordList.length; x++){
-                    var cardTextAmt = parseFloat(recordList[x].transferAmount);
-                    dailyTotalHeader += cardTextAmt;
-                    cardText += '<a href="#" class="d-block mb-2 records">' +
-                                  '<div class="d-flex justify-content-between">' + 
-                                    '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
-                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
-                                  '</div>' +
-                                '</a>';
-                  }
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);                        
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
 
-                  $('#transferList').append(
-                  '<li class="list-group-item nopadding">' + 
-                    '<div class="card">' + 
-                      '<div class="card-header">' + 
-                        '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                          '<b class="recordDate">' + cardHeaderDate + '</b>' + 
-                          '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                        '</a>' + 
-                      '</div>' + 
-                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                        '<div class="card-body">' +
-                          cardText +
-                        '</div>' +
-                      '</div>' + 
-                    '</div>' +
-                  '</li>');
-                  i += 1;
-                }
-              }
-            });
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                    '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                                    '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                          i += 1;
+                        }
+                      }
+                    });
+            }
+            /*Only account or categories been selected*/
+            //only Bank
+            else if (bankChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+                    var transferObj;
+                    var cardObj = {};
+                    var dayArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if ((firebaseMonth == validMonth && firebaseYear == validYear) && trfFrom == "Bank") {
+                          //fetch day of date for position in array
+                          var position = moment(trfDate).format("MMM DD");
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
+                            dayArray = [];
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardObj) {
+                        if (cardObj.hasOwnProperty(key)) {
+                          var cardHeaderDate = key;
+                          var recordList = cardObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);                        
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                    '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                                    '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                          i += 1;
+                        }
+                      }
+                    });
+            }
+            //only Cash
+            else if (cashChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+                    var transferObj;
+                    var cardObj = {};
+                    var dayArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if ((firebaseMonth == validMonth && firebaseYear == validYear) && trfFrom == "Cash") {
+                          //fetch day of date for position in array
+                          var position = moment(trfDate).format("MMM DD");
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
+                            dayArray = [];
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardObj) {
+                        if (cardObj.hasOwnProperty(key)) {
+                          var cardHeaderDate = key;
+                          var recordList = cardObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);                        
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                    '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                                    '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                          i += 1;
+                        }
+                      }
+                    });
+            }
           }
           else {
-            $('#transferList li').remove();
-            var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
-            var transferObj;
-            var cardBankObj = {};
-            var dayBankArray = [];
-            //index for each card item
-            var i = 1;
-            transferRef.on("value", function(snapshot) {
-              snapshot.forEach(function(childSnapshot){
-                transferObj = childSnapshot.val();
-                var trfDate = transferObj.transferDate;
-                var trfFrom = transferObj.transferFrom;
-                var trfTo = transferObj.transferTo;
-                var trfAmt = parseFloat(transferObj.transferAmount);
-                var currentSelectedMonth = document.getElementById("monthPicker").value;
-                //compare month of record with current selected month
-                var firebaseMonth = trfDate.substr(0, 2);
-                var firebaseYear = trfDate.substr(-4);
-                var validMonth = currentSelectedMonth.substr(-2);
-                var validYear = currentSelectedMonth.substr(0, 4);
-                if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                  //fetch category for position in array
-                  var position = trfFrom;
-                  //check if no empty array and records with same date, add into array and then object
-                  if (dayBankArray.length != 0 && dayBankArray[0].transferFrom != transferObj.transferFrom) {
-                    dayBankArray = [];
-                    dayBankArray.push(transferObj);
-                    cardBankObj[position] = dayBankArray;
-                  }
-                  //initialise and add to card object if any single records in one day
-                  else {
-                    dayBankArray.push(transferObj);
-                    cardBankObj[position] = dayBankArray;
-                  }
-                }
-              });
-              //print out object for card items
-              for (var key in cardBankObj) {
-                if (cardBankObj.hasOwnProperty(key)) {
-                  var tempHeader = key;
-                  var recordList = cardBankObj[key];
-                  var cardText = '';
-                  var x; //counter
+            /*default list*/
+            if ((bankChecked != "checked" && cashChecked != "checked") && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+                    var transferObj;
+                    var cardBankObj = {};
+                    var dayBankArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayBankArray.length != 0 && dayBankArray[0].transferFrom != transferObj.transferFrom) {
+                            dayBankArray = [];
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardBankObj) {
+                        if (cardBankObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardBankObj[key];
+                          var cardText = '';
+                          var x; //counter
 
-                  var dailyTotalHeader = 0;
-                  for (x = 0; x < recordList.length; x++){
-                    var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
-                    var cardTextAmt = parseFloat(recordList[x].transferAmount);
-                    dailyTotalHeader += cardTextAmt;
-                    cardText += '<a href="#" class="d-block mb-2 records">' +
-                                  '<div class="d-flex justify-content-between">' + 
-                                    '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
-                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
-                                  '</div>' +
-                                '</a>';
-                  }
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
 
-                  $('#transferList').append(
-                  '<li class="list-group-item nopadding">' + 
-                    '<div class="card">' + 
-                      '<div class="card-header">' + 
-                        '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                          '<b class="recordCat">' + cardHeaderCat + '</b>' + 
-                          '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                        '</a>' + 
-                      '</div>' + 
-                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                        '<div class="card-body">' +
-                          cardText +
-                        '</div>' +
-                      '</div>' + 
-                    '</div>' +
-                  '</li>');
-                }
-              }
-            });
-            var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
-            var transferObj;
-            var cardCashObj = {};
-            var dayCashArray = [];
-            //index for each card item
-            var i = 2;
-            transferRef.on("value", function(snapshot) {
-              snapshot.forEach(function(childSnapshot){
-                transferObj = childSnapshot.val();
-                var trfDate = transferObj.transferDate;
-                var trfFrom = transferObj.transferFrom;
-                var trfTo = transferObj.transferTo;
-                var trfAmt = parseFloat(transferObj.transferAmount);
-                var currentSelectedMonth = document.getElementById("monthPicker").value;
-                //compare month of record with current selected month
-                var firebaseMonth = trfDate.substr(0, 2);
-                var firebaseYear = trfDate.substr(-4);
-                var validMonth = currentSelectedMonth.substr(-2);
-                var validYear = currentSelectedMonth.substr(0, 4);
-                if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                  //fetch category for position in array
-                  var position = trfFrom;
-                  //check if no empty array and records with same date, add into array and then object
-                  if (dayCashArray.length != 0 && dayCashArray[0].transferFrom != transferObj.transferFrom) {
-                    dayCashArray = [];
-                    dayCashArray.push(transferObj);
-                    cardCashObj[position] = dayCashArray;
-                  }
-                  //initialise and add to card object if any single records in one day
-                  else {
-                    dayCashArray.push(transferObj);
-                    cardCashObj[position] = dayCashArray;
-                  }
-                }
-              });
-              //print out object for card items
-              for (var key in cardCashObj) {
-                if (cardCashObj.hasOwnProperty(key)) {
-                  var tempHeader = key;
-                  var recordList = cardCashObj[key];
-                  var cardText = '';
-                  var x; //counter
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }
+                    });
+                    var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+                    var transferObj;
+                    var cardCashObj = {};
+                    var dayCashArray = [];
+                    //index for each card item
+                    var i = 2;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayCashArray.length != 0 && dayCashArray[0].transferFrom != transferObj.transferFrom) {
+                            dayCashArray = [];
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardCashObj) {
+                        if (cardCashObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardCashObj[key];
+                          var cardText = '';
+                          var x; //counter
 
-                  var dailyTotalHeader = 0;
-                  for (x = 0; x < recordList.length; x++){
-                    var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
-                    var cardTextAmt = parseFloat(recordList[x].transferAmount);                    
-                    dailyTotalHeader += cardTextAmt;
-                    cardText += '<a href="#" class="d-block mb-2 records">' +
-                                  '<div class="d-flex justify-content-between">' + 
-                                    '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
-                                    '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                    '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
-                                  '</div>' +
-                                '</a>';
-                  }
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
 
-                  $('#transferList').append(
-                  '<li class="list-group-item nopadding">' + 
-                    '<div class="card">' + 
-                      '<div class="card-header">' + 
-                        '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                          '<b class="recordCat">' + cardHeaderCat + '</b>' + 
-                          '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                        '</a>' + 
-                      '</div>' + 
-                      '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                        '<div class="card-body">' +
-                          cardText +
-                        '</div>' +
-                      '</div>' + 
-                    '</div>' +
-                  '</li>');
-                }
-              }
-            });
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }          
+                    });
+            }
+            /*Only account or categories been selected*/
+            //only Bank
+            else if (bankChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+                    var transferObj;
+                    var cardBankObj = {};
+                    var dayBankArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayBankArray.length != 0 && dayBankArray[0].transferFrom != transferObj.transferFrom) {
+                            dayBankArray = [];
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardBankObj) {
+                        if (cardBankObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardBankObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }
+                    });  
+            }
+            //only Cash
+            else if (cashChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+                    var transferObj;
+                    var cardCashObj = {};
+                    var dayCashArray = [];
+                    //index for each card item
+                    var i = 2;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayCashArray.length != 0 && dayCashArray[0].transferFrom != transferObj.transferFrom) {
+                            dayCashArray = [];
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardCashObj) {
+                        if (cardCashObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardCashObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }          
+                    });  
+            }  
           }
 
           //Update the total amount of income from database at navigation item
@@ -839,241 +1170,572 @@
           $("#nextMonth").removeClass("disabled");
         }
 
-        //check whether sumByDate or sumByCat is selected
-        if ($("#sumByDate").hasClass('active')) {
-          $('#transferList li').remove();
-          var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
-          var transferObj;
-          var cardObj = {};
-          var dayArray = [];
-          //index for each card item
-          var i = 1;
-          transferRef.on("value", function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              transferObj = childSnapshot.val();
-              var trfDate = transferObj.transferDate;
-              var trfFrom = transferObj.transferFrom;
-              var trfTo = transferObj.transferTo;
-              var trfAmt = parseFloat(transferObj.transferAmount);
-              var currentSelectedMonth = document.getElementById("monthPicker").value;
-              //compare month of record with current selected month
-              var firebaseMonth = trfDate.substr(0, 2);
-              var firebaseYear = trfDate.substr(-4);
-              var validMonth = currentSelectedMonth.substr(-2);
-              var validYear = currentSelectedMonth.substr(0, 4);
-              if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                //fetch day of date for position in array
-                var position = moment(trfDate).format("MMM DD");
-                //check if no empty array and records with same date, add into array and then object
-                if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
-                  dayArray = [];
-                  dayArray.push(transferObj);
-                  cardObj[position] = dayArray;
-                }
-                //initialise and add to card object if any single records in one day
-                else {
-                  dayArray.push(transferObj);
-                  cardObj[position] = dayArray;
-                }
-              }
-            });
-            //print out object for card items
-            for (var key in cardObj) {
-              if (cardObj.hasOwnProperty(key)) {
-                var cardHeaderDate = key;
-                var recordList = cardObj[key];
-                var cardText = '';
-                var x; //counter
+        //check filter before list out records
+        var bankChecked = $("#bankFilter").attr('checked');
+          var cashChecked = $("#cashFilter").attr('checked');
 
-                var dailyTotalHeader = 0;
-                for (x = 0; x < recordList.length; x++){
-                  var cardTextAmt = parseFloat(recordList[x].transferAmount);
-                  dailyTotalHeader += cardTextAmt;
-                  cardText += '<a href="#" class="d-block mb-2 records">' +
-                                '<div class="d-flex justify-content-between">' + 
-                                  '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
-                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+          if ($("#sumByDate").hasClass('active')) {
+            /*default list*/
+            if ((bankChecked != "checked" && cashChecked != "checked") && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+                    var transferObj;
+                    var cardObj = {};
+                    var dayArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch day of date for position in array
+                          var position = moment(trfDate).format("MMM DD");
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
+                            dayArray = [];
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardObj) {
+                        if (cardObj.hasOwnProperty(key)) {
+                          var cardHeaderDate = key;
+                          var recordList = cardObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);                        
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                    '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                                    '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
                                 '</div>' +
-                              '</a>';
-                }
-
-                $('#transferList').append(
-                '<li class="list-group-item nopadding">' + 
-                  '<div class="card">' + 
-                    '<div class="card-header">' + 
-                      '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
-                        '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' + 
-                      '</a>' + 
-                    '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        cardText +
-                      '</div>' +
-                    '</div>' + 
-                  '</div>' +
-                '</li>');
-                i += 1;
-              }
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                          i += 1;
+                        }
+                      }
+                    });
             }
-          });
-        } 
-        else {
-          $('#transferList li').remove();
-          var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
-          var transferObj;
-          var cardBankObj = {};
-          var dayBankArray = [];
-          //index for each card item
-          var i = 1;
-          transferRef.on("value", function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              transferObj = childSnapshot.val();
-              var trfDate = transferObj.transferDate;
-              var trfFrom = transferObj.transferFrom;
-              var trfTo = transferObj.transferTo;
-              var trfAmt = parseFloat(transferObj.transferAmount);
-              var currentSelectedMonth = document.getElementById("monthPicker").value;
-              //compare month of record with current selected month
-              var firebaseMonth = trfDate.substr(0, 2);
-              var firebaseYear = trfDate.substr(-4);
-              var validMonth = currentSelectedMonth.substr(-2);
-              var validYear = currentSelectedMonth.substr(0, 4);
-              if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                //fetch category for position in array
-                var position = trfFrom;
-                //check if no empty array and records with same date, add into array and then object
-                if (dayBankArray.length != 0 && dayBankArray[0].transferFrom != transferObj.transferFrom) {
-                  dayBankArray = [];
-                  dayBankArray.push(transferObj);
-                  cardBankObj[position] = dayBankArray;
-                }
-                //initialise and add to card object if any single records in one day
-                else {
-                  dayBankArray.push(transferObj);
-                  cardBankObj[position] = dayBankArray;
-                }
-              }
-            });
-            //print out object for card items
-            for (var key in cardBankObj) {
-              if (cardBankObj.hasOwnProperty(key)) {
-                var tempHeader = key;
-                var recordList = cardBankObj[key];
-                var cardText = '';
-                var x; //counter
+            /*Only account or categories been selected*/
+            //only Bank
+            else if (bankChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+                    var transferObj;
+                    var cardObj = {};
+                    var dayArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if ((firebaseMonth == validMonth && firebaseYear == validYear) && trfFrom == "Bank") {
+                          //fetch day of date for position in array
+                          var position = moment(trfDate).format("MMM DD");
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
+                            dayArray = [];
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardObj) {
+                        if (cardObj.hasOwnProperty(key)) {
+                          var cardHeaderDate = key;
+                          var recordList = cardObj[key];
+                          var cardText = '';
+                          var x; //counter
 
-                var dailyTotalHeader = 0;
-                for (x = 0; x < recordList.length; x++){
-                  var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
-                  var cardTextAmt = parseFloat(recordList[x].transferAmount);
-	                dailyTotalHeader += cardTextAmt;
-                  cardText += '<a href="#" class="d-block mb-2 records">' +
-                                '<div class="d-flex justify-content-between">' + 
-                                  '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
-                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);                        
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                    '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                                    '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
                                 '</div>' +
-                              '</a>';
-                }
-
-                $('#transferList').append(
-                '<li class="list-group-item nopadding">' + 
-                  '<div class="card">' + 
-                    '<div class="card-header">' + 
-                      '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
-                        '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                      '</a>' + 
-                    '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        cardText +
-                      '</div>' +
-                    '</div>' + 
-                  '</div>' +
-                '</li>');
-              }
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                          i += 1;
+                        }
+                      }
+                    });
             }
-          });
-          var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
-          var transferObj;
-          var cardCashObj = {};
-          var dayCashArray = [];
-          //index for each card item
-          var i = 2;
-          transferRef.on("value", function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              transferObj = childSnapshot.val();
-              var trfDate = transferObj.transferDate;
-              var trfFrom = transferObj.transferFrom;
-              var trfTo = transferObj.transferTo;
-              var trfAmt = parseFloat(transferObj.transferAmount);
-              var currentSelectedMonth = document.getElementById("monthPicker").value;
-              //compare month of record with current selected month
-              var firebaseMonth = trfDate.substr(0, 2);
-              var firebaseYear = trfDate.substr(-4);
-              var validMonth = currentSelectedMonth.substr(-2);
-              var validYear = currentSelectedMonth.substr(0, 4);
-              if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                //fetch category for position in array
-                var position = trfFrom;
-                //check if no empty array and records with same date, add into array and then object
-                if (dayCashArray.length != 0 && dayCashArray[0].transferFrom != transferObj.transferFrom) {
-                  dayCashArray = [];
-                  dayCashArray.push(transferObj);
-                  cardCashObj[position] = dayCashArray;
-                }
-                //initialise and add to card object if any single records in one day
-                else {
-                  dayCashArray.push(transferObj);
-                  cardCashObj[position] = dayCashArray;
-                }
-              }
-            });
-            //print out object for card items
-            for (var key in cardCashObj) {
-              if (cardCashObj.hasOwnProperty(key)) {
-                var tempHeader = key;
-                var recordList = cardCashObj[key];
-                var cardText = '';
-                var x; //counter
+            //only Cash
+            else if (cashChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+                    var transferObj;
+                    var cardObj = {};
+                    var dayArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if ((firebaseMonth == validMonth && firebaseYear == validYear) && trfFrom == "Cash") {
+                          //fetch day of date for position in array
+                          var position = moment(trfDate).format("MMM DD");
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
+                            dayArray = [];
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardObj) {
+                        if (cardObj.hasOwnProperty(key)) {
+                          var cardHeaderDate = key;
+                          var recordList = cardObj[key];
+                          var cardText = '';
+                          var x; //counter
 
-                var dailyTotalHeader = 0;
-                for (x = 0; x < recordList.length; x++){
-                  var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
-                  var cardTextAmt = parseFloat(recordList[x].transferAmount);
-                  dailyTotalHeader += cardTextAmt;
-                  cardText += '<a href="#" class="d-block mb-2 records">' +
-                                '<div class="d-flex justify-content-between">' + 
-                                  '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
-                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);                        
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                    '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                                    '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
                                 '</div>' +
-                              '</a>';
-                }
-
-                $('#transferList').append(
-                '<li class="list-group-item nopadding">' + 
-                  '<div class="card">' + 
-                    '<div class="card-header">' + 
-                      '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
-                        '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                      '</a>' + 
-                    '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        cardText +
-                      '</div>' +
-                    '</div>' + 
-                  '</div>' +
-                '</li>');
-              }
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                          i += 1;
+                        }
+                      }
+                    });
             }
-          });
-        }
+          }
+          else {
+            /*default list*/
+            if ((bankChecked != "checked" && cashChecked != "checked") && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+                    var transferObj;
+                    var cardBankObj = {};
+                    var dayBankArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayBankArray.length != 0 && dayBankArray[0].transferFrom != transferObj.transferFrom) {
+                            dayBankArray = [];
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardBankObj) {
+                        if (cardBankObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardBankObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }
+                    });
+                    var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+                    var transferObj;
+                    var cardCashObj = {};
+                    var dayCashArray = [];
+                    //index for each card item
+                    var i = 2;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayCashArray.length != 0 && dayCashArray[0].transferFrom != transferObj.transferFrom) {
+                            dayCashArray = [];
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardCashObj) {
+                        if (cardCashObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardCashObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }          
+                    });
+            }
+            /*Only account or categories been selected*/
+            //only Bank
+            else if (bankChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+                    var transferObj;
+                    var cardBankObj = {};
+                    var dayBankArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayBankArray.length != 0 && dayBankArray[0].transferFrom != transferObj.transferFrom) {
+                            dayBankArray = [];
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardBankObj) {
+                        if (cardBankObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardBankObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }
+                    });  
+            }
+            //only Cash
+            else if (cashChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+                    var transferObj;
+                    var cardCashObj = {};
+                    var dayCashArray = [];
+                    //index for each card item
+                    var i = 2;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayCashArray.length != 0 && dayCashArray[0].transferFrom != transferObj.transferFrom) {
+                            dayCashArray = [];
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardCashObj) {
+                        if (cardCashObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardCashObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }          
+                    });  
+            }  
+          }
 
         //Update the total amount of income from database at navigation item
         var totalIncomeRef = firebase.database().ref('incomeObj');
@@ -1243,241 +1905,572 @@
           $("#nextMonth").addClass("disabled");
         }
 
-        //check whether sumByDate or sumByCat is selected
+        //check filter before list out records
+        var bankChecked = $("#bankFilter").attr('checked');
+        var cashChecked = $("#cashFilter").attr('checked');
+
         if ($("#sumByDate").hasClass('active')) {
-          $('#transferList li').remove();
-          var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
-          var transferObj;
-          var cardObj = {};
-          var dayArray = [];
-          //index for each card item
-          var i = 1;
-          transferRef.on("value", function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              transferObj = childSnapshot.val();
-              var trfDate = transferObj.transferDate;
-              var trfFrom = transferObj.transferFrom;
-              var trfTo = transferObj.transferTo;
-              var trfAmt = parseFloat(transferObj.transferAmount);
-              var currentSelectedMonth = document.getElementById("monthPicker").value;
-              //compare month of record with current selected month
-              var firebaseMonth = trfDate.substr(0, 2);
-              var firebaseYear = trfDate.substr(-4);
-              var validMonth = currentSelectedMonth.substr(-2);
-              var validYear = currentSelectedMonth.substr(0, 4);
-              if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                //fetch day of date for position in array
-                var position = moment(trfDate).format("MMM DD");
-                //check if no empty array and records with same date, add into array and then object
-                if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
-                  dayArray = [];
-                  dayArray.push(transferObj);
-                  cardObj[position] = dayArray;
-                }
-                //initialise and add to card object if any single records in one day
-                else {
-                  dayArray.push(transferObj);
-                  cardObj[position] = dayArray;
-                }
-              }
-            });
-            //print out object for card items
-            for (var key in cardObj) {
-              if (cardObj.hasOwnProperty(key)) {
-                var cardHeaderDate = key;
-                var recordList = cardObj[key];
-                var cardText = '';
-                var x; //counter
+            /*default list*/
+            if ((bankChecked != "checked" && cashChecked != "checked") && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+                    var transferObj;
+                    var cardObj = {};
+                    var dayArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch day of date for position in array
+                          var position = moment(trfDate).format("MMM DD");
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
+                            dayArray = [];
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardObj) {
+                        if (cardObj.hasOwnProperty(key)) {
+                          var cardHeaderDate = key;
+                          var recordList = cardObj[key];
+                          var cardText = '';
+                          var x; //counter
 
-                var dailyTotalHeader = 0;
-                for (x = 0; x < recordList.length; x++){
-                  var cardTextAmt = parseFloat(recordList[x].transferAmount);
-                  dailyTotalHeader += cardTextAmt;
-                  cardText += '<a href="#" class="d-block mb-2 records">' +
-                                '<div class="d-flex justify-content-between">' + 
-                                  '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
-                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);                        
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                    '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                                    '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
                                 '</div>' +
-                              '</a>';
-                }
-
-                $('#transferList').append(
-                '<li class="list-group-item nopadding">' + 
-                  '<div class="card">' + 
-                    '<div class="card-header">' + 
-                      '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b class="recordDate">' + cardHeaderDate + '</b>' + 
-                        '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                      '</a>' + 
-                    '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        cardText +
-                      '</div>' +
-                    '</div>' + 
-                  '</div>' +
-                '</li>');
-                i += 1;
-              }
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                          i += 1;
+                        }
+                      }
+                    });
             }
-          });
-        } 
-        else {
-          $('#transferList li').remove();
-          var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
-          var transferObj;
-          var cardBankObj = {};
-          var dayBankArray = [];
-          //index for each card item
-          var i = 1;
-          transferRef.on("value", function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              transferObj = childSnapshot.val();
-              var trfDate = transferObj.transferDate;
-              var trfFrom = transferObj.transferFrom;
-              var trfTo = transferObj.transferTo;
-              var trfAmt = parseFloat(transferObj.transferAmount);
-              var currentSelectedMonth = document.getElementById("monthPicker").value;
-              //compare month of record with current selected month
-              var firebaseMonth = trfDate.substr(0, 2);
-              var firebaseYear = trfDate.substr(-4);
-              var validMonth = currentSelectedMonth.substr(-2);
-              var validYear = currentSelectedMonth.substr(0, 4);
-              if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                //fetch category for position in array
-                var position = trfFrom;
-                //check if no empty array and records with same date, add into array and then object
-                if (dayBankArray.length != 0 && dayBankArray[0].transferFrom != transferObj.transferFrom) {
-                  dayBankArray = [];
-                  dayBankArray.push(transferObj);
-                  cardBankObj[position] = dayBankArray;
-                }
-                //initialise and add to card object if any single records in one day
-                else {
-                  dayBankArray.push(transferObj);
-                  cardBankObj[position] = dayBankArray;
-                }
-              }
-            });
-            //print out object for card items
-            for (var key in cardBankObj) {
-              if (cardBankObj.hasOwnProperty(key)) {
-                var tempHeader = key;
-                var recordList = cardBankObj[key];
-                var cardText = '';
-                var x; //counter
+            /*Only account or categories been selected*/
+            //only Bank
+            else if (bankChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+                    var transferObj;
+                    var cardObj = {};
+                    var dayArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if ((firebaseMonth == validMonth && firebaseYear == validYear) && trfFrom == "Bank") {
+                          //fetch day of date for position in array
+                          var position = moment(trfDate).format("MMM DD");
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
+                            dayArray = [];
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardObj) {
+                        if (cardObj.hasOwnProperty(key)) {
+                          var cardHeaderDate = key;
+                          var recordList = cardObj[key];
+                          var cardText = '';
+                          var x; //counter
 
-                var dailyTotalHeader = 0;
-                for (x = 0; x < recordList.length; x++){
-                  var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
-                  var cardTextAmt = parseFloat(recordList[x].transferAmount);
-                  dailyTotalHeader += cardTextAmt;
-                  cardText += '<a href="#" class="d-block mb-2 records">' +
-                                '<div class="d-flex justify-content-between">' + 
-                                  '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
-                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);                        
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                    '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                                    '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
                                 '</div>' +
-                              '</a>';
-                }
-
-                $('#transferList').append(
-                '<li class="list-group-item nopadding">' + 
-                  '<div class="card">' + 
-                    '<div class="card-header">' + 
-                      '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
-                        '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' + 
-                      '</a>' + 
-                    '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        cardText +
-                      '</div>' +
-                    '</div>' + 
-                  '</div>' +
-                '</li>');
-              }
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                          i += 1;
+                        }
+                      }
+                    });
             }
-          });
-          var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
-          var transferObj;
-          var cardCashObj = {};
-          var dayCashArray = [];
-          //index for each card item
-          var i = 2;
-          transferRef.on("value", function(snapshot) {
-            snapshot.forEach(function(childSnapshot){
-              transferObj = childSnapshot.val();
-              var trfDate = transferObj.transferDate;
-              var trfFrom = transferObj.transferFrom;
-              var trfTo = transferObj.transferTo;
-              var trfAmt = parseFloat(transferObj.transferAmount);
-              var currentSelectedMonth = document.getElementById("monthPicker").value;
-              //compare month of record with current selected month
-              var firebaseMonth = trfDate.substr(0, 2);
-              var firebaseYear = trfDate.substr(-4);
-              var validMonth = currentSelectedMonth.substr(-2);
-              var validYear = currentSelectedMonth.substr(0, 4);
-              if (firebaseMonth == validMonth && firebaseYear == validYear) {
-                //fetch category for position in array
-                var position = trfFrom;
-                //check if no empty array and records with same date, add into array and then object
-                if (dayCashArray.length != 0 && dayCashArray[0].transferFrom != transferObj.transferFrom) {
-                  dayCashArray = [];
-                  dayCashArray.push(transferObj);
-                  cardCashObj[position] = dayCashArray;
-                }
-                //initialise and add to card object if any single records in one day
-                else {
-                  dayCashArray.push(transferObj);
-                  cardCashObj[position] = dayCashArray;
-                }
-              }
-            });
-            //print out object for card items
-            for (var key in cardCashObj) {
-              if (cardCashObj.hasOwnProperty(key)) {
-                var tempHeader = key;
-                var recordList = cardCashObj[key];
-                var cardText = '';
-                var x; //counter
+            //only Cash
+            else if (cashChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferObj').orderByChild('transferDate');
+                    var transferObj;
+                    var cardObj = {};
+                    var dayArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if ((firebaseMonth == validMonth && firebaseYear == validYear) && trfFrom == "Cash") {
+                          //fetch day of date for position in array
+                          var position = moment(trfDate).format("MMM DD");
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayArray.length != 0 && dayArray[0].transferDate != transferObj.transferDate) {
+                            dayArray = [];
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayArray.push(transferObj);
+                            cardObj[position] = dayArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardObj) {
+                        if (cardObj.hasOwnProperty(key)) {
+                          var cardHeaderDate = key;
+                          var recordList = cardObj[key];
+                          var cardText = '';
+                          var x; //counter
 
-                var dailyTotalHeader = 0;
-                for (x = 0; x < recordList.length; x++){
-                  var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
-                  var cardTextAmt = parseFloat(recordList[x].transferAmount);
-                  dailyTotalHeader += cardTextAmt;
-                  cardText += '<a href="#" class="d-block mb-2 records">' +
-                                '<div class="d-flex justify-content-between">' + 
-                                  '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
-                                  '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
-                                  '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);                        
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordAcc">' + recordList[x].transferFrom + " &#8594; " + recordList[x].transferTo + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                    '<b class="recordDate">' + cardHeaderDate + '</b>' + 
+                                    '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
                                 '</div>' +
-                              '</a>';
-                }
-
-                $('#transferList').append(
-                '<li class="list-group-item nopadding">' + 
-                  '<div class="card">' + 
-                    '<div class="card-header">' + 
-                      '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
-                        '<b class="recordCat">' + cardHeaderCat + '</b>' + 
-                        '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' + 
-                      '</a>' + 
-                    '</div>' + 
-                    '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
-                      '<div class="card-body">' +
-                        cardText +
-                      '</div>' +
-                    '</div>' + 
-                  '</div>' +
-                '</li>');
-              }
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                          i += 1;
+                        }
+                      }
+                    });
             }
-          });
         }
+        else {
+            /*default list*/
+            if ((bankChecked != "checked" && cashChecked != "checked") && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+                    var transferObj;
+                    var cardBankObj = {};
+                    var dayBankArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayBankArray.length != 0 && dayBankArray[0].transferFrom != transferObj.transferFrom) {
+                            dayBankArray = [];
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardBankObj) {
+                        if (cardBankObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardBankObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }
+                    });
+                    var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+                    var transferObj;
+                    var cardCashObj = {};
+                    var dayCashArray = [];
+                    //index for each card item
+                    var i = 2;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayCashArray.length != 0 && dayCashArray[0].transferFrom != transferObj.transferFrom) {
+                            dayCashArray = [];
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardCashObj) {
+                        if (cardCashObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardCashObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }          
+                    });
+            }
+            /*Only account or categories been selected*/
+            //only Bank
+            else if (bankChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferCat/Bank').orderByChild('transferDate');
+                    var transferObj;
+                    var cardBankObj = {};
+                    var dayBankArray = [];
+                    //index for each card item
+                    var i = 1;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayBankArray.length != 0 && dayBankArray[0].transferFrom != transferObj.transferFrom) {
+                            dayBankArray = [];
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayBankArray.push(transferObj);
+                            cardBankObj[position] = dayBankArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardBankObj) {
+                        if (cardBankObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardBankObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }
+                    });  
+            }
+            //only Cash
+            else if (cashChecked == "checked" && $("#filter-condition").is(":contains('Filter')")) {
+                    $('#transferList li').remove();
+                    var transferRef = firebase.database().ref('transferCat/Cash').orderByChild('transferDate');
+                    var transferObj;
+                    var cardCashObj = {};
+                    var dayCashArray = [];
+                    //index for each card item
+                    var i = 2;
+                    transferRef.on("value", function(snapshot) {
+                      snapshot.forEach(function(childSnapshot){
+                        transferObj = childSnapshot.val();
+                        var trfDate = transferObj.transferDate;
+                        var trfFrom = transferObj.transferFrom;
+                        var trfTo = transferObj.transferTo;
+                        var trfAmt = parseFloat(transferObj.transferAmount);
+                        var currentSelectedMonth = document.getElementById("monthPicker").value;
+                        //compare month of record with current selected month
+                        var firebaseMonth = trfDate.substr(0, 2);
+                        var firebaseYear = trfDate.substr(-4);
+                        var validMonth = currentSelectedMonth.substr(-2);
+                        var validYear = currentSelectedMonth.substr(0, 4);
+                        if (firebaseMonth == validMonth && firebaseYear == validYear) {
+                          //fetch category for position in array
+                          var position = trfFrom;
+                          //check if no empty array and records with same date, add into array and then object
+                          if (dayCashArray.length != 0 && dayCashArray[0].transferFrom != transferObj.transferFrom) {
+                            dayCashArray = [];
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                          //initialise and add to card object if any single records in one day
+                          else {
+                            dayCashArray.push(transferObj);
+                            cardCashObj[position] = dayCashArray;
+                          }
+                        }
+                      });
+                      //print out object for card items
+                      for (var key in cardCashObj) {
+                        if (cardCashObj.hasOwnProperty(key)) {
+                          var tempHeader = key;
+                          var recordList = cardCashObj[key];
+                          var cardText = '';
+                          var x; //counter
+
+                          var dailyTotalHeader = 0;
+                          for (x = 0; x < recordList.length; x++){
+                            var cardHeaderCat = tempHeader + " &#8594; " + recordList[x].transferTo;
+                            var cardTextAmt = parseFloat(recordList[x].transferAmount);
+                            dailyTotalHeader += cardTextAmt;
+                            cardText += '<a href="#" class="d-block mb-2 records">' +
+                                          '<div class="d-flex justify-content-between">' + 
+                                            '<span class="recordDate">' + recordList[x].transferDate + '</span>' + 
+                                            '<span class="recordAmt">RM' + cardTextAmt.toFixed(2) + '</span>' + 
+                                            '<p class="recordKey" style="display: none">' + recordList[x].key + '</p>' +       
+                                          '</div>' +
+                                        '</a>';
+                          }
+
+                          $('#transferList').append(
+                          '<li class="list-group-item nopadding">' + 
+                            '<div class="card">' + 
+                              '<div class="card-header">' + 
+                                '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
+                                  '<b class="recordCat">' + cardHeaderCat + '</b>' + 
+                                  '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
+                                '</a>' + 
+                              '</div>' + 
+                              '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
+                                '<div class="card-body">' +
+                                  cardText +
+                                '</div>' +
+                              '</div>' + 
+                            '</div>' +
+                          '</li>');
+                        }
+                      }          
+                    });  
+            }  
+          }
 
         //Update the total amount of income from database at navigation item
         var totalIncomeRef = firebase.database().ref('incomeObj');
@@ -3803,7 +4796,6 @@
           });
 
         //output list of data when loading the page and only appear if there are available data
-        $("#transferList li").remove();
         //check filter before list out records
         var bankChecked = $("#bankFilter").attr('checked');
         var cashChecked = $("#cashFilter").attr('checked');
