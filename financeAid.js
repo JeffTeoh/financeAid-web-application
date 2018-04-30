@@ -140,6 +140,24 @@ $(document).ready(function(){
         }
     });
 
+    //display current selected records
+    $("#transferList").on('click', '.records', function(){    
+        $("#recordDetail").toggle('slide', {direction: "right"}, 100);
+
+        //read from records
+        if ($("#sumByDate").hasClass('active')) {
+            $("#recordDetailAmt").text($(this).find('.recordAmt').text());
+            $("#recordDetailAcc").text($(this).find('.recordAcc').text());
+            $("#recordDetailDate").text($(this).parent().parent().siblings().find('.recordDate').text());
+            $("#recordDetailKey").text($(this).find('.recordKey').text());
+        } else {
+            $("#recordDetailAmt").text($(this).find('.recordAmt').text());
+            $("#recordDetailDate").text($(this).find('.recordDate').text());
+            $("#recordDetailAcc").text($(this).parent().parent().siblings().find('.recordCat').text());
+            $("#recordDetailKey").text($(this).find('.recordKey').text());
+        }
+    });
+
     //delete records
     $("#deleteBtn").on('click',function(){
         $("#recordDetail").toggle('slide', {direction: "right"}, 100);
