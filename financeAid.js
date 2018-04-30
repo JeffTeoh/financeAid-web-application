@@ -83,10 +83,22 @@ $(document).ready(function(){
 
     $("#sorting").on('click', function(){
         $("#sorting > i").animateRotate(270);
-        var list = $("ul#expenseList li").get().reverse();
+        var listExp = $("ul#expenseList li").get().reverse();
         $("ul#expenseList").empty();
-        $.each(list, function(i){
-            $("ul#expenseList").append('<li class="list-group-item nopadding">'+list[i].innerHTML+'</li>');
+        $.each(listExp, function(i){
+            $("ul#expenseList").append('<li class="list-group-item nopadding">'+listExp[i].innerHTML+'</li>');
+        });
+
+        var listInc = $("ul#incomeList li").get().reverse();
+        $("ul#incomeList").empty();
+        $.each(listInc, function(i){
+            $("ul#incomeList").append('<li class="list-group-item nopadding">'+listInc[i].innerHTML+'</li>');
+        });
+
+        var listTrf = $("ul#transferList li").get().reverse();
+        $("ul#transferList").empty();
+        $.each(listTrf, function(i){
+            $("ul#transferList").append('<li class="list-group-item nopadding">'+listTrf[i].innerHTML+'</li>');
         });
     });
 

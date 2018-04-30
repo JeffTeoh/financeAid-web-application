@@ -7131,7 +7131,8 @@
           else {
             alert("Please ensure either Account or Category has been selected");
           }        
-        } else if (currentSelectedFeature == "inc") {
+        } 
+        else if (currentSelectedFeature == "inc") {
           var incomeDateObj = $("#datepicker").datepicker("getDate");
           //return in MM-DD-YYYY
           var incDate = $.datepicker.formatDate("mm-dd-yy", incomeDateObj);
@@ -7172,7 +7173,8 @@
             document.getElementById("account").value = '';
             document.getElementById("amount").value = '';
           }
-        } else if (currentSelectedFeature == "trf") {
+        } 
+        else if (currentSelectedFeature == "trf") {
           var transferDateObj = $("#datepicker").datepicker("getDate");
           //return in MM-DD-YYYY
           var trfDate = $.datepicker.formatDate("mm-dd-yy", transferDateObj);

@@ -176,7 +176,7 @@
         </div>
 
         <div class="scroll-area">
-          <div class="summary mt-4 mx-0">
+          <div class="summary mt-2 mx-0">
             <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
               <button class="btn btn-secondary w-100 active" id="sumByDate">
                 <input type="radio" name="options" id="option1" autocomplete="off" checked>
@@ -3016,8 +3016,8 @@
       $("#filterInc").on('click', function(){
         $("#filter-menu").slideToggle('fast', function(){
           if($("#filter-menu").is(":hidden")) {
-            $("#filter").css("color", "#4c4c4c");
-            $("#filter").css("background", "transparent");
+            $("#filterInc").css("color", "#4c4c4c");
+            $("#filterInc").css("background", "transparent");
 
             //perform filter function
             var bankChecked = $("#bankFilter").attr('checked');
@@ -3583,8 +3583,8 @@
             }
           }
           else {
-            $("#filter").css("color", "white");
-            $("#filter").css("background", "#4c4c4c");
+            $("#filterInc").css("color", "white");
+            $("#filterInc").css("background", "#4c4c4c");
           }
         });
       });
