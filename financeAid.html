@@ -1647,14 +1647,14 @@
             }
             //Cash + Entertainment & Vehicle
             else if (cashChecked == "checked" && ($("#filter-condition").is(":contains('Entertainment')") && $("#filter-condition").is(":contains('Vehicle')"))) {
-                $('#expenseList li').remove();
-                var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
-                var expenseObj;
-                var cardObj = {};
-                var dayArray = [];
-                //index for each card item
-                var i = 1;
-                expenseRef.on("value", function(snapshot) {
+              $('#expenseList li').remove();
+              var expenseRef = firebase.database().ref('expenseObj').orderByChild('expenseDate');
+              var expenseObj;
+              var cardObj = {};
+              var dayArray = [];
+              //index for each card item
+              var i = 1;
+              expenseRef.on("value", function(snapshot) {
                 snapshot.forEach(function(childSnapshot){
                   expenseObj = childSnapshot.val();
                   var expDate = expenseObj.expenseDate;
