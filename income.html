@@ -3408,7 +3408,6 @@
             var expenseObj = {};
             var expenseObjKey = expenseObjKey ? expenseObjKey : firebase.database().ref().child('expenseObj').push().key;
             expenseObj[expenseObjKey] = {expenseDate: expDate, expenseAccount: expAcc, expenseCategory: expCat, expenseAmount: expAmt, key: expenseObjKey};
-            firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
 
             //calculate and update current amount based on expense
             var selectedAccount = expAcc;
@@ -3423,6 +3422,7 @@
                 document.getElementById("category").value = '';
                 document.getElementById("amount").value = '';
               } else {
+                firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
                 firebase.database().ref().child('expenseObj').update(expenseObj);
                 currentBankAmt -= currentexpenseAmt;
                             
@@ -3448,6 +3448,7 @@
                 document.getElementById("category").value = '';
                 document.getElementById("amount").value = '';
               } else {
+                firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
                 firebase.database().ref().child('expenseObj').update(expenseObj);
                 currentCashAmt -= currentexpenseAmt;
 
@@ -3602,7 +3603,6 @@
             var transferObj = {}; //(override on same object, never update)
             var transferObjKey = transferObjKey ? transferObjKey : firebase.database().ref().child('transferObj').push().key;
             transferObj[transferObjKey] = {transferDate: trfDate, transferFrom: trfFrom, transferTo: trfTo, transferAmount: trfAmt, key: transferObjKey};
-            firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
 
             //calculate and update current amount based on transfer
             var selectedAccountFrom = trfFrom;
@@ -3620,6 +3620,7 @@
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
               } else {
+                firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
                 firebase.database().ref().child('transferObj').update(transferObj);
                 currentBankAmt -= currentTransferAmt;
                 currentCashAmt += currentTransferAmt;
@@ -3649,6 +3650,7 @@
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
               } else {
+                firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
                 firebase.database().ref().child('transferObj').update(transferObj);
                 currentBankAmt += currentTransferAmt;
                 currentCashAmt -= currentTransferAmt;

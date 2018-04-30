@@ -3431,7 +3431,6 @@
             var expenseObj = {};
             var expenseObjKey = expenseObjKey ? expenseObjKey : firebase.database().ref().child('expenseObj').push().key;
             expenseObj[expenseObjKey] = {expenseDate: expDate, expenseAccount: expAcc, expenseCategory: expCat, expenseAmount: expAmt, key: expenseObjKey};
-            firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
 
             //calculate and update current amount based on expense
             var selectedAccount = expAcc;
@@ -3446,6 +3445,7 @@
                 document.getElementById("category").value = '';
                 document.getElementById("amount").value = '';
               } else {
+                firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
                 firebase.database().ref().child('expenseObj').update(expenseObj);
                 currentBankAmt -= currentexpenseAmt;
                                   
@@ -3470,6 +3470,7 @@
                 document.getElementById("category").value = '';
                 document.getElementById("amount").value = '';
               } else {
+                firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
                 firebase.database().ref().child('expenseObj').update(expenseObj);
                 currentCashAmt -= currentexpenseAmt;
       

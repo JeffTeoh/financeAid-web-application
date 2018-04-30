@@ -20030,7 +20030,8 @@
                 document.getElementById("category").value = '';
                 document.getElementById("amount").value = '';
               } 
-              else {
+              else {                
+                firebase.database().ref('expenseCat').child(expCat).update(expenseObj);
                 firebase.database().ref().child('expenseObj').update(expenseObj);
                 currentCashAmt -= currentexpenseAmt;
 
@@ -20188,7 +20189,6 @@
             var transferObj = {}; //(override on same object, never update)
             var transferObjKey = transferObjKey ? transferObjKey : firebase.database().ref().child('transferObj').push().key;
             transferObj[transferObjKey] = {transferDate: trfDate, transferFrom: trfFrom, transferTo: trfTo, transferAmount: trfAmt, key: transferObjKey};
-            firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
 
             //calculate and update current amount based on transfer
             var selectedAccountFrom = trfFrom;
@@ -20207,6 +20207,7 @@
                 document.getElementById("amount").value = '';
               } 
               else {
+                firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
                 firebase.database().ref().child('transferObj').update(transferObj);
                 currentBankAmt -= currentTransferAmt;
                 currentCashAmt += currentTransferAmt;
@@ -20223,7 +20224,8 @@
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
               }                        
-            } else if(selectedAccountFrom == "Cash"){
+            }
+            else if(selectedAccountFrom == "Cash"){
               currentBankAmt = parseFloat(currentBankObj.currentBank);
               currentCashAmt = parseFloat(currentCashObj.currentCash);
               var validTrfDiff = currentCashAmt - currentTransferAmt;
@@ -20235,6 +20237,7 @@
                 document.getElementById("amount").value = '';
               } 
               else {
+                firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
                 firebase.database().ref().child('transferObj').update(transferObj);
                 currentBankAmt += currentTransferAmt;
                 currentCashAmt -= currentTransferAmt;

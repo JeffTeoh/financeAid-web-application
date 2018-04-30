@@ -20118,7 +20118,6 @@
             var transferObj = {}; //(override on same object, never update)
             var transferObjKey = transferObjKey ? transferObjKey : firebase.database().ref().child('transferObj').push().key;
             transferObj[transferObjKey] = {transferDate: trfDate, transferFrom: trfFrom, transferTo: trfTo, transferAmount: trfAmt, key: transferObjKey};
-            firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
 
             //calculate and update current amount based on transfer
             var selectedAccountFrom = trfFrom;
@@ -20136,7 +20135,9 @@
                 document.getElementById("transferFrom").value = '';
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
-              } else {
+              } 
+              else {
+                firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
                 firebase.database().ref().child('transferObj').update(transferObj);
                 currentBankAmt -= currentTransferAmt;
                 currentCashAmt += currentTransferAmt;
@@ -20165,7 +20166,9 @@
                 document.getElementById("transferFrom").value = '';
                 document.getElementById("transferTo").value = '';
                 document.getElementById("amount").value = '';
-              } else {
+              } 
+              else {
+                firebase.database().ref('transferCat').child(trfFrom).update(transferObj);
                 firebase.database().ref().child('transferObj').update(transferObj);
                 currentBankAmt += currentTransferAmt;
                 currentCashAmt -= currentTransferAmt;
