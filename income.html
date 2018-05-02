@@ -503,7 +503,7 @@
                           '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                             '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                             '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                            '</a>' + 
+                          '</a>' + 
                         '</div>' + 
                         '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
                           '<div class="card-body">' +
@@ -656,9 +656,9 @@
                                   '</a>';
                     }
                     $('#incomeList').append(
-                      '<li class="list-group-item nopadding">' + 
-                        '<div class="card">' + 
-                          '<div class="card-header">' + 
+                    '<li class="list-group-item nopadding">' + 
+                      '<div class="card">' + 
+                        '<div class="card-header">' + 
                           '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                             '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                             '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
@@ -1107,6 +1107,16 @@
                 options: {
                   responsive: true,
                   maintainAspectRatio: false,
+                  tooltips: {
+                    callbacks: {
+                      title: function(tooltipItem, data) {
+                        return data['labels'][tooltipItem[0]['index']];
+                      },
+                      label: function(tooltipItem, data) {
+                        return "RM" + (data['datasets'][0]['data'][tooltipItem['index']]).toFixed(2);
+                      },
+                    }
+                  },
                   elements: {
                     center: {
                       text: "RM" + parseFloat(bankTotal + cashTotal).toFixed(2),
@@ -1237,7 +1247,7 @@
                           '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                             '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                             '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                            '</a>' + 
+                          '</a>' + 
                         '</div>' + 
                         '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
                           '<div class="card-body">' +
@@ -1390,9 +1400,9 @@
                                   '</a>';
                     }
                     $('#incomeList').append(
-                      '<li class="list-group-item nopadding">' + 
-                        '<div class="card">' + 
-                          '<div class="card-header">' + 
+                    '<li class="list-group-item nopadding">' + 
+                      '<div class="card">' + 
+                        '<div class="card-header">' + 
                           '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                             '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                             '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
@@ -1830,17 +1840,27 @@
                   backgroundColor: [
                     'rgba(0, 0, 139, 0.2)',
                     'rgba(178, 34, 34, 0.2)'
-                ],
-                borderColor: [
-                  'rgba(0, 0, 139, 1)',
-                  'rgba(178, 34, 34, 1)'
-                ],
-                borderWidth: 1
+                  ],
+                  borderColor: [
+                    'rgba(0, 0, 139, 1)',
+                    'rgba(178, 34, 34, 1)'
+                  ],
+                  borderWidth: 1
                 }]
               },
               options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                tooltips: {
+                  callbacks: {
+                    title: function(tooltipItem, data) {
+                      return data['labels'][tooltipItem[0]['index']];
+                    },
+                    label: function(tooltipItem, data) {
+                      return "RM" + (data['datasets'][0]['data'][tooltipItem['index']]).toFixed(2);
+                    },
+                  }
+                },
                 elements: {
                   center: {
                     text: "RM" + parseFloat(bankTotal + cashTotal).toFixed(2),
@@ -1967,7 +1987,7 @@
                           '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                             '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                             '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                            '</a>' + 
+                          '</a>' + 
                         '</div>' + 
                         '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
                           '<div class="card-body">' +
@@ -2120,9 +2140,9 @@
                                   '</a>';
                     }
                     $('#incomeList').append(
-                      '<li class="list-group-item nopadding">' + 
-                        '<div class="card">' + 
-                          '<div class="card-header">' + 
+                    '<li class="list-group-item nopadding">' + 
+                      '<div class="card">' + 
+                        '<div class="card-header">' + 
                           '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                             '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                             '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
@@ -2560,17 +2580,27 @@
                   backgroundColor: [
                     'rgba(0, 0, 139, 0.2)',
                     'rgba(178, 34, 34, 0.2)'
-                ],
-                borderColor: [
-                  'rgba(0, 0, 139, 1)',
-                  'rgba(178, 34, 34, 1)'
-                ],
-                borderWidth: 1
+                  ],
+                  borderColor: [
+                    'rgba(0, 0, 139, 1)',
+                    'rgba(178, 34, 34, 1)'
+                  ],
+                  borderWidth: 1
                 }]
               },
               options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                tooltips: {
+                  callbacks: {
+                    title: function(tooltipItem, data) {
+                      return data['labels'][tooltipItem[0]['index']];
+                    },
+                    label: function(tooltipItem, data) {
+                      return "RM" + (data['datasets'][0]['data'][tooltipItem['index']]).toFixed(2);
+                    },
+                  }
+                },
                 elements: {
                   center: {
                     text: "RM" + parseFloat(bankTotal + cashTotal).toFixed(2),
@@ -2766,7 +2796,7 @@
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                         '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                        '</a>' + 
+                      '</a>' + 
                     '</div>' + 
                     '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
                       '<div class="card-body">' +
@@ -2919,9 +2949,9 @@
                               '</a>';
                 }
                 $('#incomeList').append(
-                  '<li class="list-group-item nopadding">' + 
-                    '<div class="card">' + 
-                      '<div class="card-header">' + 
+                '<li class="list-group-item nopadding">' + 
+                  '<div class="card">' + 
+                    '<div class="card-header">' + 
                       '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                         '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                         '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
@@ -4099,6 +4129,16 @@
               options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                tooltips: {
+                  callbacks: {
+                    title: function(tooltipItem, data) {
+                      return data['labels'][tooltipItem[0]['index']];
+                    },
+                    label: function(tooltipItem, data) {
+                      return "RM" + (data['datasets'][0]['data'][tooltipItem['index']]).toFixed(2);
+                    },
+                  }
+                },
                 elements: {
                   center: {
                     text: "RM" + parseFloat(bankTotal + cashTotal).toFixed(2),
@@ -4265,6 +4305,16 @@
             options: {
               responsive: true,
               maintainAspectRatio: false,
+              tooltips: {
+                callbacks: {
+                  title: function(tooltipItem, data) {
+                    return data['labels'][tooltipItem[0]['index']];
+                  },
+                  label: function(tooltipItem, data) {
+                    return "RM" + (data['datasets'][0]['data'][tooltipItem['index']]).toFixed(2);
+                  },
+                }
+              },
               elements: {
                 center: {
                   text: "RM" + parseFloat(bankTotal + cashTotal).toFixed(2),
@@ -4381,7 +4431,7 @@
                       $('#incomeList').append(
                       '<li class="list-group-item nopadding">' + 
                         '<div class="card">' + 
-                            '<div class="card-header">' + 
+                          '<div class="card-header">' + 
                             '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                               '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                               '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
@@ -4614,7 +4664,7 @@
                       $('#incomeList').append(
                       '<li class="list-group-item nopadding">' + 
                         '<div class="card">' + 
-                            '<div class="card-header">' + 
+                          '<div class="card-header">' + 
                             '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                               '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                               '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
@@ -4772,7 +4822,7 @@
                       $('#incomeList').append(
                       '<li class="list-group-item nopadding">' + 
                         '<div class="card">' + 
-                            '<div class="card-header">' + 
+                          '<div class="card-header">' + 
                             '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                               '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                               '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
@@ -5006,8 +5056,8 @@
                   label: '# of Votes',
                   data: [bankTotal, cashTotal],
                   backgroundColor: [
-                      'rgba(0, 0, 139, 0.2)',
-                      'rgba(178, 34, 34, 0.2)'
+                    'rgba(0, 0, 139, 0.2)',
+                    'rgba(178, 34, 34, 0.2)'
                   ],
                   borderColor: [
                     'rgba(0, 0, 139, 1)',
@@ -5019,6 +5069,16 @@
               options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                tooltips: {
+                  callbacks: {
+                    title: function(tooltipItem, data) {
+                      return data['labels'][tooltipItem[0]['index']];
+                    },
+                    label: function(tooltipItem, data) {
+                      return "RM" + (data['datasets'][0]['data'][tooltipItem['index']]).toFixed(2);
+                    },
+                  }
+                },
                 elements: {
                   center: {
                     text: "RM" + parseFloat(bankTotal + cashTotal).toFixed(2),
@@ -5127,7 +5187,7 @@
                         '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                           '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                           '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
-                          '</a>' + 
+                        '</a>' + 
                       '</div>' + 
                       '<div id="collapse-item' + i + '" class="collapse show" aria-labelledby="heading-item' + i + '">' + 
                         '<div class="card-body">' +
@@ -5280,9 +5340,9 @@
                                 '</a>';
                   }
                   $('#incomeList').append(
-                    '<li class="list-group-item nopadding">' + 
-                      '<div class="card">' + 
-                        '<div class="card-header">' + 
+                  '<li class="list-group-item nopadding">' + 
+                    '<div class="card">' + 
+                      '<div class="card-header">' + 
                         '<a data-toggle="collapse" href="#collapse-item' + i + '" aria-expanded="true" aria-controls="collapse-item" id="heading-item' + i + '" class="d-block" style="text-decoration: none;color: black;">' + 
                           '<b class="recordDate">' + cardHeaderDate + '</b>' + 
                           '<span class="float-right">RM' + (dailyTotalHeader).toFixed(2) + '</span>' +
