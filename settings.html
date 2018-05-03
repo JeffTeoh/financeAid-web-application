@@ -50,84 +50,33 @@
       <!--content of page-->
       <div class="content p-1">
         <!--Button to toggle side bar-->
-        <ul id="toggle-group" class="p-0">
-          <li>
-            <a class="sidebar-toggle btn text-light"><i class="fa fa-bars" style="color:white;"></i>Menu</a>
-          </li>
-        </ul>
+        <a class="sidebar-toggle btn text-light"><i class="fa fa-bars" style="color:white;"></i>Menu</a>
         <div class="p-5 text-center">
           <h5>Please set the initial amount for current Bank and Cash amount to start to use the features.</h5>
           <h6 style="color: grey;">Reset button will only available when current Bank and Cash accounts had been set.</h6>
         </div>
         <!-- Header that include balance and setting of starting amount for accounts -->
-        <div class="d-flex justify-content-center mx-5">
-          <div class="card-item" style="margin-right: 15%">
-            <button href="#" id="startCashBtn" class="py-4 px-5 btn btn-primary" data-toggle="modal" data-target="#cashModal">
-              <p>CASH</p>
-              <p id="currentCashAmt"></p>
-            </button>
-          </div>
-          <div class="card-item" style="margin-left: 15%">
-            <button href="#" id="startBankBtn" class="py-4 px-5 btn btn-primary" data-toggle="modal" data-target="#bankModal">
-              <p>BANK</p>
-              <p id="currentBankAmt"></p>
-            </button>
-          </div>
+        <div class="d-flex justify-content-center my-5 mx-5">
+          <form>
+            <div class="form-inline">
+              <label for="startBank"><b>Bank: RM</b></label>
+              <input type="text" class="form-control mx-1" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank" maxlength="10">
+            </div>
+          </form>
+        </div>
+        <div class="d-flex justify-content-center my-5 mx-5">
+          <form>
+            <div class="form-inline">
+              <label for="startCash"><b>Cash: RM</b></label>
+              <input type="text" class="form-control mx-1" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash" maxlength="10">
+            </div>
+          </form>
         </div>
         <div class="d-flex justify-content-center mt-5">
-          <button id="reset" type="button" class="btn btn-danger" data-toggle="modal" data-target="#resetModal">Reset</button>
+          <button type="button" class="save btn btn-primary" data-dismiss="modal" style="margin-right: 5%">Save</button>
+          <button id="reset" type="button" class="btn btn-danger" data-toggle="modal" data-target="#resetModal" style="margin-left: 5%">Reset</button>
         </div>
       </div>      
-      
-      <!-- Modal for cash -->
-      <div id="cashModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="cashModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="cashModalCenterTitle">Set starting amount of Cash</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="cashCloseBtn">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <div class="form-group">
-                  <label for="startCash">RM *</label>
-                  <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash" maxlength="10">
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="saveCash btn btn-primary" data-dismiss="modal">Save</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Modal for bank -->
-      <div id="bankModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="bankModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="bankModalCenterTitle">Set starting amount of Bank</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="bankCloseBtn">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form>
-                <div class="form-group">
-                  <label for="startBank">RM *</label>
-                  <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank" maxlength="10">
-                </div>
-              </form>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="saveBank btn btn-primary" data-dismiss="modal">Save</button>
-            </div>
-          </div>
-        </div>
-      </div>
       
       <!-- Modal for reset -->
       <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetConfirmation" aria-hidden="true">
@@ -182,26 +131,26 @@
           bankRef.on('value', function(snapshot){
             var childData = snapshot.val();
             if (childData == null) {
-              $("#startBankBtn").prop('disabled', false);
-              var bankState = $("#startBankBtn").prop('disabled');
-              stateObj.bankState = bankState;
+              $("#bankStartAmt").prop('disabled', false);
+              var cashState = $("#bankStartAmt").prop('disabled');
+              stateObj.cashState = cashState;              
             }
             else {
-              $("#startBankBtn").prop('disabled', true);
-              var bankState = $("#startBankBtn").prop('disabled');
-              stateObj.bankState = bankState;
+              $("#bankStartAmt").prop('disabled', true);
+              var cashState = $("#bankStartAmt").prop('disabled');
+              stateObj.cashState = cashState;
             }
           });
           cashRef.on('value', function(snapshot){
             var childData = snapshot.val();
             if (childData == null) {
-              $("#startCashBtn").prop('disabled', false);
-              var cashState = $("#startCashBtn").prop('disabled');
-              stateObj.cashState = cashState;
+              $("#cashStartAmt").prop('disabled', false);
+              var cashState = $("#cashStartAmt").prop('disabled');
+              stateObj.cashState = cashState;              
             }
             else {
-              $("#startCashBtn").prop('disabled', true);
-              var cashState = $("#startCashBtn").prop('disabled');
+              $("#cashStartAmt").prop('disabled', true);
+              var cashState = $("#cashStartAmt").prop('disabled');
               stateObj.cashState = cashState;
             }
           });
@@ -215,9 +164,11 @@
             var bankState = v.bankState;
             var cashState = v.cashState;
             if (v.bankState == false || v.cashState == false) {
+              $(".save").prop('disabled', false);
               $("#reset").prop('disabled', true);
             }
             else {
+              $(".save").prop('disabled', true);
               $("#reset").prop('disabled', false);
             }
           }, 1000);
@@ -228,8 +179,9 @@
 
       //reset firebase db by remove all the data
       $("#resetBtn").on('click', function(){
-        $("#startBankBtn").prop('disabled', false);
-        $("#startCashBtn").prop('disabled', false);
+        $("#bankStartAmt").prop('disabled', false);
+        $("#cashStartAmt").prop('disabled', false);        
+        $(".save").prop('disabled', false);
         $("#reset").prop('disabled', true);
         
         var resetObj = {};
@@ -288,38 +240,11 @@
       var currentBankAmt = {};
       var currentBankKey;
 
-      //saving cash from input
-      $('.saveCash').on('click', function(e) {
-        e.preventDefault();
-        var validCashAmt = document.getElementById("cashStartAmt").value;
-        if (validCashAmt != null && parseFloat(validCashAmt) > 0){
-          startCashKey = startCashKey ? startCashKey : firebase.database().ref().child('startCash').push().key;
-          startCashAmt.startCash = document.getElementById("cashStartAmt").value;
-          firebase.database().ref().child('startCash').set(startCashAmt);
-          currentCashAmt = {currentCash: startCashAmt.startCash};
-          currefntCashKey = currentCashKey ? currentCashKey : firebase.database().ref().child('currentCashAmt').push().key;
-          firebase.database().ref().child('currentCashAmt').set(currentCashAmt);
-          document.getElementById("cashStartAmt").value = '';
-
-          //check bank existence and disable reset button if existed
-          var bankRef = firebase.database().ref('startBank');
-          bankRef.on('value', function(snapshot){
-            var childData = snapshot.val();
-            if (childData != null) {
-              $("#reset").prop('disabled', false);
-            }
-          });
-        } else {
-          alert('Please fill up the starting amount');
-          document.getElementById("cashStartAmt").value = '';
-        }
-      });
-
-      //saving bank from input
-      $('.saveBank').on('click', function(e) {
+      $(".save").on('click', function(e){
         e.preventDefault();
         var validBankAmt = document.getElementById("bankStartAmt").value;
-        if (validBankAmt != null && parseFloat(validBankAmt) > 0){
+        var validCashAmt = document.getElementById("cashStartAmt").value;
+        if ((validBankAmt != null && parseFloat(validBankAmt) > 0) && (validCashAmt != null && parseFloat(validCashAmt) > 0)){
           startBankKey = startBankKey ? startBankKey : firebase.database().ref().child('startBank').push().key;
           startBankAmt.startBank = document.getElementById("bankStartAmt").value;
           firebase.database().ref().child('startBank').set(startBankAmt);
@@ -328,18 +253,25 @@
           firebase.database().ref().child('currentBankAmt').set(currentBankAmt);
           document.getElementById("bankStartAmt").value = '';
 
-          //check cash existence and disable reset button if existed
-          var cashRef = firebase.database().ref('startCash');
-          cashRef.on('value', function(snapshot){
-            var childData = snapshot.val();
-            if (childData != null) {
-              $("#reset").prop('disabled', false);
-            }
-          });
+          startCashKey = startCashKey ? startCashKey : firebase.database().ref().child('startCash').push().key;
+          startCashAmt.startCash = document.getElementById("cashStartAmt").value;
+          firebase.database().ref().child('startCash').set(startCashAmt);
+          currentCashAmt = {currentCash: startCashAmt.startCash};
+          currentCashKey = currentCashKey ? currentCashKey : firebase.database().ref().child('currentCashAmt').push().key;
+          firebase.database().ref().child('currentCashAmt').set(currentCashAmt);
+          document.getElementById("cashStartAmt").value = '';
+
+          alert("The starting amount had been set");
+          $("#bankStartAmt").prop('disabled', true);
+          $("#cashStartAmt").prop('disabled', true); 
+          $(".save").prop('disabled', true);
+          $("#reset").prop('disabled', false);
+
         } else {
           alert('Please fill up the starting amount');
           document.getElementById("bankStartAmt").value = '';
-        }        
+          document.getElementById("cashStartAmt").value = '';
+        }
       });
 
     </script>
