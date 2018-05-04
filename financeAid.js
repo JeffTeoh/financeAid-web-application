@@ -5,7 +5,8 @@ $(document).ready(function(){
         if ($('.sidebar').hasClass('toggled')) {
             $('.sidebar-toggleright').show();
             $("#addRecordBtn").css("display", "block");
-            $(".sidebar").css("min-height", "100vh");            
+            $(".sidebar").css("min-height", "100vh");
+            $("#settings").show();
         } else {
             $('.sidebar-toggleright').hide();
             $("#sidebar-right").css("display", "none");
@@ -15,6 +16,7 @@ $(document).ready(function(){
             } else
             if ($(window).width() < 768) {
                 $(".sidebar").css("min-height", "145vh");
+                $("#settings").attr("style", "display: none !important");
             } else 
             if ($(window).width() < 1200) {
                 $(".sidebar").css("min-height", "120vh");

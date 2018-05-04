@@ -56,27 +56,37 @@
           <h6 style="color: grey;">Reset button will only available when current Bank and Cash accounts had been set.</h6>
         </div>
         <!-- Header that include balance and setting of starting amount for accounts -->
-        <div class="d-flex justify-content-center my-5 mx-5">
-          <form>
-            <div class="form-inline">
-              <label for="startBank"><b>Bank: RM</b></label>
-              <input type="text" class="form-control mx-1" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank" maxlength="10">
+        <div class="d-flex justify-content-center w-100" id="settings">
+          <div class="w-50">
+            <div class="mw-100 d-flex row">
+              <div class="w-50 d-flex justify-content-end pr-5" style="align-items: center">
+                <b>Bank: RM</b>
+              </div>
+              <div class="w-50">
+                <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank" maxlength="10">
+              </div>
             </div>
-          </form>
-        </div>
-        <div class="d-flex justify-content-center my-5 mx-5">
-          <form>
-            <div class="form-inline">
-              <label for="startCash"><b>Cash: RM</b></label>
-              <input type="text" class="form-control mx-1" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash" maxlength="10">
+            <div class="mw-100 d-flex row mt-5">
+              <div class="w-50 d-flex justify-content-end pr-5" style="align-items: center">
+                <b>Cash: RM</b>
+              </div>
+              <div class="w-50">
+                <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash" maxlength="10">
+              </div>
             </div>
-          </form>
+            <div class="mw-100 d-flex row mt-5">
+              <div class="w-100 d-flex justify-content-center">
+                <div class="w-50 d-flex justify-content-end pr-5">
+                  <button type="button" class="save btn btn-primary">Save</button>
+                </div>
+                <div class="w-50">
+                  <button id="reset" type="button" class="btn btn-danger" data-toggle="modal" data-target="#resetModal">Reset</button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="d-flex justify-content-center mt-5">
-          <button type="button" class="save btn btn-primary" data-dismiss="modal" style="margin-right: 5%">Save</button>
-          <button id="reset" type="button" class="btn btn-danger" data-toggle="modal" data-target="#resetModal" style="margin-left: 5%">Reset</button>
-        </div>
-      </div>      
+      </div>
       
       <!-- Modal for reset -->
       <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetConfirmation" aria-hidden="true">
@@ -184,7 +194,7 @@
         $(".save").prop('disabled', false);
         $("#reset").prop('disabled', true);
         
-        var resetObj = {};
+        /*var resetObj = {};
         firebase.database().ref().child('startBank').set(resetObj);
         firebase.database().ref().child('startCash').set(resetObj);
         firebase.database().ref().child('currentBankAmt').set(resetObj);
@@ -197,7 +207,7 @@
         firebase.database().ref().child('incomeObj').set(resetObj);
 
         firebase.database().ref().child('transferCat').set(resetObj);
-        firebase.database().ref().child('transferObj').set(resetObj);
+        firebase.database().ref().child('transferObj').set(resetObj);*/
       });
 
       //only enable number and decimal points to be input
