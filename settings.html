@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/all.css" integrity="sha384-5SOiIsAziJl6AWe0HWRKTXlfcSHKmYV4RBF18PPJ173Kzn7jzMyFuTtk8JA7QQG1" crossorigin="anonymous">
+    <link rel="stylesheet" href="financeAid.css">
+    
+    <title>Finance Aid</title>
+  </head>
+  <body>
+    <div class="d-flex">
+      <nav class="sidebar bg-dark settingsidebar" id="sidebar">
+        <ul class="list-unstyled">
+          <li><a class="navbar-brand text-center" href="financeAid.html">Finance Aid</a></li>
+          <li>
+            <a href="income.html" class="text-center d-block">
+                <i class="fa fa-plus nav-item float-left middleicon"></i>
+                <div class="text">
+                  <span class="d-none d-lg-block">Income</span>
+                </div>
+            </a>
+          </li>
+          <li>
+            <a href="expense.html" class="text-center d-block">
+              <i class="fa fa-minus nav-item float-left middleicon"></i>
+              <span class="d-none d-lg-block">Expense</span>           
+            </a>
+          </li>
+          <li>
+            <a href="transfer.html" class="text-center d-block">
+              <i class="fa fa-exchange-alt nav-item float-left middleicon"></i>
+              <span class="d-none d-lg-inline align-middle">Transfer</span>
+            </a>
+          </li>
+          <hr style="background-color: white;">
+          <li>
+            <a href="#" class="text-center d-block">
+              <i class="fa fa-cog nav-item float-left middleicon"></i>
+              <span class="d-none d-lg-inline align-middle">Settings</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!--content of page-->
+      <div class="content p-1">
+        <!--Button to toggle side bar-->
+        <a class="sidebar-toggle btn text-light"><i class="fa fa-bars" style="color:white;"></i>Menu</a>
+        <div class="p-5 text-center">
+          <h5>Please set the initial amount for current Bank and Cash amount to start to use the features.</h5>
+          <h6 style="color: grey;">Reset button will only available when current Bank and Cash accounts had been set.</h6>
+        </div>
+        <!-- Header that include balance and setting of starting amount for accounts -->
+        <div class="d-flex justify-content-center w-100" id="settings">
+          <div class="w-50">
+            <div class="mw-100 d-flex row">
+              <div class="w-50 d-flex justify-content-end pr-5" style="align-items: center">
+                <b>Bank: RM</b>
+              </div>
+              <div class="w-50">
+                <input type="text" class="form-control" id="bankStartAmt" placeholder="Amount" aria-label="startBankAmount" aria-describedby="basic-addon1" name="startBank" maxlength="10">
+              </div>
+            </div>
+            <div class="mw-100 d-flex row mt-5">
+              <div class="w-50 d-flex justify-content-end pr-5" style="align-items: center">
+                <b>Cash: RM</b>
+              </div>
+              <div class="w-50">
+                <input type="text" class="form-control" id="cashStartAmt" placeholder="Amount" aria-label="startCashAmount" aria-describedby="basic-addon1" name="startCash" maxlength="10">
+              </div>
+            </div>
+            <div class="mw-100 d-flex row mt-5">
+              <div class="w-100 d-flex justify-content-center">
+                <div class="w-50 d-flex justify-content-end pr-5">
+                  <button type="button" class="save btn btn-primary">Save</button>
+                </div>
+                <div class="w-50">
+                  <button id="reset" type="button" class="btn btn-danger" data-toggle="modal" data-target="#resetModal">Reset</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Modal for reset -->
+      <div class="modal fade" id="resetModal" tabindex="-1" role="dialog" aria-labelledby="resetConfirmation" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">RESET</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              All of the data will be deleted.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal" id="resetBtn">Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>    
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase-database.js"></script>
+    <script src="financeAid.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyAR3t7qI2D5wRu4fO38FuPYbPegZwQd_yI",
+        authDomain: "finance-aid-b7793.firebaseapp.com",
+        databaseURL: "https://finance-aid-b7793.firebaseio.com",
+        projectId: "finance-aid-b7793",
+        storageBucket: "finance-aid-b7793.appspot.com",
+        messagingSenderId: "165519709635"
+      };
+      firebase.initializeApp(config);
+
+      //check firebase db and disable button if have currentBankAmt or currentCashAmt
+      function delay() {
+        return new Promise(function(resolve, reject){
+          var states = {};
+          var stateObj = {};
+          var bankRef = firebase.database().ref('startBank');
+          var cashRef = firebase.database().ref('startCash');
+          bankRef.on('value', function(snapshot){
+            var childData = snapshot.val();
+            if (childData == null) {
+              $("#bankStartAmt").prop('disabled', false);
+              var cashState = $("#bankStartAmt").prop('disabled');
+              stateObj.cashState = cashState;              
+            }
+            else {
+              $("#bankStartAmt").prop('disabled', true);
+              var cashState = $("#bankStartAmt").prop('disabled');
+              stateObj.cashState = cashState;
+            }
+          });
+          cashRef.on('value', function(snapshot){
+            var childData = snapshot.val();
+            if (childData == null) {
+              $("#cashStartAmt").prop('disabled', false);
+              var cashState = $("#cashStartAmt").prop('disabled');
+              stateObj.cashState = cashState;              
+            }
+            else {
+              $("#cashStartAmt").prop('disabled', true);
+              var cashState = $("#cashStartAmt").prop('disabled');
+              stateObj.cashState = cashState;
+            }
+          });
+          resolve(stateObj);
+        });
+      }
+
+      delay()
+        .then(function(v) {
+          setTimeout(function() {
+            var bankState = v.bankState;
+            var cashState = v.cashState;
+            if (v.bankState == false || v.cashState == false) {
+              $(".save").prop('disabled', false);
+              $("#reset").prop('disabled', true);
+            }
+            else {
+              $(".save").prop('disabled', true);
+              $("#reset").prop('disabled', false);
+            }
+          }, 1000);
+        })
+        .catch(function(v){
+          alert();
+        });
+
+      //reset firebase db by remove all the data
+      $("#resetBtn").on('click', function(){
+        $("#bankStartAmt").prop('disabled', false);
+        $("#cashStartAmt").prop('disabled', false);        
+        $(".save").prop('disabled', false);
+        $("#reset").prop('disabled', true);
+        
+        /*var resetObj = {};
+        firebase.database().ref().child('startBank').set(resetObj);
+        firebase.database().ref().child('startCash').set(resetObj);
+        firebase.database().ref().child('currentBankAmt').set(resetObj);
+        firebase.database().ref().child('currentCashAmt').set(resetObj);
+
+        firebase.database().ref().child('expenseCat').set(resetObj);
+        firebase.database().ref().child('expenseObj').set(resetObj);
+
+        firebase.database().ref().child('incomeAcc').set(resetObj);
+        firebase.database().ref().child('incomeObj').set(resetObj);
+
+        firebase.database().ref().child('transferCat').set(resetObj);
+        firebase.database().ref().child('transferObj').set(resetObj);*/
+      });
+
+      //only enable number and decimal points to be input
+      $('#cashStartAmt').keypress(function(e) {
+        var a = [];
+        var k = e.which;
+
+        var y = 46;
+        a.push(y);
+
+        for (i = 48; i < 58; i++)
+          a.push(i);
+    
+        if (!(a.indexOf(k)>=0))
+          e.preventDefault();    
+      });
+
+      $('#bankStartAmt').keypress(function(e) {
+        var a = [];
+        var k = e.which;
+
+        var y = 46;
+        a.push(y);
+
+        for (i = 48; i < 58; i++)
+          a.push(i);
+    
+        if (!(a.indexOf(k)>=0))
+          e.preventDefault();    
+      });
+
+      //Write amount input by user to firebase database      
+      var startCashAmt = {};
+      var startCashKey;
+      var currentCashAmt = {};
+      var currentCashKey;
+
+      var startBankAmt = {};
+      var startBankKey;
+      var currentBankAmt = {};
+      var currentBankKey;
+
+      $(".save").on('click', function(e){
+        e.preventDefault();
+        var validBankAmt = document.getElementById("bankStartAmt").value;
+        var validCashAmt = document.getElementById("cashStartAmt").value;
+        if ((validBankAmt != null && parseFloat(validBankAmt) > 0) && (validCashAmt != null && parseFloat(validCashAmt) > 0)){
+          startBankKey = startBankKey ? startBankKey : firebase.database().ref().child('startBank').push().key;
+          startBankAmt.startBank = document.getElementById("bankStartAmt").value;
+          firebase.database().ref().child('startBank').set(startBankAmt);
+          currentBankAmt = {currentBank: startBankAmt.startBank};
+          currentBankKey = currentBankKey ? currentBankKey : firebase.database().ref().child('currentBankAmt').push().key;
+          firebase.database().ref().child('currentBankAmt').set(currentBankAmt);
+          document.getElementById("bankStartAmt").value = '';
+
+          startCashKey = startCashKey ? startCashKey : firebase.database().ref().child('startCash').push().key;
+          startCashAmt.startCash = document.getElementById("cashStartAmt").value;
+          firebase.database().ref().child('startCash').set(startCashAmt);
+          currentCashAmt = {currentCash: startCashAmt.startCash};
+          currentCashKey = currentCashKey ? currentCashKey : firebase.database().ref().child('currentCashAmt').push().key;
+          firebase.database().ref().child('currentCashAmt').set(currentCashAmt);
+          document.getElementById("cashStartAmt").value = '';
+
+          alert("The starting amount had been set");
+          $("#bankStartAmt").prop('disabled', true);
+          $("#cashStartAmt").prop('disabled', true); 
+          $(".save").prop('disabled', true);
+          $("#reset").prop('disabled', false);
+
+        } else {
+          alert('Please fill up the starting amount');
+          document.getElementById("bankStartAmt").value = '';
+          document.getElementById("cashStartAmt").value = '';
+        }
+      });
+
+    </script>
+  </body>
+</html>
